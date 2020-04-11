@@ -15,40 +15,53 @@
       <th class="p-2 text-center">Legs Against</th>
       <th class="p-2 text-center">Leg Difference</th>
     </tr>
+    {% set leaderboard = [] %}
     {% for player in players %}
+      {% set homeGames = clone(gamesQuery).relatedTo({
+        element: player,
+        field: 'player1'
+      }) %}
+      {% set awayGames = clone(gamesQuery).relatedTo({
+        element: player,
+        field: 'player2'
+      }) %}
+
+      {% set gamesPlayed = clone(gamesQuery).relatedTo(player) %}
+
+      {% set totalGamesPlayed = clone(gamesPlayed).count() %}
+
+      {% set homeLegsFor = clone(homeGames).sum('field_player1LegsWon') %}
+      {% set homeLegsAgainst = clone(homeGames).sum('field_player2LegsWon') %}
+      {% set awayLegsFor = clone(awayGames).sum('field_player2LegsWon') %}
+      {% set awayLegsAgainst = clone(awayGames).sum('field_player1LegsWon') %}
+      {% set totalLegsFor = homeLegsFor + awayLegsFor %}
+      {% set totalLegsAgainst = homeLegsAgainst + awayLegsAgainst %}
+
+      {% set homeGamesWon = clone(homeGames).where('field_player1LegsWon > field_player2LegsWon').count() %}
+      {% set awayGamesWon = clone(awayGames).where('field_player2LegsWon > field_player1LegsWon').count() %}
+      {% set totalGamesWon = homeGamesWon + awayGamesWon %}
+
+      {% set leaderboard = leaderboard|merge([{
+        playerName: player.title,
+        totalGamesWon:totalGamesWon,
+        totalGamesPlayed:totalGamesPlayed,
+        totalGamesWon:totalGamesWon,
+        totalGamesPlayed:totalGamesPlayed,
+        totalLegsFor:totalLegsFor,
+        totalLegsAgainst:totalLegsAgainst,
+        totalLegsFor:totalLegsFor
+      }]) %}
+    {% endfor %}
+    {% for row in leaderboard|sort((a, b) => a.totalGamesWon <=> b.totalGamesWon)|reverse %}
       <tr>
-        {% set homeGames = clone(gamesQuery).relatedTo({
-          element: player,
-          field: 'player1'
-        }) %}
-        {% set awayGames = clone(gamesQuery).relatedTo({
-          element: player,
-          field: 'player2'
-        }) %}
-
-        {% set gamesPlayed = clone(gamesQuery).relatedTo(player) %}
-
-        {% set totalGamesPlayed = clone(gamesPlayed).count() %}
-
-        {% set homeLegsFor = clone(homeGames).sum('field_player1LegsWon') %}
-        {% set homeLegsAgainst = clone(homeGames).sum('field_player2LegsWon') %}
-        {% set awayLegsFor = clone(awayGames).sum('field_player2LegsWon') %}
-        {% set awayLegsAgainst = clone(awayGames).sum('field_player1LegsWon') %}
-        {% set totalLegsFor = homeLegsFor + awayLegsFor %}
-        {% set totalLegsAgainst = homeLegsAgainst + awayLegsAgainst %}
-
-        {% set homeGamesWon = clone(homeGames).where('field_player1LegsWon > field_player2LegsWon').count() %}
-        {% set awayGamesWon = clone(awayGames).where('field_player2LegsWon > field_player1LegsWon').count() %}
-        {% set totalGamesWon = homeGamesWon + awayGamesWon %}
-
-        <th class="border border-gray-400 px-4 py-2 text-right">{{ player.title }}</th>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalGamesWon * 3 }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalGamesPlayed }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalGamesWon }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalGamesPlayed - totalGamesWon }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalLegsFor }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalLegsAgainst }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ totalLegsFor - totalLegsAgainst }}</td>
+        <th class="border border-gray-400 px-4 py-2 text-right">{{ row.playerName }}</th>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed - row.totalGamesWon }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalLegsFor }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalLegsAgainst }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalLegsFor - row.totalLegsAgainst }}</td>
       </tr>
     {% endfor %}
   </table>
