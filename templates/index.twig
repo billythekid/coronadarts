@@ -1,0 +1,55 @@
+{% extends "_layout" %}
+
+{% block content %}
+  {% set gamesQuery = craft.entries.section('games').with(['player1', 'player2']) %}
+  {% set players = craft.entries.section('players').relatedTo(gamesQuery).all() %}
+
+  <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
+    <tr>
+      <th>Player</th>
+      <th>Points</th>
+      <th>Played</th>
+      <th>Won</th>
+      <th>Lost</th>
+      <th>Legs For</th>
+      <th>Legs Against</th>
+      <th>Leg Difference</th>
+    </tr>
+    {% for player in players %}
+      <tr>
+        {% set homeGames = clone(gamesQuery).relatedTo({
+          element: player,
+          field: 'player1'
+        }) %}
+        {% set awayGames = clone(gamesQuery).relatedTo({
+          element: player,
+          field: 'player2'
+        }) %}
+
+        {% set gamesPlayed = clone(gamesQuery).relatedTo(player) %}
+
+        {% set totalGamesPlayed = clone(gamesPlayed).count() %}
+
+        {% set homeLegsFor = clone(homeGames).sum('field_player1LegsWon') %}
+        {% set homeLegsAgainst = clone(homeGames).sum('field_player2LegsWon') %}
+        {% set awayLegsFor = clone(awayGames).sum('field_player2LegsWon') %}
+        {% set awayLegsAgainst = clone(awayGames).sum('field_player1LegsWon') %}
+        {% set totalLegsFor = homeLegsFor + awayLegsFor %}
+        {% set totalLegsAgainst = homeLegsAgainst + awayLegsAgainst %}
+
+        {% set homeGamesWon = clone(homeGames).where('field_player1LegsWon > field_player2LegsWon').count() %}
+        {% set awayGamesWon = clone(awayGames).where('field_player2LegsWon > field_player1LegsWon').count() %}
+        {% set totalGamesWon = homeGamesWon + awayGamesWon %}
+
+        <th class="border border-gray-400 px-4 py-2">{{ player.title }}</th>
+        <td class="border border-gray-400 px-4 py-2">{{ totalGamesWon * 3 }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalGamesPlayed }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalGamesWon }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalGamesPlayed - totalGamesWon }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalLegsFor }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalLegsAgainst }}</td>
+        <td class="border border-gray-400 px-4 py-2">{{ totalLegsFor - totalLegsAgainst }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

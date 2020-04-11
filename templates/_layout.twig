@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="none">
+    <title>{{ siteName }}</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="block mx-auto p-8 max-w-5xl bg-gray-100">
+      <ul class="list-inline text-center">
+        <a href="/">Home</a> |
+        <a href="/games">Games</a>
+      </ul>
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
