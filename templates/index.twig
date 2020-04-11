@@ -61,7 +61,7 @@
       : (a.totalGamesPlayed <=> b.totalGamesPlayed)
       )
       |reverse %}
-      <tr>
+      <tr class="{{ loop.first ? 'text-green-500' }} {{ loop.last ? 'text-red-500' }}">
         <th class="border border-gray-400 px-4 py-2 text-right">{{ row.playerName }}</th>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
