@@ -8,11 +8,11 @@
   <div class="flex justify-around text-center">
     <div class="player1 py-4 {{ winner == 'player1' ? 'text-green-500' : 'text-red-500' }}">
       <h2 class="text-2xl">{{ entry.player1.one().title }}</h2>
-      <p class="text-6xl">{{ entry.player1LegsWon }}</p>
+      <p class="text-6xl">{{ entry.player1LegsWon + 0 }}</p>
     </div>
     <div class="player2 py-4 {{ winner == 'player2' ? 'text-green-500' : 'text-red-500' }}">
       <h2 class="text-2xl">{{ entry.player2.one().title }}</h2>
-      <p class="text-6xl">{{ entry.player2LegsWon }}</p>
+      <p class="text-6xl">{{ entry.player2LegsWon + 0 }}</p>
     </div>
   </div>
 
