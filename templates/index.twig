@@ -2,7 +2,7 @@
 
 {% block content %}
   {% set gamesQuery = craft.entries.section('games').with(['player1', 'player2']) %}
-  {% set players = craft.entries.section('players').relatedTo(gamesQuery).all() %}
+  {% set players = craft.entries.section('players').all() %}
 
   <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
     <tr>
