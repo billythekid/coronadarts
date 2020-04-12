@@ -127,4 +127,8 @@
   {% if gamesPlayed is not empty %}
     <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first }}. They've met {{ mostPlayedAgainst|first == 1 ? "once" : mostPlayedAgainst|first == 2 ? "twice" :  mostPlayedAgainst|first ~ " times"}}.</p>
   {% endif %}
+
+  {# TODO high scores #}
+  {# TODO high checkouts #}
+
 {% endblock %}
