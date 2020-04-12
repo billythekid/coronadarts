@@ -2,6 +2,9 @@
 namespace modules;
 
 use Craft;
+use craft\web\twig\variables\CraftVariable;
+use modules\twigextensions\LeagueTwigExtension;
+use yii\base\Event;
 
 /**
  * Custom module class.
@@ -40,5 +43,13 @@ class Module extends \yii\base\Module
         parent::init();
 
         // Custom initialization code goes here...
+
+      Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $e) {
+        /** @var CraftVariable $variable */
+        $variable = $e->sender;
+
+        // Attach a service:
+        $variable->set('league', LeagueTwigExtension::class);
+      });
     }
 }

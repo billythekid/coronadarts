@@ -15,54 +15,9 @@
       <th class="p-2 text-center">Legs Against</th>
       <th class="p-2 text-center">Leg Diff</th>
     </tr>
-    {% set leaderboard = [] %}
-    {% for player in players %}
-      {% set homeGames = clone(gamesQuery).relatedTo({
-        element: player,
-        field: 'player1'
-      }) %}
-      {% set awayGames = clone(gamesQuery).relatedTo({
-        element: player,
-        field: 'player2'
-      }) %}
-
-      {% set gamesPlayed = clone(gamesQuery).relatedTo(player) %}
-
-      {% set totalGamesPlayed = clone(gamesPlayed).count() %}
-
-      {% set homeLegsFor = clone(homeGames).sum('field_player1LegsWon') %}
-      {% set homeLegsAgainst = clone(homeGames).sum('field_player2LegsWon') %}
-      {% set awayLegsFor = clone(awayGames).sum('field_player2LegsWon') %}
-      {% set awayLegsAgainst = clone(awayGames).sum('field_player1LegsWon') %}
-      {% set totalLegsFor = homeLegsFor + awayLegsFor %}
-      {% set totalLegsAgainst = homeLegsAgainst + awayLegsAgainst %}
-
-      {% set homeGamesWon = clone(homeGames).where('field_player1LegsWon > field_player2LegsWon').count() %}
-      {% set awayGamesWon = clone(awayGames).where('field_player2LegsWon > field_player1LegsWon').count() %}
-      {% set totalGamesWon = homeGamesWon + awayGamesWon %}
-
-      {% set leaderboard = leaderboard|merge([{
-        playerName: player.title,
-        totalGamesWon:totalGamesWon,
-        totalGamesPlayed:totalGamesPlayed,
-        totalGamesWon:totalGamesWon,
-        totalGamesPlayed:totalGamesPlayed,
-        totalLegsFor:totalLegsFor,
-        totalLegsAgainst:totalLegsAgainst,
-        totalLegsFor:totalLegsFor
-      }]) %}
-    {% endfor %}
-    {# Sort by totalgames won, followed by leg difference, followed by games played #}
-    {% for row in leaderboard|sort((a,b) =>
-      a.totalGamesWon != b.totalGamesWon ?
-      a.totalGamesWon <=> b.totalGamesWon :
-      (a.totalLegsFor - a.totalLegsAgainst) != (b.totalLegsFor - b.totalLegsAgainst) ?
-      (a.totalLegsFor - a.totalLegsAgainst) <=> (b.totalLegsFor - b.totalLegsAgainst)
-      : (a.totalGamesPlayed <=> b.totalGamesPlayed)
-      )
-      |reverse %}
+    {% for row in craft.league.leaderboard %}
       <tr class="{{ loop.first ? 'text-green-500' }} {{ loop.last ? 'text-red-500' }}">
-        <th class="border border-gray-400 px-4 py-2 text-right">{{ row.playerName }}</th>
+        <th class="border border-gray-400 px-4 py-2 text-right">{{ craft.entries.title(row.playerName).one().link }}</th>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
