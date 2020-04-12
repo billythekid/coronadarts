@@ -61,6 +61,7 @@ class LeagueTwigExtension extends AbstractExtension
       $this->awayGamesWon     = $this->awayGames->where('field_player2LegsWon > field_player1LegsWon')->count();
       $this->totalGamesWon    = $this->homeGamesWon + $this->awayGamesWon;
       $this->leaderboard[]    = (object)[
+          'playerUrl'        => $player->url,
           'playerName'       => $player->title,
           'totalGamesWon'    => $this->totalGamesWon,
           'totalGamesPlayed' => $this->totalGamesPlayed,
