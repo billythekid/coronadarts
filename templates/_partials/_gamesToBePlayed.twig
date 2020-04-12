@@ -1,0 +1,42 @@
+{% set gamesToBePlayed = [
+  'Scotty vs Billy',
+  'Andy vs Ian',
+  'Mitch vs Martyn',
+  'Bruce vs Jim',
+  'Ian vs Scotty',
+  'Martyn vs Billy',
+  'Jim vs Andy',
+  'Bruce vs Mitch',
+  'Scotty vs Martyn',
+  'Ian vs Jim',
+  'Billy vs Bruce',
+  'Andy vs Mitch',
+  'Jim vs Scotty',
+  'Martyn vs Bruce',
+  'Mitch vs Ian',
+  'Billy vs Andy',
+  'Scotty vs Bruce',
+  'Jim vs Mitch',
+  'Martyn vs Andy',
+  'Ian vs Billy',
+  'Mitch vs Scotty',
+  'Andy vs Bruce',
+  'Billy vs Jim',
+  'Ian vs Martyn',
+  'Scotty vs Andy',
+  'Mitch vs Billy',
+  'Bruce vs Ian',
+  'Jim vs Martyn' ] %}
+
+  {% set gamesPlayed = craft.entries.section('games').title(gamesToBePlayed).select('title').column() %}
+<div>
+  <h2 class="text-center text-3xl pt-5">Games still to be played</h2>
+  <div class="text-center">
+    <ul>
+      {% for game in gamesToBePlayed %}
+        {% if game not in gamesPlayed %}
+          <li>{{ game }}</li>{% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
