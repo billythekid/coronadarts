@@ -101,8 +101,8 @@
       {% else %}
         {{ homeGamesWon|length + awayGamesWon|length > 0 ? "won it": "lost it" }}.
       {% endif %}
-    {%- else -%}
-      .
+    {%- else %}
+      so there's not much more we can say about {{ entry.title }}.
     {% endif %}
   </p>
   {% if homeGames|length %}
