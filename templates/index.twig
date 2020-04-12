@@ -7,17 +7,17 @@
   <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
     <tr>
       <th class="p-2 text-center">Player</th>
-      <th class="p-2 text-center">Points</th>
-      <th class="p-2 text-center">Played</th>
+      <th class="p-2 text-center"><span class="sm:hidden">Pts</span><span class="hidden sm:inline">Points</span></th>
+      <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Played</span></th>
       <th class="p-2 text-center">Won</th>
       <th class="p-2 text-center hidden sm:table-cell">Lost</th>
       <th class="p-2 text-center hidden sm:table-cell">Legs For</th>
-      <th class="p-2 text-center hidden sm:table-cell">Legs Against</th>
-      <th class="p-2 text-center">Leg Diff</th>
+      <th class="p-2 text-center hidden sm:table-cell">Against</th>
+      <th class="p-2 text-center"><span class="sm:hidden">L/D</span><span class="hidden sm:inline">Leg Diff</span></th>
     </tr>
     {% for row in craft.league.leaderboard %}
       <tr class="{{ loop.first ? 'text-green-500' }} {{ loop.last ? 'text-red-500' }}">
-        <th class="border border-gray-400 px-4 py-2 text-right"><a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
+        <th class="border border-gray-400 px-4 py-2 text-left"><a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
