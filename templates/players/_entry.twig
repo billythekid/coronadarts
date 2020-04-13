@@ -1,7 +1,7 @@
 {% extends "_layout" %}
 
 {% block content %}
-  {% set gamesPlayed = craft.entries.section('games').with('player1', 'player2').orderBy('postDate DESC').relatedTo(entry).all() %}
+  {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
   {% set lastGame = gamesPlayed[0] ?? null %}
   {% set greatWininSmackTalk =[
     "destroying ",
@@ -87,8 +87,27 @@
   {% set uniqueHomeAgainstPlayers = homeAgainstPlayers|reduce((unique, player) => player in unique ? unique : unique|merge([player]), []) %}
   {% set uniqueAwayAgainstPlayers = awayAgainstPlayers|reduce((unique, player) => player in unique ? unique : unique|merge([player]), []) %}
   {% set uniquePlayers = (uniqueHomeAgainstPlayers|merge(uniqueAwayAgainstPlayers))|reduce((unique, player) => player in unique ? unique : unique|merge([player]), []) %}
-
   {% set mostPlayedAgainst = craft.league.mostPlayed(entry) %}
+  {% set highScores = [] %}
+  {% set highCheckouts = [] %}
+  {% for game in gamesPlayed %}
+
+    {% for score in game.highScores %}
+      {% if score.player[0].id == entry.id %}
+        {% set highScores = highScores|merge([
+          {score: score.score, game: game}
+        ]) %}
+      {% endif %}
+    {% endfor %}
+
+    {% for checkout in game.highCheckouts %}
+      {% if checkout.player[0].id == entry.id %}
+        {% set highCheckouts = highCheckouts|merge([
+          {checkout: checkout.checkout, game: game}
+        ]) %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
 
@@ -117,18 +136,34 @@
         {{ uniqueHomeAgainstPlayers|join(', ', ' and ') }} at home
         {% if awayGames|length %} and {% endif %}
       {% endif %}
-      {{ uniqueAwayAgainstPlayers|join(', ', ' and ') }} away.
+      {% if awayGames|length %}
+        {{ uniqueAwayAgainstPlayers|join(', ', ' and ') }} away.
+      {% endif %}
     </p>
   {% endif %}
   {% if lastGame %}
-    <p>The last time {{ entry.title }} played was {{ lastGame.postDate|date }}, {{ lastGame.player1[0].id == entry.id ? "at home" : "away" }} against {{ lastGame.player1[0].id == entry.id ? lastGame.player2[0].title : lastGame.player1[0].title }} ({{ lastResult }}).</p>
+    <p>The last time {{ entry.title }} played was <a class="underline" href="{{ lastGame.url }}">{{ lastGame.postDate|date }}</a>, {{ lastGame.player1[0].id == entry.id ? "at home" : "away" }} against {{ lastGame.player1[0].id == entry.id ? lastGame.player2[0].title : lastGame.player1[0].title }} ({{ lastResult }}).</p>
   {% endif %}
 
   {% if gamesPlayed is not empty %}
-    <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first }}. They've met {{ mostPlayedAgainst|first == 1 ? "once" : mostPlayedAgainst|first == 2 ? "twice" :  mostPlayedAgainst|first ~ " times"}}.</p>
+    <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first|raw }}. They've met {{ mostPlayedAgainst|first == 1 ? "once" : mostPlayedAgainst|first == 2 ? "twice" :  mostPlayedAgainst|first ~ " times" }}.</p>
   {% endif %}
 
-  {# TODO high scores #}
-  {# TODO high checkouts #}
+  {% if highScores is not empty %}
+    <p>{{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points.
+      {{ highScores
+      | sort((a,b) => b.score <=> a.score)
+      | map(score => score.score ~ " (<a class='underline' href='#{score.game.url}'>against #{score.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
+      | join(', ', ' and ') | raw }}.
+    </p>
+  {% endif %}
+
+  {% if highCheckouts is not empty %}
+    <p>{{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highScores|length != 1 ? 's' }} with 100 or more.
+      {{ highCheckouts
+      | sort((a,b) => b.checkout <=> a.checkout)
+      | map(checkout => checkout.checkout ~ " (<a class='underline' href='#{checkout.game.url}'>against #{checkout.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
+      | join(', ', ' and ') | raw }}.
+    </p>  {% endif %}
 
 {% endblock %}

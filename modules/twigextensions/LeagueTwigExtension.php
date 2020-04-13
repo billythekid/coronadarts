@@ -2,10 +2,8 @@
 
 namespace modules\twigextensions;
 
-use Craft;
 use craft\elements\db\ElementQuery;
 use craft\elements\Entry;
-use DateTime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -71,11 +69,11 @@ class LeagueTwigExtension extends AbstractExtension
 
       usort($this->leaderboard, function ($a, $b) {
         // if the player has won more games they're higher
-        if ($a->totalGamesWon != $b->totalGamesWon)
+        if ($a->totalGamesWon !== $b->totalGamesWon)
         {
           return $a->totalGamesWon <=> $b->totalGamesWon;
           // if they've won the same number of games, check the leg difference
-        } elseif (($a->totalLegsFor - $a->totalLegsAgainst) != ($b->totalLegsFor - $b->totalLegsAgainst))
+        } elseif (($a->totalLegsFor - $a->totalLegsAgainst) !== ($b->totalLegsFor - $b->totalLegsAgainst))
         {
           return ($a->totalLegsFor - $a->totalLegsAgainst) <=> ($b->totalLegsFor - $b->totalLegsAgainst);
         }
@@ -98,7 +96,7 @@ class LeagueTwigExtension extends AbstractExtension
     for ($i = 0; $i <= count($this->leaderboard); $i++)
     {
       $leaguePlayer = $this->leaderboard[$i];
-      if ($leaguePlayer->playerName == $player->title)
+      if ($leaguePlayer->playerName === $player->title)
       {
         return $i + 1 . date("S", date_timestamp_get(date_create("2000-01-" . ($i + 1))));
       }
@@ -113,7 +111,7 @@ class LeagueTwigExtension extends AbstractExtension
     $opponents = [];
     foreach ($this->gamesQuery->relatedTo($player)->all() as $game)
     {
-      $opponents[] = ($game->player1[0]->id == $player->id) ? $game->player2[0]->title : $game->player1[0]->title;
+      $opponents[] = (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player1[0]->title)) . "</a>";
     }
     $opponentsByGames = array_count_values($opponents);
     arsort($opponentsByGames);
