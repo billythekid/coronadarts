@@ -146,7 +146,7 @@
   {% endif %}
 
   {% if gamesPlayed is not empty %}
-    <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first|raw }}. They've met {{ mostPlayedAgainst|first == 1 ? "once" : mostPlayedAgainst|first == 2 ? "twice" :  mostPlayedAgainst|first ~ " times" }}.</p>
+    <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first|raw }}. They've met {{ mostPlayedAgainst|first == '1' ? "once" : mostPlayedAgainst|first == '2' ? "twice" :  mostPlayedAgainst|first ~ " times" }}.</p>
   {% endif %}
 
   {% if highScores is not empty %}

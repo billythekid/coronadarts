@@ -111,7 +111,7 @@ class LeagueTwigExtension extends AbstractExtension
     $opponents = [];
     foreach ($this->gamesQuery->relatedTo($player)->all() as $game)
     {
-      $opponents[] = (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player1[0]->title)) . "</a>";
+      $opponents[] = (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player1[0]->url}'>" . $game->player1[0]->title)) . "</a>";
     }
     $opponentsByGames = array_count_values($opponents);
     arsort($opponentsByGames);
