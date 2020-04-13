@@ -3,16 +3,27 @@
 {% block content %}
   {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
   {% set lastGame = gamesPlayed[0] ?? null %}
-  {% set greatWinSmackTalk =[
-    "destroying ",
-    "humping ",
-    "wasting ",
-    "gubbing ",
-    "obliterating ",
-    "fucking ",
-    "wellying ",
-    "pounding ",
-    "pummelling "
+  {% set modifier = [
+    "",
+    "completely",
+    "utterly",
+    "fucking",
+    "seriously",
+    "decidedly",
+    ""
+  ] %}
+  {% set greatWinSmackTalk = [
+    "#{entry.title} " ~ random(modifier) ~ " destroyed ",
+    "#{entry.title} " ~ random(modifier) ~ " humped ",
+    "#{entry.title} " ~ random(modifier) ~ " wasted ",
+    "#{entry.title} " ~ random(modifier) ~ " gubbed ",
+    "#{entry.title} " ~ random(modifier) ~ " obliterated ",
+    "#{entry.title} " ~ random(modifier) ~ " destroyed ",
+    "#{entry.title} " ~ random(modifier) ~ " wellied ",
+    "#{entry.title} " ~ random(modifier) ~ " pounded ",
+    "#{entry.title} " ~ random(modifier) ~ " pummelled ",
+    "#{entry.title} " ~ random(modifier) ~ " killed ",
+
   ] %}
   {% set justWonSmackTalk =  [
     "stealing the match from ",
@@ -24,14 +35,15 @@
     "closely beating ",
   ] %}
   {% set completeLossSmackTalk = [
-    "#{entry.title} destroyed by ",
-    "#{entry.title} got humped by ",
-    "#{entry.title} took a gubbing from ",
-    "#{entry.title} obliterated by ",
-    "#{entry.title} taking a beating from ",
-    "#{entry.title} accepted an absolute pounding off ",
-    "#{entry.title} was fucking pummelled by ",
-    "#{entry.title} took a right rogering from "
+    "#{entry.title} " ~ random(modifier) ~ " destroyed by ",
+    "#{entry.title} got " ~ random(modifier) ~ " humped by ",
+    "#{entry.title} " ~ random(modifier) ~ " took a gubbing from ",
+    "#{entry.title} " ~ random(modifier) ~ " obliterated by ",
+    "#{entry.title} " ~ random(modifier) ~ " taking a beating from ",
+    "#{entry.title} " ~ random(modifier) ~ " accepted an absolute pounding off ",
+    "#{entry.title} was " ~ random(modifier) ~ " pummelled by ",
+    "#{entry.title} " ~ random(modifier) ~ " took a right rogering from ",
+    "#{entry.title} " ~ random(modifier) ~ " killed by "
   ] %}
   {% set narrowLossSmackTalk = [
     "#{entry.title} had victory stolen by ",
