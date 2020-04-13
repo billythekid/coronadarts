@@ -72,7 +72,6 @@
     "finally",
     "hardly",
     "lightly",
-    "luckily",
     "more or less",
     "narrowly",
     "marginally"
@@ -103,6 +102,7 @@
   {% set narrowLossSmackTalk =  (entry.title ~ random([" got ", " was "]) ~ random(passiveAdverbs) ~ " " ~ random(passiveLossVerbs) ~ " by ")|replace("  ", " ") %}
   {# If they were at home and won, else if they were the away player and won, or were the home player and got beat, or anything else (away player and got beat), tell the story #}
   {% set lastResult = ', well who knows, Billy made this! (this is an error, tell Billy about it.)' %}
+
   {% if lastGame %}
     {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
       {# won at home #}
