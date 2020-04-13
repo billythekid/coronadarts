@@ -70,7 +70,7 @@
   'Mitch vs Ian',
 ] %}
 
-{% set gamesPlayed = craft.entries.section('games').title(gamesToBePlayed).select('title').column() %}
+{% set gamesPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
 
 <div>
   <h2 class="text-center text-3xl py-5">Games still to be played</h2>
@@ -80,10 +80,11 @@
       <ul class="mb-5">
         {% for game in rounds %}
           <li>
-            {%- if game not in gamesPlayed -%}
-              {{ game | replace(' ', ' ') }}
+            {%- if game not in gamesPlayed|map(game => game.title) -%}
+              {{ game }}
             {%- else -%}
-              <span class="text-gray-500"><s>{{ game | replace(' ', ' ') }}</s></span>
+              {% set playedGame = gamesPlayed|filter(thisGame => thisGame.title == game)|first %}
+              <span class="text-gray-500"><s><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></s></span>
             {%- endif -%}
           </li>
         {% endfor %}

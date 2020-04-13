@@ -5,7 +5,7 @@
 
 {% block content %}
   <h1 class="text-5xl text-center mt-5">{{ entry.title }}</h1>
-  <p class="text-center">{{ entry.postDate|date }}</p>
+  <p class="text-center">{{ entry.postDate|date('l jS F Y') }}</p>
 
   <div class="flex justify-around text-center">
     <div class="player1 py-4 {{ winner == 'player1' ? 'text-green-500' : 'text-red-500' }}">
