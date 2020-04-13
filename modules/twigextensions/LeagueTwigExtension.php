@@ -34,7 +34,6 @@ class LeagueTwigExtension extends AbstractExtension
   {
     $this->gamesQuery  = Entry::find()->section('games')->with(['player1', 'player2']);
     $this->players     = Entry::find()->section('players')->all();
-    $this->players     = Entry::find()->section('players')->all();
     $this->leaderboard = [];
     foreach ($this->players as $player)
     {
