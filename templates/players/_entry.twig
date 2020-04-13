@@ -127,70 +127,68 @@
   {% endfor %}
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
-
-  <p>{{ entry.title }} is sitting <span class="text-2xl">{{ craft.league.position(entry) }}</span> in the league.</p>
-
-  <p>{{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
-    {%- if gamesPlayed is not empty -%}
-      , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
-      {% if gamesPlayed|length != 1 %}
-        won {{ homeGamesWon|length + awayGamesWon|length == gamesPlayed|length ? "all" }} {{ homeGamesWon|length + awayGamesWon|length }} of them.
-      {% else %}
-        {{ homeGamesWon|length + awayGamesWon|length > 0 ? "won it": "lost it" }}.
+  <div class="leading-loose">
+    <p>{{ entry.title }} is sitting <span class="text-2xl">{{ craft.league.position(entry) }}</span> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
+      {%- if gamesPlayed is not empty -%}
+        , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
+        {% if gamesPlayed|length != 1 %}
+          won {{ homeGamesWon|length + awayGamesWon|length == gamesPlayed|length ? "all" }} {{ homeGamesWon|length + awayGamesWon|length }} of them.
+        {% else %}
+          {{ homeGamesWon|length + awayGamesWon|length > 0 ? "won it": "lost it" }}.
+        {% endif %}
+      {%- else %}
+        so there's not much more we can say about {{ entry.title }}.
       {% endif %}
-    {%- else %}
-      so there's not much more we can say about {{ entry.title }}.
+    </p>
+
+    {% if homeGames|length %}
+      <p>{{ entry.title }} played {{ homeGames|length }} games as the "home" player and won {{ homeGamesWon|length == homeGames|length ? 'all' : homeGamesWon|length }} of those.</p>
     {% endif %}
-  </p>
 
-  {% if homeGames|length %}
-    <p>{{ entry.title }} played {{ homeGames|length }} games as the "home" player and won {{ homeGamesWon|length == homeGames|length ? 'all' : homeGamesWon|length }} of those.</p>
-  {% endif %}
+    {% if awayGames|length %}
+      <p>Of the {{ awayGames|length }} games as the "away" player, {{ entry.title }} won {{ awayGamesWon|length == awayGames|length ? 'all ' ~  awayGames|length : awayGamesWon|length }} game{{ awayGamesWon|length != 1 ? 's' }}.</p>
+    {% endif %}
 
-  {% if awayGames|length %}
-    <p>Of the {{ awayGames|length }} games as the "away" player, {{ entry.title }} won {{ awayGamesWon|length == awayGames|length ? 'all ' ~  awayGames|length : awayGamesWon|length }} game{{ awayGamesWon|length != 1 ? 's' }}.</p>
-  {% endif %}
+    {% if gamesPlayed is not empty %}
+      <p>
+        {{ entry.title }} has played
+        {% if homeGames|length %}
+          {{ uniqueHomeAgainstPlayers|join(', ', ' and ') }} at home{% if awayGames|length %} and {% else %}.{% endif %}
+        {% endif %}
+        {% if awayGames|length %}
+          {{ uniqueAwayAgainstPlayers|join(', ', ' and ') }} away.
+        {% endif %}
+      </p>
+    {% endif %}
 
-  {% if gamesPlayed is not empty %}
-    <p>
-      {{ entry.title }} has played
-      {% if homeGames|length %}
-        {{ uniqueHomeAgainstPlayers|join(', ', ' and ') }} at home{% if awayGames|length %} and {% else %}.{% endif %}
-      {% endif %}
-      {% if awayGames|length %}
-        {{ uniqueAwayAgainstPlayers|join(', ', ' and ') }} away.
-      {% endif %}
-    </p>
-  {% endif %}
+    {% if lastGame %}
+      <p>The last time {{ entry.title }} played was
+        <a class="underline" href="{{ lastGame.url }}">{{ lastGame.postDate|date }}</a>, {{ lastGame.player1[0].id == entry.id ? "at home" : "away" }} against {{ lastGame.player1[0].id == entry.id ? lastGame.player2[0].title : lastGame.player1[0].title }} ({{ lastResult }}).
+      </p>
+    {% endif %}
 
-  {% if lastGame %}
-    <p>The last time {{ entry.title }} played was
-      <a class="underline" href="{{ lastGame.url }}">{{ lastGame.postDate|date }}</a>, {{ lastGame.player1[0].id == entry.id ? "at home" : "away" }} against {{ lastGame.player1[0].id == entry.id ? lastGame.player2[0].title : lastGame.player1[0].title }} ({{ lastResult }}).
-    </p>
-  {% endif %}
+    {% if gamesPlayed is not empty %}
+      <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first|raw }}. They've met {{ mostPlayedAgainst|first == '1' ? "once" : mostPlayedAgainst|first == '2' ? "twice" :  mostPlayedAgainst|first ~ " times" }}.</p>
+    {% endif %}
 
-  {% if gamesPlayed is not empty %}
-    <p>The person {{ entry.title }} has played the most is {{ mostPlayedAgainst|keys|first|raw }}. They've met {{ mostPlayedAgainst|first == '1' ? "once" : mostPlayedAgainst|first == '2' ? "twice" :  mostPlayedAgainst|first ~ " times" }}.</p>
-  {% endif %}
+    {% if highScores is not empty %}
+      <p>
+        {{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points.
+        {{ highScores
+        | sort((a,b) => b.score <=> a.score)
+        | map(score => score.score ~ " (<a class='underline' href='#{score.game.url}'>against #{score.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
+        | join(', ', ' and ') | raw }}.
+      </p>
+    {% endif %}
 
-  {% if highScores is not empty %}
-    <p>
-      {{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points.
-      {{ highScores
-      | sort((a,b) => b.score <=> a.score)
-      | map(score => score.score ~ " (<a class='underline' href='#{score.game.url}'>against #{score.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
-      | join(', ', ' and ') | raw }}.
-    </p>
-  {% endif %}
-
-  {% if highCheckouts is not empty %}
-    <p>
-      {{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highScores|length != 1 ? 's' }} with 100 or more.
-      {{ highCheckouts
-      | sort((a,b) => b.checkout <=> a.checkout)
-      | map(checkout => checkout.checkout ~ " (<a class='underline' href='#{checkout.game.url}'>against #{checkout.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
-      | join(', ', ' and ') | raw }}.
-    </p>
-  {% endif %}
-
+    {% if highCheckouts is not empty %}
+      <p>
+        {{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highScores|length != 1 ? 's' }} with 100 or more.
+        {{ highCheckouts
+        | sort((a,b) => b.checkout <=> a.checkout)
+        | map(checkout => checkout.checkout ~ " (<a class='underline' href='#{checkout.game.url}'>against #{checkout.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
+        | join(', ', ' and ') | raw }}.
+      </p>
+    {% endif %}
+  </div>
 {% endblock %}
