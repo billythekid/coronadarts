@@ -16,7 +16,7 @@
       <th class="p-2 text-center"><span class="sm:hidden">L/D</span><span class="hidden sm:inline">Leg Diff</span></th>
     </tr>
     {% for row in craft.league.leaderboard %}
-      <tr class="{{ loop.first ? 'text-green-500' }} {{ loop.last ? 'text-red-500' }}">
+      <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
         <th class="border border-gray-400 px-4 py-2 text-left">
           <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</td>
