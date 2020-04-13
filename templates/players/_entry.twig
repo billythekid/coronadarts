@@ -3,7 +3,7 @@
 {% block content %}
   {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
   {% set lastGame = gamesPlayed[0] ?? null %}
-  {% set modifier = [
+  {% set extremeModifier = [
     "",
     "completely",
     "utterly",
@@ -13,37 +13,37 @@
     ""
   ] %}
   {% set greatWinSmackTalk = [
-    "#{entry.title} " ~ random(modifier) ~ " destroyed ",
-    "#{entry.title} " ~ random(modifier) ~ " humped ",
-    "#{entry.title} " ~ random(modifier) ~ " wasted ",
-    "#{entry.title} " ~ random(modifier) ~ " gubbed ",
-    "#{entry.title} " ~ random(modifier) ~ " obliterated ",
-    "#{entry.title} " ~ random(modifier) ~ " destroyed ",
-    "#{entry.title} " ~ random(modifier) ~ " wellied ",
-    "#{entry.title} " ~ random(modifier) ~ " pounded ",
-    "#{entry.title} " ~ random(modifier) ~ " pummelled ",
-    "#{entry.title} " ~ random(modifier) ~ " killed ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " humped ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " wasted ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " gubbed ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " obliterated ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " wellied ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " pounded ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " pummelled ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " killed ",
 
   ] %}
   {% set justWonSmackTalk =  [
-    "stealing the match from ",
-    "narrowly beating ",
-    "scraping past ",
-    "luckily taking ",
-    "struggling past ",
-    "just managing to overcome ",
-    "closely beating ",
+    "#{entry.title} stealing the match from ",
+    "#{entry.title} narrowly beating ",
+    "#{entry.title} scraping past ",
+    "#{entry.title} luckily taking ",
+    "#{entry.title} struggling past ",
+    "#{entry.title} just managing to overcome ",
+    "#{entry.title} closely beating ",
   ] %}
   {% set completeLossSmackTalk = [
-    "#{entry.title} " ~ random(modifier) ~ " destroyed by ",
-    "#{entry.title} got " ~ random(modifier) ~ " humped by ",
-    "#{entry.title} " ~ random(modifier) ~ " took a gubbing from ",
-    "#{entry.title} " ~ random(modifier) ~ " obliterated by ",
-    "#{entry.title} " ~ random(modifier) ~ " taking a beating from ",
-    "#{entry.title} " ~ random(modifier) ~ " accepted an absolute pounding off ",
-    "#{entry.title} was " ~ random(modifier) ~ " pummelled by ",
-    "#{entry.title} " ~ random(modifier) ~ " took a right rogering from ",
-    "#{entry.title} " ~ random(modifier) ~ " killed by "
+    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed by ",
+    "#{entry.title} got " ~ random(extremeModifier) ~ " humped by ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " took a gubbing from ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " obliterated by ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " taking a beating from ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " accepted an absolute pounding off ",
+    "#{entry.title} was " ~ random(extremeModifier) ~ " pummelled by ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " took a right rogering from ",
+    "#{entry.title} " ~ random(extremeModifier) ~ " killed by "
   ] %}
   {% set narrowLossSmackTalk = [
     "#{entry.title} had victory stolen by ",

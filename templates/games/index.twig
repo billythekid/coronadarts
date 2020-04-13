@@ -1,7 +1,7 @@
 {% extends "_layout" %}
 
 {% block content %}
-  <h1 class="text-5xl text-center">Games</h1>
+  <h1 class="text-5xl text-center">Games Played</h1>
   <ul class="text-center">
     {% for playedDate, games in craft.entries.section('games').all()|group('postDate|date') %}
       <li class="border-t-2 py-5">
