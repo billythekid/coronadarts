@@ -3,7 +3,7 @@
 {% block content %}
   {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
   {% set lastGame = gamesPlayed[0] ?? null %}
-  {% set greatWininSmackTalk =[
+  {% set greatWinSmackTalk =[
     "destroying ",
     "humping ",
     "wasting ",
@@ -45,7 +45,7 @@
 
       {# won at home #}
       {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ?
-        random(greatWininSmackTalk) :
+        random(greatWinSmackTalk) :
         random(justWonSmackTalk) %}
       {% set lastResult = prefix ~ lastGame.player2[0].title %}
 
@@ -53,7 +53,7 @@
 
       {# won away #}
       {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ?
-        random(greatWininSmackTalk) :
+        random(greatWinSmackTalk) :
         random(justWonSmackTalk) %}
       {% set lastResult = prefix ~ lastGame.player1[0].title %}
 
