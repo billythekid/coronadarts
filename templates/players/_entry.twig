@@ -4,90 +4,113 @@
 {% block content %}
   {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
   {% set lastGame = gamesPlayed[0] ?? null %}
-  {% set extremeModifier = [
+  {% set extremeAdverbs = [
     "",
+    "absolutely",
+    "altogether",
     "completely",
-    "utterly",
-    "fucking",
-    "seriously",
+    "comprehensively",
+    "conclusively",
     "decidedly",
-    "embarrasingly"
+    "disturbingly",
+    "effectively",
+    "embarrasingly",
+    "firmly",
+    "fully",
+    "fucking",
+    "mortifyingly",
+    "perfectly",
+    "seriously",
+    "solidly",
+    "thoroughly",
+    "totally",
+    "ultimately",
+    "unconditionally",
+    "utterly",
+    "wholly",
   ] %}
-  {% set greatWinSmackTalk = [
-    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " humped ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " wasted ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " gubbed ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " obliterated ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " wellied ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " pounded ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " pummelled ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " killed ",
-
+  {% set extremeVerbs = [
+    "abolished",
+    "annihilated",
+    "conquered",
+    "crushed",
+    "decimated",
+    "demolished",
+    "destroyed",
+    "eradicated",
+    "erased",
+    "fucked",
+    "finished off",
+    "gubbed",
+    "humped",
+    "invalidated",
+    "killed",
+    "massacred",
+    "murdered",
+    "nullified",
+    "obliterated",
+    "overpowered",
+    "overwhelmed",
+    "owned",
+    "pummelled",
+    "rattled",
+    "ruined",
+    "slaughtered",
+    "wasted",
+    "wellied",
+    "wiped out",
+    "wrecked",
   ] %}
-  {% set justWonSmackTalk =  [
-    "#{entry.title} stealing the match from ",
-    "#{entry.title} narrowly beating ",
-    "#{entry.title} scraping past ",
-    "#{entry.title} luckily taking ",
-    "#{entry.title} struggling past ",
-    "#{entry.title} just managing to overcome ",
-    "#{entry.title} closely beating ",
+  {% set passiveAdverbs = [
+    "closely",
+    "finally",
+    "luckily",
+    "narrowly",
+    "only just",
+    "marginally"
   ] %}
-  {% set completeLossSmackTalk = [
-    "#{entry.title} " ~ random(extremeModifier) ~ " destroyed by ",
-    "#{entry.title} got " ~ random(extremeModifier) ~ " humped by ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " took a gubbing from ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " obliterated by ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " taking a beating from ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " accepted an absolute pounding off ",
-    "#{entry.title} was " ~ random(extremeModifier) ~ " pummelled by ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " took a right rogering from ",
-    "#{entry.title} " ~ random(extremeModifier) ~ " killed by "
+  {% set passiveWinVerbs = [
+    "beat",
+    "bested",
+    "overcame",
+    "pipped",
+    "scraped past",
+    "stole it from",
+    "struggled past",
+    "thwarted",
+    "took",
+    "undid",
   ] %}
-  {% set narrowLossSmackTalk = [
-    "#{entry.title} had victory stolen by ",
-    "#{entry.title} was just pipped by ",
-    "#{entry.title} was closely beaten by ",
-    "#{entry.title} unluckily taken by ",
-    "#{entry.title} fought hard but was eventually beaten by ",
-    "#{entry.title} finding themself narrowly overcome by "
+  {% set passiveLossVerbs = [
+    "beaten",
+    "bested",
+    "overcome",
+    "pipped",
+    "stolen",
+    "taken",
   ] %}
+  {% set greatWinSmackTalk = (entry.title ~ " " ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " ")|replace("  ", " ") %}
+  {% set justWonSmackTalk =  (entry.title ~ " " ~ random(passiveAdverbs) ~ " " ~ random(passiveWinVerbs) ~ " ")|replace("  ", " ") %}
+  {% set completeLossSmackTalk = (entry.title ~ random([" got ", " was "]) ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " by ")|replace("  ", " ") %}
+  {% set narrowLossSmackTalk =  (entry.title ~ random([" got ", " was "]) ~ random(passiveAdverbs) ~ " " ~ random(passiveLossVerbs) ~ " by ")|replace("  ", " ") %}
   {# If they were at home and won, else if they were the away player and won, or were the home player and got beat, or anything else (away player and got beat), tell the story #}
   {% set lastResult = ', well who knows, Billy made this! (this is an error, tell Billy about it.)' %}
   {% if lastGame %}
     {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
-
       {# won at home #}
-      {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ?
-        random(greatWinSmackTalk) :
-        random(justWonSmackTalk) %}
+      {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
       {% set lastResult = prefix ~ lastGame.player2[0].title %}
-
     {% elseif ( ( lastGame.player2[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
-
       {# won away #}
-      {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ?
-        random(greatWinSmackTalk) :
-        random(justWonSmackTalk) %}
+      {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
       {% set lastResult = prefix ~ lastGame.player1[0].title %}
-
     {% elseif ( ( lastGame.player1[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
-
       {# lost at home #}
-      {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ?
-        random(completeLossSmackTalk) :
-        random(narrowLossSmackTalk) %}
+      {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
       {% set lastResult = prefix ~ lastGame.player2[0].title %}
-
     {% else %}
-
       {# lost away  #}
-
-      {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ?
-        random(completeLossSmackTalk) :
-        random(narrowLossSmackTalk) %}
+      {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
       {% set lastResult = prefix ~ lastGame.player1[0].title %}
     {% endif %}
 
@@ -128,7 +151,8 @@
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
   <div class="leading-loose">
-    <p>{{ entry.title }} is sitting <span class="text-2xl">{{ craft.league.position(entry) }}</span> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
+    <p>{{ entry.title }} is sitting
+      <span class="text-2xl">{{ craft.league.position(entry) }}</span> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
         , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
         {% if gamesPlayed|length != 1 %}
