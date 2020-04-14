@@ -25,8 +25,8 @@
       }
     </style>
   </head>
-  <body>
-    <div class="block mx-auto p-8 max-w-screen-xl relative min-h-screen text-blue-800 text-lg">
+  <body class="min-h-screen">
+    <div class="block mx-auto p-8 max-w-screen-xl relative text-blue-800 text-lg pb-16">
       {% if craft.app.request.segments is not empty %}<a href="/">{% endif %}
         <h1 class="text-3xl text-center pt-10 z-10">
           <span class="font-bold text-blue-600">C</span>oronavirus
@@ -56,7 +56,7 @@
         {% block content %}{% endblock %}
       </div>
     </div>
-    <footer class="text-center text-sm text-gray-400 pt-5">
+    <footer class="text-center text-sm text-gray-400 absolute bottom-0 left-0 right-0 min-h-5 pb-5">
       <p>Copyright {{ now|date('Y') }} Billy Fagan</p>
     </footer>
   </body>
