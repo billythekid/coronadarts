@@ -40,16 +40,16 @@
       <h2 class="text-center pb-10">Darts League</h2>
       <ul class="list-inline text-center">
         <li class="inline-block">
-          <a class="{% if craft.app.request.segments is empty %}text-blue-600{% endif %}" href="/">Home</a> |
+          <a class="bg-gray-100 rounded-full border-2 px-2 py-1 {% if craft.app.request.segments is empty %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/">Home</a>
         </li>
         <li class="inline-block">
-          <a class="{% if 'games' in craft.app.request.segments %}text-blue-600{% endif %}" href="/games">Games</a> |
+          <a class="bg-gray-100 rounded-full border-2 px-2 py-1 {% if 'games' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/games">Games</a>
         </li>
         <li class="inline-block">
-          <a class="{% if 'players' in craft.app.request.segments %}text-blue-600{% endif %}" href="/players">Players</a> |
+          <a class="bg-gray-100 rounded-full border-2 px-2 py-1 {% if 'players' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/players">Players</a>
         </li>
         <li class="inline-block">
-          <a class="{% if 'roll-of-honour' in craft.app.request.segments %}text-blue-600{% endif %}" href="/order-of-merit">Order of Merit</a>
+          <a class="bg-gray-100 rounded-full border-2 px-2 py-1 {% if 'order-of-merit' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/order-of-merit">Order of Merit</a>
         </li>
       </ul>
       <div class="pt-5">
