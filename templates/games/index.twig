@@ -7,7 +7,7 @@
     {% for playedDate, games in craft.entries.section('games').all()|group('postDate|date') %}
       <li class="border-t-2 py-5">
         <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
-        <ul class="grid grid-cols-3 gap-4">
+        <ul class="grid grid-cols-2 md:grid-cols-3 gap-4">
           {% for game in games %}
             <li><a class="underline" href="{{ game.url }}">{{ game.title|replace(" vs ", " #{game.player1LegsWon} vs #{game.player2LegsWon} ") }}</a></li>
           {% endfor %}
