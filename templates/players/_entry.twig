@@ -229,34 +229,36 @@
     {% endif %}
   </div>
 
-  <div class="leading-loose sm:leading-normal">
-    <h2 class="text-3xl my-5">{{ entry.title }}'s Game summaries</h2>
-    {% for lastGame in gamesPlayed %}
-      {% set greatWinSmackTalk = (entry.title ~ " " ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " ")|replace("  ", " ") %}
-      {% set justWonSmackTalk =  (entry.title ~ " " ~ random(passiveAdverbs) ~ " " ~ random(passiveWinVerbs) ~ " ")|replace("  ", " ") %}
-      {% set completeLossSmackTalk = (entry.title ~ random([" got ", " was "]) ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " by ")|replace("  ", " ") %}
-      {% set narrowLossSmackTalk =  (entry.title ~ random([" got ", " was "]) ~ random(passiveAdverbs) ~ " " ~ random(passiveLossVerbs) ~ " by ")|replace("  ", " ") %}
-      {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
-        {# won at home #}
-        {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-        {% set lastResult = prefix ~ lastGame.player2[0].title %}
-      {% elseif ( ( lastGame.player2[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
-        {# won away #}
-        {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-        {% set lastResult = prefix ~ lastGame.player1[0].title %}
-      {% elseif ( ( lastGame.player1[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
-        {# lost at home #}
-        {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-        {% set lastResult = prefix ~ lastGame.player2[0].title %}
-      {% else %}
-        {# lost away  #}
-        {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-        {% set lastResult = prefix ~ lastGame.player1[0].title %}
-      {% endif %}
+  {% if gamesPlayed is not empty %}
+    <div class="leading-loose sm:leading-normal">
+      <h2 class="text-3xl my-5">{{ entry.title }}'s Game summaries</h2>
+      {% for lastGame in gamesPlayed %}
+        {% set greatWinSmackTalk = (entry.title ~ " " ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " ")|replace("  ", " ") %}
+        {% set justWonSmackTalk =  (entry.title ~ " " ~ random(passiveAdverbs) ~ " " ~ random(passiveWinVerbs) ~ " ")|replace("  ", " ") %}
+        {% set completeLossSmackTalk = (entry.title ~ random([" got ", " was "]) ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " by ")|replace("  ", " ") %}
+        {% set narrowLossSmackTalk =  (entry.title ~ random([" got ", " was "]) ~ random(passiveAdverbs) ~ " " ~ random(passiveLossVerbs) ~ " by ")|replace("  ", " ") %}
+        {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
+          {# won at home #}
+          {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title %}
+        {% elseif ( ( lastGame.player2[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
+          {# won away #}
+          {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title %}
+        {% elseif ( ( lastGame.player1[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
+          {# lost at home #}
+          {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title %}
+        {% else %}
+          {# lost away  #}
+          {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title %}
+        {% endif %}
 
-      {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
-      <p>{{ lastGame.postDate|date }} -
-        <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
-    {% endfor %}
-  </div>
+        {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
+        <p>{{ lastGame.postDate|date }} -
+          <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endblock %}
