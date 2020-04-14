@@ -4,7 +4,7 @@
   {% set gamesQuery = craft.entries.section('games').with(['player1', 'player2']) %}
   {% set players = craft.entries.section('players').all() %}
 
-  <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
+  <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto shadow-xl">
     <tr>
       <th class="p-2 text-center">Player</th>
       <th class="p-2 text-center"><span class="sm:hidden">Pts</span><span class="hidden sm:inline">Points</span></th>
