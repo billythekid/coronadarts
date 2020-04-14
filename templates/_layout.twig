@@ -7,32 +7,49 @@
     <meta name="robots" content="none">
     <title>{{ title is defined ? title ~ " | " }}'mon the Tigers!</title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      body {
+        position: relative;
+      }
+
+      body:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url(/bg.jpg) no-repeat top left fixed;
+        background-size: cover;
+        opacity: 0.1;
+      }
+    </style>
   </head>
   <body>
-    <div class="block mx-auto p-8 max-w-5xl bg-gray-100 relative">
+    <div class="block mx-auto p-8 max-w-screen-xl relative min-h-screen shadow-xl text-blue-800 text-lg">
       {% if craft.app.request.segments is not empty %}<a href="/">{% endif %}
         <h1 class="text-3xl text-center pt-10 z-10">
-          <span class="font-bold text-teal-600">C</span>oronavirus
-          <span class="font-bold text-teal-600">U</span>nited
-          <span class="font-bold text-teal-600">N</span>ewton
-          <span class="font-bold text-teal-600">T</span>igers
-          <span class="font-bold text-teal-600">S</span>ingles
+          <span class="font-bold text-blue-600">C</span>oronavirus
+          <span class="font-bold text-blue-600">U</span>nited
+          <span class="font-bold text-blue-600">N</span>ewton
+          <span class="font-bold text-blue-600">T</span>igers
+          <span class="font-bold text-blue-600">S</span>ingles
         </h1>
         {% if craft.app.request.segments is not empty %}</a>{% endif %}
 
       <h2 class="text-center pb-10">Darts League</h2>
       <ul class="list-inline text-center">
         <li class="inline-block">
-          <a class="{% if craft.app.request.segments is empty %}text-teal-600{% endif %}" href="/">Home</a> |
+          <a class="{% if craft.app.request.segments is empty %}text-blue-600{% endif %}" href="/">Home</a> |
         </li>
         <li class="inline-block">
-          <a class="{% if 'games' in craft.app.request.segments %}text-teal-600{% endif %}" href="/games">Games</a> |
+          <a class="{% if 'games' in craft.app.request.segments %}text-blue-600{% endif %}" href="/games">Games</a> |
         </li>
         <li class="inline-block">
-          <a class="{% if 'players' in craft.app.request.segments %}text-teal-600{% endif %}" href="/players">Players</a> |
+          <a class="{% if 'players' in craft.app.request.segments %}text-blue-600{% endif %}" href="/players">Players</a> |
         </li>
         <li class="inline-block">
-          <a class="{% if 'roll-of-honour' in craft.app.request.segments %}text-teal-600{% endif %}" href="/order-of-merit">Order of Merit</a>
+          <a class="{% if 'roll-of-honour' in craft.app.request.segments %}text-blue-600{% endif %}" href="/order-of-merit">Order of Merit</a>
         </li>
       </ul>
       <div class="pt-5">

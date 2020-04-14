@@ -16,9 +16,9 @@
           <th class="px-4 py-2">Game</th>
         </tr>
         {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).orderBy('checkout DESC').all() %}
-        <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
+        <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
           <td class="border border-gray-400 px-4 py-2">
-            {{ checkout.player[0].title }}
+            <a class="underline" href="{{ checkout.player[0].url }}">{{ checkout.player[0].title }}</a>
           </td>
           <td class="border border-gray-400 px-4 py-2">
             {{ checkout.checkout }}
@@ -43,9 +43,9 @@
           <th class="px-4 py-2">Game</th>
         </tr>
         {% for score in craft.superTable.blocks().fieldId(6).with(['player']).orderBy('score DESC').all() %}
-        <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
+        <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
           <td class="border border-gray-400 px-4 py-2">
-            {{ score.player[0].title }}
+            <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>
           </td>
           <td class="border border-gray-400 px-4 py-2">
             {{ score.score }}
