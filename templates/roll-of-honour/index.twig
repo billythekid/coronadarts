@@ -5,55 +5,62 @@
 
   <h1 class="text-5xl text-center mb-5">Roll of honour</h1>
 
-  <h2 class="text-3xl text-center">High Checkouts (100+)</h2>
-  <table class="border-collapse border-2 border-gray-500 my-5 mx-auto">
-    <tr>
-      <th class="px-4 py-2">Player</th>
-      <th class="px-4 py-2">Checked out</th>
-      <th class="px-4 py-2">Game</th>
-    </tr>
-    {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).orderBy('checkout DESC').all() %}
-    <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
-      <td class="border border-gray-400 px-4 py-2">
-        {{ checkout.player[0].title }}
-      </td>
-      <td class="border border-gray-400 px-4 py-2">
-        {{ checkout.checkout }}
-      </td>
-      <td class="border border-gray-400 px-4 py-2">
-        <a class="underline" href="{{ checkout.owner.url }}">{{ checkout.owner.title }}</a>
-      </td>
-    {% else %}
-      <tr>
-        <td>No high checkouts</td>
-      </tr>
-    {% endfor %}
-  </table>
+  <div class="md:grid grid-cols-2 gap-4">
 
-  <h2 class="text-3xl text-center">High Scores (140+)</h2>
-  <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
-    <tr>
-      <th class="px-4 py-2">Player</th>
-      <th class="px-4 py-2">Scored</th>
-      <th class="px-4 py-2">Game</th>
-    </tr>
-    {% for score in craft.superTable.blocks().fieldId(6).with(['player']).orderBy('score DESC').all() %}
-    <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
-      <td class="border border-gray-400 px-4 py-2">
-        {{ score.player[0].title }}
-      </td>
-      <td class="border border-gray-400 px-4 py-2">
-        {{ score.score }}
-      </td>
-      <td class="border border-gray-400 px-4 py-2">
-        <a class="underline" href="{{ score.owner.url }}">{{ score.owner.title }}</a>
-      </td>
-    {% else %}
-      <tr>
-        <td class="border border-gray-400 px-4 py-2" colspan="3">No high checkouts</td>
-      </tr>
-    {% endfor %}
-  </table>
+    <div>
+      <h2 class="text-3xl text-center">High Checkouts (100+)</h2>
+      <table class="border-collapse border-2 border-gray-500 my-5 mx-auto">
+        <tr>
+          <th class="px-4 py-2">Player</th>
+          <th class="px-4 py-2">Checked out</th>
+          <th class="px-4 py-2">Game</th>
+        </tr>
+        {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).orderBy('checkout DESC').all() %}
+        <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
+          <td class="border border-gray-400 px-4 py-2">
+            {{ checkout.player[0].title }}
+          </td>
+          <td class="border border-gray-400 px-4 py-2">
+            {{ checkout.checkout }}
+          </td>
+          <td class="border border-gray-400 px-4 py-2">
+            <a class="underline" href="{{ checkout.owner.url }}">{{ checkout.owner.title }}</a>
+          </td>
+        {% else %}
+          <tr>
+            <td>No high checkouts</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
 
+    <div>
+      <h2 class="text-3xl text-center">High Scores (140+)</h2>
+      <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto">
+        <tr>
+          <th class="px-4 py-2">Player</th>
+          <th class="px-4 py-2">Scored</th>
+          <th class="px-4 py-2">Game</th>
+        </tr>
+        {% for score in craft.superTable.blocks().fieldId(6).with(['player']).orderBy('score DESC').all() %}
+        <tr class="{% if loop.first %}bg-orange-300{% elseif loop.index == 2 %}bg-gray-500{% elseif loop.index == 3 %}bg-orange-800 text-white{% else %}bg-green-100{% endif %}">
+          <td class="border border-gray-400 px-4 py-2">
+            {{ score.player[0].title }}
+          </td>
+          <td class="border border-gray-400 px-4 py-2">
+            {{ score.score }}
+          </td>
+          <td class="border border-gray-400 px-4 py-2">
+            <a class="underline" href="{{ score.owner.url }}">{{ score.owner.title }}</a>
+          </td>
+        {% else %}
+          <tr>
+            <td class="border border-gray-400 px-4 py-2" colspan="3">No high checkouts</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+  </div>
 
 {% endblock %}

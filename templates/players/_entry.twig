@@ -157,9 +157,9 @@
   {% endfor %}
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
-  <div class="leading-loose">
-    <p>{{ entry.title }} is sitting
-      <span class="text-2xl">{{ craft.league.position(entry) }}</span> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
+  <div class="leading-loose sm:leading-normal sm:grid grid-cols-2 gap-4">
+    <p class="align-top">{{ entry.title }} is sitting
+      <strong>{{ craft.league.position(entry) }}</strong> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
         , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
         {% if gamesPlayed|length != 1 %}
@@ -172,12 +172,18 @@
       {% endif %}
     </p>
 
-    {% if homeGames|length %}
-      <p>{{ entry.title }} played {{ homeGames|length }} games as the "home" player and won {{ homeGamesWon|length == homeGames|length ? 'all' : homeGamesWon|length }} of those.</p>
-    {% endif %}
+    {% if gamesPlayed is not empty %}
+      <div>
+        <p>
+          {% if homeGames|length %}
+            {{ entry.title }} played {{ homeGames|length }} games as the "home" player and won {{ homeGamesWon|length == homeGames|length ? 'all' : homeGamesWon|length }} of those.
+          {% endif %}
 
-    {% if awayGames|length %}
-      <p>Of the {{ awayGames|length }} games as the "away" player, {{ entry.title }} won {{ awayGamesWon|length == awayGames|length ? 'all ' ~  awayGames|length : awayGamesWon|length }} game{{ awayGamesWon|length != 1 ? 's' }}.</p>
+          {% if awayGames|length %}
+            Of the {{ awayGames|length }} games as the "away" player, {{ entry.title }} won {{ awayGamesWon|length == awayGames|length ? 'all ' ~  awayGames|length : awayGamesWon|length }} game{{ awayGamesWon|length != 1 ? 's' }}.
+          {% endif %}
+        </p>
+      </div>
     {% endif %}
 
     {% if gamesPlayed is not empty %}
@@ -221,8 +227,10 @@
         | join(', ', ' and ') | raw }}.
       </p>
     {% endif %}
+  </div>
 
-    <h2 class="text-3xl">{{ entry.title }}'s Game summaries</h2>
+  <div class="leading-loose sm:leading-normal">
+    <h2 class="text-3xl my-5">{{ entry.title }}'s Game summaries</h2>
     {% for lastGame in gamesPlayed %}
       {% set greatWinSmackTalk = (entry.title ~ " " ~ random(extremeAdverbs) ~ " " ~ random(extremeVerbs) ~ " ")|replace("  ", " ") %}
       {% set justWonSmackTalk =  (entry.title ~ " " ~ random(passiveAdverbs) ~ " " ~ random(passiveWinVerbs) ~ " ")|replace("  ", " ") %}
@@ -247,7 +255,8 @@
       {% endif %}
 
       {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
-      <p>{{ lastGame.postDate|date }} - <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
+      <p>{{ lastGame.postDate|date }} -
+        <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
     {% endfor %}
   </div>
 {% endblock %}
