@@ -19,6 +19,12 @@
     "firmly",
     "fully",
     "fucking",
+    "fucking",
+    "fucking",
+    "fucking",
+    "fucking",
+    "fucking",
+    "fucking",
     "greatly",
     "immensely",
     "mightily",
@@ -39,6 +45,7 @@
     "annihilated",
     "conquered",
     "crushed",
+    "cunted",
     "decimated",
     "demolished",
     "destroyed",
@@ -49,10 +56,12 @@
     "gubbed",
     "humped",
     "invalidated",
+    "kicked in the nuts",
     "killed",
     "massacred",
     "murdered",
     "nullified",
+    "nutted",
     "obliterated",
     "overpowered",
     "overwhelmed",
@@ -61,6 +70,7 @@
     "rattled",
     "ruined",
     "slaughtered",
+    "twatted",
     "wasted",
     "wellied",
     "wiped out",
@@ -240,19 +250,19 @@
         {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
           {# won at home #}
           {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player2[0].title %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title ~ ", at home" %}
         {% elseif ( ( lastGame.player2[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
           {# won away #}
           {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player1[0].title %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title ~ ", away" %}
         {% elseif ( ( lastGame.player1[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
           {# lost at home #}
           {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player2[0].title %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title ~ ", at home" %}
         {% else %}
           {# lost away  #}
           {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player1[0].title %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title ~ ", away" %}
         {% endif %}
 
         {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
