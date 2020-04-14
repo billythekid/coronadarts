@@ -249,19 +249,19 @@
         {% if ( ( lastGame.player1[0].id == entry.id ) and lastGame.player1LegsWon > lastGame.player2LegsWon ) %}
           {# won at home #}
           {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player2[0].title ~ ", at home" %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title %}
         {% elseif ( ( lastGame.player2[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
           {# won away #}
           {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? greatWinSmackTalk : justWonSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player1[0].title ~ ", away" %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title %}
         {% elseif ( ( lastGame.player1[0].id == entry.id ) and lastGame.player2LegsWon > lastGame.player1LegsWon ) %}
           {# lost at home #}
           {% set prefix = lastGame.player2LegsWon - lastGame.player1LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player2[0].title ~ ", at home" %}
+          {% set lastResult = prefix ~ lastGame.player2[0].title %}
         {% else %}
           {# lost away  #}
           {% set prefix = lastGame.player1LegsWon - lastGame.player2LegsWon == 2 ? completeLossSmackTalk : narrowLossSmackTalk %}
-          {% set lastResult = prefix ~ lastGame.player1[0].title ~ ", away" %}
+          {% set lastResult = prefix ~ lastGame.player1[0].title %}
         {% endif %}
 
         {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
