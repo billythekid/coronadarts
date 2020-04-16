@@ -15,8 +15,8 @@
           <th class="px-4 py-2">Checked out</th>
           <th class="px-4 py-2">Game</th>
         </tr>
-        {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).orderBy('checkout DESC').all() %}
-        <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
+        {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).all()|sort((a,b) => b.checkout <=> a.checkout ) %}
+        <tr class="{% if loop.first or checkout.checkout == 170 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
           <td class="border border-gray-400 px-4 py-2">
             <a class="underline" href="{{ checkout.player[0].url }}">{{ checkout.player[0].title }}</a>
           </td>
@@ -42,8 +42,9 @@
           <th class="px-4 py-2">Scored</th>
           <th class="px-4 py-2">Game</th>
         </tr>
-        {% for score in craft.superTable.blocks().fieldId(6).with(['player']).orderBy('score DESC').all() %}
-        <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
+        {% set scores = craft.superTable.blocks().fieldId(6).with(['player']).all()|sort((a,b) => b.score <=> a.score ) %}
+        {% for score in scores %}
+        <tr class="{% if loop.first or score.score == 180 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
           <td class="border border-gray-400 px-4 py-2">
             <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>
           </td>
