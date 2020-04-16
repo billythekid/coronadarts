@@ -1,52 +1,42 @@
 {% set gamesToBePlayed = [
-  'Scotty vs Martyn',
   'Andy vs Jim',
   'Billy vs Mitch',
   'Bruce vs Ian',
 
   'Jim vs Scotty',
-  'Mitch vs Martyn',
   'Ian vs Andy',
   'Bruce vs Billy',
 
   'Scotty vs Mitch',
   'Jim vs Ian',
-  'Martyn vs Bruce',
   'Andy vs Billy',
 
   'Ian vs Scotty',
   'Bruce vs Mitch',
   'Billy vs Jim',
-  'Andy vs Martyn',
 
   'Scotty vs Bruce',
   'Ian vs Billy',
   'Mitch vs Andy',
-  'Jim vs Martyn',
 
   'Billy vs Scotty',
   'Andy vs Bruce',
-  'Martyn vs Ian',
   'Jim vs Mitch',
 
   'Scotty vs Andy',
-  'Billy vs Martyn',
   'Bruce vs Jim',
   'Ian vs Mitch',
 
-  'Martyn vs Scotty',
   'Jim vs Andy',
   'Mitch vs Billy',
   'Ian vs Bruce',
 
   'Scotty vs Jim',
-  'Martyn vs Mitch',
   'Andy vs Ian',
   'Billy vs Bruce',
 
   'Mitch vs Scotty',
   'Ian vs Jim',
-  'Bruce vs Martyn',
   'Billy vs Andy',
 
   'Scotty vs Ian',
@@ -57,15 +47,12 @@
   'Bruce vs Scotty',
   'Billy vs Ian',
   'Andy vs Mitch',
-  'Martyn vs Jim',
 
   'Scotty vs Billy',
   'Bruce vs Andy',
-  'Ian vs Martyn',
   'Mitch vs Jim',
 
   'Andy vs Scotty',
-  'Martyn vs Billy',
   'Jim vs Bruce',
   'Mitch vs Ian',
 ] %}
@@ -80,16 +67,14 @@
         <h3 class="text-2xl">Round {{ loop.index }}</h3>
         <ul class="mb-5 grid grid-cols-2 gap-4">
           {% for game in rounds %}
-            {% if 'Martyn' not in game %}
-              <li>
-                {%- if game not in gamesPlayed|map(game => game.title) -%}
-                  {{ game }}
-                {%- else -%}
-                  {% set playedGame = gamesPlayed|filter(thisGame => thisGame.title == game)|first %}
-                  <span class="text-gray-500"><s><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></s></span>
-                {%- endif -%}
-              </li>
-            {% endif %}
+            <li>
+              {%- if game not in gamesPlayed|map(game => game.title) -%}
+                {{ game }}
+              {%- else -%}
+                {% set playedGame = gamesPlayed|filter(thisGame => thisGame.title == game)|first %}
+                <span class="text-gray-500"><s><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></s></span>
+              {%- endif -%}
+            </li>
           {% endfor %}
         </ul>
       </div>
