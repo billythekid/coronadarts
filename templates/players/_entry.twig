@@ -155,6 +155,8 @@
       {% endif %}
     {% endfor %}
 
+    {% set highScores = highScores | sort((a,b) => b.score <=> a.score) %}
+
     {% for checkout in game.highCheckouts %}
       {% if checkout.player[0].id == entry.id %}
         {% set highCheckouts = highCheckouts|merge([
@@ -162,6 +164,9 @@
         ]) %}
       {% endif %}
     {% endfor %}
+
+    {% set highCheckouts = highCheckouts | sort((a,b) => b.checkout <=> a.checkout) %}
+
 
   {% endfor %}
 
@@ -221,22 +226,47 @@
       <p>
         {{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points.
         {{ highScores
-        | sort((a,b) => b.score <=> a.score)
         | map(score => score.score ~ " (<a class='underline' href='#{score.game.url}'>against #{score.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
         | join(', ', ' and ') | raw }}.
       </p>
+
     {% endif %}
 
     {% if highCheckouts is not empty %}
       <p>
         {{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highScores|length != 1 ? 's' }} with 100 or more.
         {{ highCheckouts
-        | sort((a,b) => b.checkout <=> a.checkout)
         | map(checkout => checkout.checkout ~ " (<a class='underline' href='#{checkout.game.url}'>against #{checkout.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
         | join(', ', ' and ') | raw }}.
       </p>
     {% endif %}
   </div>
+
+  {% set tonEighties = highScores|filter(score=>score.score == 180) %}
+  {% set bigFishes = highCheckouts|filter(checkout=>checkout.checkout == 170) %}
+  {% if tonEighties is not empty or bigFishes is not empty %}
+
+    <div class="text-yellow-400 p-20 mt-5 bg-black text-2xl text-center">
+
+      {% if bigFishes is not empty %}
+        <p>
+          {{ entry.title }} has only gone and checked out {{ bigFishes|length == 1 ? 'a' : bigFishes|length }} big fish{{ bigFishes|length != 1 ? 'es;' }} against
+          {% for fish in bigFishes %}
+            <a class="underline" href="{{ fish.game.url }}">{{ fish.game.title|replace(entry.title,'')|replace(' vs ', '') }}</a>{{ not loop.last ? ', ' : "!" }}
+          {% endfor %}
+        </p>
+      {% endif %}
+
+      {% if tonEighties is not empty %}
+        <p>
+          {{ entry.title }} has only gone and hit {{ tonEighties|length == 1 ? 'a' : tonEighties|length }} 180{{ tonEighties|length != 1 ? 's;' }} against
+          {% for one80 in tonEighties %}
+            <a class="underline" href="{{ one80.game.url }}">{{ one80.game.title|replace(entry.title,'')|replace(' vs ', '') }}</a>{{ not loop.last ? ', ' : "!" }}
+          {% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
 
   {% if gamesPlayed is not empty %}
     <div class="leading-loose sm:leading-normal">
