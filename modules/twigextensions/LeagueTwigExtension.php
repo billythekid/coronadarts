@@ -116,8 +116,48 @@ class LeagueTwigExtension extends AbstractExtension
     arsort($opponentsByGames);
 
     return $opponentsByGames;
+  }
+
+  function roundRobin($players, $rounds = 1)
+  {
+    $allPlayers = $players;
+
+    $response = [];
+    if (count($allPlayers) % 2 != 0)
+    {
+      // insert [BYE] into position 2 in the array. This way no rounds have BYE at the start in every round (the return legs especially)
+      array_splice($allPlayers, 2, 0, "[BYE]");
+    }
 
 
+    for ($thisRound = 0; $thisRound < $rounds; $thisRound++)
+    {
+      $players = $allPlayers;
+      if ($thisRound % 2 !== 0)
+      {
+        $players = array_reverse($players);
+      }
+      $round = [];
+      $away  = array_splice($players, (count($players) / 2));
+      $home  = $players;
+      for ($i = 0; $i < count($home) + count($away) - 1; $i++)
+      {
+        for ($j = 0; $j < count($home); $j++)
+        {
+          $round[] = $home[$j] . ' vs ' . $away[$j];
+        }
+        if (count($home) + count($away) - 1 > 2)
+        {
+          $s     = array_splice($home, 1, 1);
+          $slice = array_shift($s);
+          array_unshift($away, $slice);
+          array_push($home, array_pop($away));
+        }
+      }
+      $response[] = $round;
+    }
+
+    return array_merge(...$response);
   }
 
 

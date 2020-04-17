@@ -1,8 +1,6 @@
 {% extends "_layout" %}
 
 {% block content %}
-  {% set gamesQuery = craft.entries.section('games').with(['player1', 'player2']) %}
-  {% set players = craft.entries.section('players').all() %}
 
   <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto shadow-xl">
     <tr class="bg-gray-100">
@@ -15,6 +13,7 @@
       <th class="p-2 text-center hidden sm:table-cell">Against</th>
       <th class="p-2 text-center"><span class="sm:hidden">L/D</span><span class="hidden sm:inline">Leg Diff</span></th>
     </tr>
+
     {% for row in craft.league.leaderboard %}
       <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
         <th class="border border-gray-400 px-4 py-2 text-left">
@@ -28,6 +27,7 @@
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalLegsFor - row.totalLegsAgainst }}</td>
       </tr>
     {% endfor %}
+
   </table>
 
   {% include "_partials/_gamesToBePlayed.twig" %}

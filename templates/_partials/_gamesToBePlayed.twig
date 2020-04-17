@@ -1,78 +1,43 @@
-{% set gamesToBePlayed = [
-  'Andy vs Jim',
-  'Billy vs Mitch',
-  'Bruce vs Ian',
+{% set players = craft.entries.section('players').select('title').column() %}
+{% set gamesToBePlayed = [] %}
+{% for player in players %}
+  {% set homeGames = [] %}
+  {% set awayGames = [] %}
+  {% for opponent in players|filter(possibleOpponent => possibleOpponent != player) %}
+    {% if player ~ " vs " ~ opponent not in gamesToBePlayed %}
+      {% set homeGames = homeGames|merge([player ~ " vs " ~ opponent]) %}
+    {% endif %}
+    {% if opponent ~ " vs " ~ player not in gamesToBePlayed %}
+      {% set awayGames = awayGames|merge([opponent ~ " vs " ~ player]) %}
+    {% endif %}
+  {% endfor %}
+  {% set gamesToBePlayed = gamesToBePlayed|merge(homeGames)|merge(awayGames) %}
+{% endfor %}
 
-  'Jim vs Scotty',
-  'Ian vs Andy',
-  'Bruce vs Billy',
+{% set rounds = players|length / 2 %}
 
-  'Scotty vs Mitch',
-  'Jim vs Ian',
-  'Andy vs Billy',
+{% set gamesToBePlayed = craft.league.roundRobin(players,2) %}
 
-  'Ian vs Scotty',
-  'Bruce vs Mitch',
-  'Billy vs Jim',
-
-  'Scotty vs Bruce',
-  'Ian vs Billy',
-  'Mitch vs Andy',
-
-  'Billy vs Scotty',
-  'Andy vs Bruce',
-  'Jim vs Mitch',
-
-  'Scotty vs Andy',
-  'Bruce vs Jim',
-  'Ian vs Mitch',
-
-  'Jim vs Andy',
-  'Mitch vs Billy',
-  'Ian vs Bruce',
-
-  'Scotty vs Jim',
-  'Andy vs Ian',
-  'Billy vs Bruce',
-
-  'Mitch vs Scotty',
-  'Ian vs Jim',
-  'Billy vs Andy',
-
-  'Scotty vs Ian',
-  'Mitch vs Bruce',
-  'Jim vs Billy',
-  'Martyn vs Andy',
-
-  'Bruce vs Scotty',
-  'Billy vs Ian',
-  'Andy vs Mitch',
-
-  'Scotty vs Billy',
-  'Bruce vs Andy',
-  'Mitch vs Jim',
-
-  'Andy vs Scotty',
-  'Jim vs Bruce',
-  'Mitch vs Ian',
-] %}
-
-{% set gamesPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
+{% set gamesThatHaveBeenPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
 
 <div>
   <h2 class="text-center text-3xl py-5">Games still to be played</h2>
   <div class="text-center grid grid-cols-2 md:grid-cols-3  gap-12">
-    {% for rounds in gamesToBePlayed | batch(3) %}
+    {% for rounds in gamesToBePlayed | batch( rounds ) %}
       <div>
         <h3 class="text-2xl">Round {{ loop.index }}</h3>
         <ul class="mb-5 grid grid-cols-2 gap-4">
           {% for game in rounds %}
             <li>
-              {%- if game not in gamesPlayed|map(game => game.title) -%}
-                {{ game }}
+              {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
+                {%- if '[BYE]' in game -%}
+                  <span class="text-gray-400"><s>{{ game }}</a></s></span>
+                {% else %}
+                  {{ game }}
+                {% endif %}
               {%- else -%}
-                {% set playedGame = gamesPlayed|filter(thisGame => thisGame.title == game)|first %}
-                <span class="text-gray-400"><s><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></s></span>
+                {% set playedGame = gamesThatHaveBeenPlayed|filter(thisGame => thisGame.title == game)|first %}
+                <span class="text-gray-400"><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></span>
               {%- endif -%}
             </li>
           {% endfor %}
