@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="none">
     <title>{{ title is defined ? title ~ " | " }}'mon the Tigers!</title>
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="/app.css" rel="stylesheet">
     <style>
       body {
         position: relative;
@@ -29,11 +29,11 @@
     <div class="block mx-auto p-2 sm:p-8 max-w-screen-xl relative text-blue-800 text-lg pb-16">
       {% if craft.app.request.segments is not empty %}<a href="/">{% endif %}
         <h1 class="text-3xl text-center sm:pt-10 z-10">
-          <span class="font-bold text-blue-600">C</span><span class="hidden sm:inline">oronavirus</span>
-          <span class="font-bold text-blue-600">U</span><span class="hidden sm:inline">nited</span>
-          <span class="font-bold text-blue-600">N</span><span class="hidden sm:inline">ewton</span>
-          <span class="font-bold text-blue-600">T</span><span class="hidden sm:inline">igers</span>
-          <span class="font-bold text-blue-600">S</span><span class="hidden sm:inline">ingles</span>
+          <span class="font-bold text-blue-600">C</span><span class="">oronavirus</span>
+          <span class="font-bold text-blue-600">U</span><span class="">nitary</span>
+          <span class="font-bold text-blue-600">N</span><span class="">ewton</span>
+          <span class="font-bold text-blue-600">T</span><span class="">igers</span>
+          <span class="font-bold text-blue-600">S</span><span class="">ingles</span>
         </h1>
         {% if craft.app.request.segments is not empty %}</a>{% endif %}
 
