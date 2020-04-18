@@ -22,22 +22,22 @@
 
 <div>
   <h2 class="text-center text-3xl py-5">Games still to be played</h2>
-  <div class="text-center grid grid-cols-2 md:grid-cols-3  gap-12">
+  <div class="text-center grid grid-cols-2 md:grid-cols-3  sm:gap-12">
     {% for rounds in gamesToBePlayed | batch( rounds ) %}
       <div>
         <h3 class="text-2xl">Round {{ loop.index }}</h3>
-        <ul class="mb-5 grid grid-cols-2 gap-4">
+        <ul class="mb-5 sm:grid grid-cols-2 gap-4">
           {% for game in rounds %}
             <li>
               {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
                 {%- if '[BYE]' in game -%}
-                  <span class="text-gray-400"><s>{{ game }}</a></s></span>
+                  <span class="hidden sm:inline text-gray-400"><s>{{ game }}</a></s></span>
                 {% else %}
                   {{ game }}
                 {% endif %}
               {%- else -%}
                 {% set playedGame = gamesThatHaveBeenPlayed|filter(thisGame => thisGame.title == game)|first %}
-                <span class="text-gray-400"><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></span>
+                <span class="hidden sm:inline text-gray-400"><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></span>
               {%- endif -%}
             </li>
           {% endfor %}

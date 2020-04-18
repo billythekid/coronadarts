@@ -3,11 +3,11 @@
 
 
 {% block content %}
-  <h1 class="text-5xl text-center">Players</h1>
+  <h1 class="text-5xl text-center mb-5">Players</h1>
 
-  <ul class="grid grid-cols-2">
+  <ul class="">
     {% for player in craft.entries.section('players').all() %}
-      <li class="text-center underline max-w-4xl">{{ player.link }}</li>
+      <li class="text-center underline mb-3">{{ player.link }}</li>
     {% endfor %}
   </ul>
 {% endblock %}
