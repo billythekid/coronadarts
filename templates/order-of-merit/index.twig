@@ -46,8 +46,8 @@
           <th class="px-4 py-2">Game</th>
         </tr>
         {% set coronaCup = [
-          { coronaPlayer:"Billy", score: 180, game: "Corona Cup 1 Semi Final (vs Jim)"}
-        ]%}
+          { coronaPlayer:"Billy", link: "/players/billy", score: 180, game: "Corona Cup 1 Semi Final (vs Jim)"}
+        ] %}
         {% set scores = craft.superTable.blocks().fieldId(6).with(['player']).all() %}
         {% set scores = coronaCup|merge(scores) %}
         {% set scores = scores|sort((a,b) => b.score <=> a.score ) %}
@@ -55,7 +55,9 @@
         <tr class="{% if loop.first or score.score == 180 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100 odd:bg-green-200{% endif %}">
           <td class="border border-gray-400 px-4 py-2">
             {% if score.player is not defined %}
-              {{ score.coronaPlayer }}
+              <a class="underline" href="{{ score.link }}">
+                {{ score.coronaPlayer }}
+              </a>
             {% else %}
               <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>
             {% endif %}

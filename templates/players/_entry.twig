@@ -171,7 +171,7 @@
   {% endfor %}
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
-  <div class="leading-loose sm:leading-normal sm:grid grid-cols-2 gap-4">
+  <div class="leading-loose sm:leading-normal">
     <p class="align-top">{{ entry.title }} is sitting
       <strong>{{ craft.league.position(entry) }}</strong> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
@@ -298,6 +298,23 @@
         <p>{{ lastGame.postDate|date }} -
           <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
       {% endfor %}
+    </div>
+  {% endif %}
+  {% if entry.coronaCups is not empty %}
+    <div class="my-5">
+      <h2 class="text-3xl my-5">Corona Cups.</h2>
+      <table class="border-collapse border-2 border-gray-500 mt-2 shadow-xl bg-white">
+        <tr>
+          <th class="border border-gray-400 px-4 py-2">Corona Cup</th>
+          <th class="border border-gray-400 px-4 py-2">Result</th>
+        </tr>
+        {% for cup in entry.coronaCups.all() %}
+          <tr class="{% if cup.result == "winner" %}bg-yellow-400{% elseif cup.result == "finalist" %}bg-gray-300{% endif %}">
+            <td class="border border-gray-400 px-4 py-2">Corona Cup {{ cup.cupNumber }}</td>
+            <td class="border border-gray-400 px-4 py-2">{{ cup.result.label | title }}</td>
+          </tr>
+        {% endfor %}
+      </table>
     </div>
   {% endif %}
 {% endblock %}
