@@ -16,7 +16,7 @@
 
 {% set rounds = players|length / 2 %}
 
-{% set gamesToBePlayed = craft.league.roundRobin(players,2) %}
+{% set gamesToBePlayed = craft.league.roundRobin(players) %}
 
 {% set gamesThatHaveBeenPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
 
