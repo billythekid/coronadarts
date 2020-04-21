@@ -2,7 +2,7 @@ const mix = require('laravel-mix');
 require('laravel-mix-polyfill');
 require('laravel-mix-purgecss');
 const tailwindcss = require('tailwindcss');
-const proxyURL = process.env.PWD.substr(12);
+const proxyURL = "cd.test";
 const rootPath = Mix.paths.root.bind(Mix.paths);
 
 mix.setPublicPath(path.normalize('web'))

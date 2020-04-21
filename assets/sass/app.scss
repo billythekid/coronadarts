@@ -4,3 +4,19 @@
 /* purgecss end ignore */
 
 @tailwind utilities;
+
+body {
+  position: relative;
+}
+
+body:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url(/bg.png) no-repeat top left fixed;
+  background-size: 50%;
+  opacity: 0.1;
+}
