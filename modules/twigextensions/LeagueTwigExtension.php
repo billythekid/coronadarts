@@ -11,13 +11,6 @@ class LeagueTwigExtension extends AbstractExtension
   private $gamesQuery;
   private $players;
 
-
-  public function __construct()
-  {
-    $this->gamesQuery = Entry::find()->section('games')->with(['player1', 'player2']);
-    $this->players    = Entry::find()->section('players')->all();
-  }
-
   public function getPosition($player)
   {
     for ($i = 0; $i <= count($this->getLeaderboard()); $i++)

@@ -322,16 +322,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.4.15",
+            "version": "3.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "2fc56f0bcd70a1ae67e9338512e053b896f4a47e"
+                "reference": "5353983f67ac02135cf2f63f2493b2c8098ac2e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/2fc56f0bcd70a1ae67e9338512e053b896f4a47e",
-                "reference": "2fc56f0bcd70a1ae67e9338512e053b896f4a47e",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/5353983f67ac02135cf2f63f2493b2c8098ac2e2",
+                "reference": "5353983f67ac02135cf2f63f2493b2c8098ac2e2",
                 "shasum": ""
             },
             "require": {
@@ -415,7 +415,7 @@
                 "craftcms",
                 "yii2"
             ],
-            "time": "2020-04-09T17:45:41+00:00"
+            "time": "2020-04-20T18:04:23+00:00"
         },
         {
             "name": "craftcms/oauth2-craftid",
@@ -4735,23 +4735,23 @@
         },
         {
             "name": "yiisoft/yii2-composer",
-            "version": "2.0.8",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-composer.git",
-                "reference": "5c7ca9836cf80b34db265332a7f2f8438eb469b9"
+                "reference": "d191176c4f8372e397a9e3df27360dca6a70efaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/5c7ca9836cf80b34db265332a7f2f8438eb469b9",
-                "reference": "5c7ca9836cf80b34db265332a7f2f8438eb469b9",
+                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/d191176c4f8372e397a9e3df27360dca6a70efaa",
+                "reference": "d191176c4f8372e397a9e3df27360dca6a70efaa",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0"
+                "composer-plugin-api": "^1.0 | ^2.0"
             },
             "require-dev": {
-                "composer/composer": "^1.0",
+                "composer/composer": "^1.0 | ^2.0@dev",
                 "phpunit/phpunit": "<7"
             },
             "type": "composer-plugin",
@@ -4786,7 +4786,7 @@
                 "extension installer",
                 "yii2"
             ],
-            "time": "2019-07-16T13:22:30+00:00"
+            "time": "2020-04-20T18:47:46+00:00"
         },
         {
             "name": "yiisoft/yii2-debug",
