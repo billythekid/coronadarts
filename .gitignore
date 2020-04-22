@@ -1,4 +1,10 @@
 /.env
 /.idea
 /vendor
+/node_modules
 .DS_Store
+/web/assets/js
+/web/assets/css
+/web/mix-manifest.json
+/web/error_log
+/web/cache/blitz/
