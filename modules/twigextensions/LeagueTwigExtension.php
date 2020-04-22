@@ -12,11 +12,11 @@ class LeagueTwigExtension extends AbstractExtension
   private $gamesQuery;
   private $players;
 
-  public function getPosition($player)
+  public function getPosition($player, $competition)
   {
-    for ($i = 0; $i < count($this->getLeaderboard()) - 1; $i++)
+    for ($i = 0; $i < count($this->getLeaderboard($competition)) - 1; $i++)
     {
-      $leaguePlayer = $this->getLeaderBoard()[$i];
+      $leaguePlayer = $this->getLeaderBoard($competition)[$i];
       if ($leaguePlayer->playerName === $player->title)
       {
         return $i + 1 . date("S", date_timestamp_get(date_create("2000-01-" . ($i + 1))));
@@ -29,14 +29,7 @@ class LeagueTwigExtension extends AbstractExtension
 
   public function mostPlayed($player)
   {
-    $liveLeagues = Entry::find()->section('games')->level(1)->status(Entry::STATUS_LIVE)->ids();
-
-    if(empty($liveLeagues))
-    {
-      return null;
-    }
-
-    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($liveLeagues)->with(['player1', 'player2']);
+    $gamesQuery = Entry::find()->section('games')->level(2)->with(['player1', 'player2']);
 
     $opponents = [];
 
@@ -92,19 +85,76 @@ class LeagueTwigExtension extends AbstractExtension
     return array_merge(...$response);
   }
 
-
-  public function getLeaderboard()
+  function elimination($competition)
   {
-    $liveLeagues = Entry::find()->section('games')->level(1)->status(Entry::STATUS_LIVE)->ids();
+    $rounds = [];
 
-    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($liveLeagues)->with(['player1', 'player2']);
-    $players    = Entry::find()->section('players')->all();
+    $allPlayers = array_map(function ($player) {
+      return $player->title;
+    }, $competition->players);
+
+    if (count($allPlayers) % 2 != 0)
+    {
+      $allPlayers[] = "[BYE]";
+    }
+
+    $gamesThatHaveBeenPlayed = array_map(function ($game) {
+      return $game->title;
+    }, Entry::find()->descendantOf($competition)->all());
+
+    $firstRoundGames        = $this->getNextRoundGames($allPlayers);
+    $totalMatchesLeftToPlay = count($allPlayers) - 1;
+    $totalRounds            = 0;
+
+    while ($totalMatchesLeftToPlay > 0)
+    {
+      $totalMatchesLeftToPlay = round($totalMatchesLeftToPlay / 2, 0, PHP_ROUND_HALF_DOWN);
+      $totalRounds++;
+    }
+
+    $playersStillIn = $allPlayers;
+    for ($i = 0; $i < $totalRounds; $i++)
+    {
+      $games          = $this->getNextRoundGames($playersStillIn);
+      $rounds[$i]     = $games;
+      $playersStillIn = [];
+      foreach ($games as $game)
+      {
+        if (in_array($game, $gamesThatHaveBeenPlayed))
+        {
+          // winner goes through
+          $gameThatWasPlayed = Entry::find()->descendantOf($competition)->title($game)->with(['player1', 'player2'])->one();
+          $playersStillIn[]  = $gameThatWasPlayed->player1LegsWon > $gameThatWasPlayed->player2LegsWon ? $gameThatWasPlayed->player1[0]->title : $gameThatWasPlayed->player2[0]->title;
+        } elseif (strpos($game, "[BYE]") !== false)
+        {
+          // person who got a bye goes through
+          $playersStillIn[] = str_replace([' vs [BYE]', '[BYE] vs '], '', $game);
+        } else
+        {
+          // placeholder goes through
+          $playersStillIn[] = "(Winner of {$game})";
+        }
+      }
+    }
+
+    return $rounds;
+  }
+
+  public function getLeaderboard($competition = null)
+  {
+    if ($competition === null)
+    {
+      return [];
+    }
+
+    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($competition)->with(['player1', 'player2']);
+    $players    = $competition->players->all();
 
 
     $leaderboard = [];
     foreach ($players as $player)
     {
-      if (empty($liveLeagues))
+      if (empty($competition))
       {
         return $leaderboard;
       } else
@@ -157,6 +207,29 @@ class LeagueTwigExtension extends AbstractExtension
     }
 
     return array_reverse($leaderboard);
+  }
+
+  /**
+   * @param array $players
+   * @param array $gamesThatHaveBeenPlayed
+   * @return array
+   */
+  private function getNextRoundGames(array $players): array
+  {
+    $round = [];
+    for ($i = 0; $i < count($players); $i += 2)
+    {
+      if (@$players[$i + 1])
+      {
+        $gameTitle = $players[$i] . ' vs ' . $players[$i + 1];
+      } else
+      {
+        $gameTitle = "WINNER!";
+      }
+      $round[] = $gameTitle;
+    }
+
+    return $round;
   }
 
 }

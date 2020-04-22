@@ -1,4 +1,4 @@
-dateModified: 1587491237
+dateModified: 1587560449
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -59,6 +59,24 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: verbb\supertable\fields\SuperTableField
+  02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: showRoundsIfCompetitionTypeIsARoundRobin
+    instructions: ''
+    name: 'Show rounds if competition type is a round robin'
+    searchable: true
+    settings:
+      conditionalOnField: competitionType
+      conditionalShow: '1'
+      conditionalShowOrHideFields:
+        - roundRobinRounds
+      conditionalShowOrHideTabs: ''
+      conditionalValue: conditional-exactly
+      exactlyValue: roundRobin
+    translationKeyFormat: null
+    translationMethod: none
+    type: billythekid\conditionalfields\fields\Conditional
   0900cd97-c6b2-4a38-b2a0-0704a2955d60:
     contentColumnType: smallint(1)
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -131,6 +149,44 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: craft\fields\Entries
+  608f1f15-eead-4798-9900-48ee61e4e4f2:
+    contentColumnType: integer(10)
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: roundRobinRounds
+    instructions: 'How many rounds? (How many times should each player meet?) Every 2nd round will be reversed (home/away games)'
+    name: 'Round Robin Rounds'
+    searchable: true
+    settings:
+      decimals: 0
+      defaultValue: '2'
+      max: null
+      min: '1'
+      prefix: ''
+      size: null
+      suffix: rounds
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Number
+  af3615af-c06f-4804-b179-040281bb1151:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: players
+    instructions: ''
+    name: Players
+    searchable: true
+    settings:
+      limit: ''
+      localizeRelations: false
+      selectionLabel: 'Add players'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
   b46c53b9-a36e-4ca2-8ac7-ce9e753120af:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -185,7 +241,45 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: craft\fields\Entries
+  dd191238-04e4-486e-9029-d27780b2ce11:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: competitionType
+    instructions: ''
+    name: 'Competition Type'
+    searchable: true
+    settings:
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - 'Round Robin'
+            -
+              - value
+              - roundRobin
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Elimination
+            -
+              - value
+              - elimination
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\RadioButtons
 plugins:
+  conditional-fields:
+    edition: standard
+    enabled: true
+    schemaVersion: 0.0.1
   super-table:
     edition: standard
     enabled: true
@@ -238,9 +332,28 @@ sections:
         titleFormat: '{ player1.one().title } vs { player2.one().title }'
         titleLabel: Title
       fe94bfac-3367-4b74-8c0a-b198f5093b79:
-        handle: league
+        fieldLayouts:
+          190985fb-4d05-4986-a0bd-65352912db15:
+            tabs:
+              -
+                fields:
+                  02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
+                    required: false
+                    sortOrder: 2
+                  608f1f15-eead-4798-9900-48ee61e4e4f2:
+                    required: false
+                    sortOrder: 3
+                  af3615af-c06f-4804-b179-040281bb1151:
+                    required: false
+                    sortOrder: 4
+                  dd191238-04e4-486e-9029-d27780b2ce11:
+                    required: false
+                    sortOrder: 1
+                name: Settings
+                sortOrder: 1
+        handle: competition
         hasTitleField: true
-        name: League
+        name: Competition
         sortOrder: 2
         titleFormat: ''
         titleLabel: Title
@@ -290,26 +403,6 @@ sections:
       maxLevels: 1
       uid: c5230701-390d-40bc-8349-d00d2a88997e
     type: structure
-  cdb4c033-e6a3-4935-9f46-d45d450649ff:
-    enableVersioning: false
-    entryTypes:
-      642efcff-df39-4ede-84f4-c08dbb0f4287:
-        handle: leagueStanding
-        hasTitleField: false
-        name: 'League Standing'
-        sortOrder: 1
-        titleFormat: '{section.name|raw}'
-        titleLabel: null
-    handle: leagueStanding
-    name: 'League Standing'
-    propagationMethod: all
-    siteSettings:
-      9ef2b075-2c8e-48f2-acf4-b42629480270:
-        enabledByDefault: true
-        hasUrls: true
-        template: ''
-        uriFormat: __home__
-    type: single
 siteGroups:
   98c3a7c2-70ec-44da-a147-b2acf4a813d4:
     name: 'Coronavirus United Newton Tigers Singles League'

@@ -1,4 +1,5 @@
-{% set players = craft.entries.section('players').select('title').column() %}
+{% for competition in craft.entries.section('games').level(1).orderBy('postDate DESC').with('players').all() %}
+  {% set players = competition.players|map((player)=>player.title) %}
   {% set gamesToBePlayed = [] %}
   {% for player in players %}
     {% set homeGames = [] %}
@@ -16,33 +17,94 @@
 
   {% set rounds = players|length / 2 %}
 
-  {% set gamesToBePlayed = craft.league.roundRobin(players) %}
+  {% if competition.competitionType == "roundRobin" %}
+    {% set gamesToBePlayed = craft.league.roundRobin(players, competition.roundRobinRounds) %}
+  {% endif %}
 
-  {% set gamesThatHaveBeenPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
+  {% set gamesThatHaveBeenPlayed = craft.entries.section('games').descendantOf(competition).title(gamesToBePlayed).all() %}
 
-<div>
-  <h2 class="text-center text-3xl py-5">Games still to be played</h2>
-  <div class="text-center grid grid-cols-2 md:grid-cols-3  sm:gap-12">
-    {% for rounds in gamesToBePlayed | batch( rounds ) %}
-      <div>
-        <h3 class="text-2xl">Round {{ loop.index }}</h3>
-        <ul class="mb-5 sm:grid grid-cols-2 gap-4">
-          {% for game in rounds %}
-            <li>
+  <div class="my-5 {{ loop.index is even ? 'bg-gray-100' : 'bg-white' }} border shadow">
+    <h2 class="text-center text-3xl py-5">{{ competition.title }} Games</h2>
+    {% if competition.competitionType == "roundRobin" %}
+      <div class="text-center grid grid-cols-2 md:grid-cols-3  sm:gap-12">
+        {% for rounds in gamesToBePlayed | batch( rounds ) %}
+
+          <div>
+            <h3 class="text-2xl">Round {{ loop.index }}</h3>
+            <ul class="mb-5 sm:grid grid-cols-2 gap-4">
+              {% for game in rounds %}
+                <li>
+                  {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
+                    {%- if '[BYE]' in game -%}
+                      <span class="hidden sm:inline text-gray-400"><s>{{ game }}</a></s></span>
+                    {% else %}
+                      {{ game }}
+                    {% endif %}
+                  {%- else -%}
+                    {% set playedGame = gamesThatHaveBeenPlayed|filter(thisGame => thisGame.title == game)|first %}
+                    <span class="hidden sm:inline text-gray-400"><a class="underline" href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></span>
+                  {%- endif -%}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% set roundsToBePlayed = craft.league.elimination(competition) %}
+      {% set gamesThatHaveBeenPlayed = craft.entries.section('games').descendantOf(competition).all() %}
+
+
+      {% for round in roundsToBePlayed %}
+        <h3 class="text-2xl text-center">
+          {% if loop.last %}
+            Final
+          {% elseif loop.index == loop.length - 1 %}
+            Semi Final
+          {% elseif loop.index == loop.length - 2 %}
+            Quarter Final
+          {% else %}
+            Round {{ loop.index }}
+          {% endif %}
+        </h3>
+        <ul class="mb-5 flex justify-around">
+          {% for game in round %}
+            <li class="text-center">
               {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
                 {%- if '[BYE]' in game -%}
-                  <span class="hidden sm:inline text-gray-400"><s>{{ game }}</a></s></span>
+                  {% set winner =  game|replace(' vs [BYE]','')|replace('[BYE] vs ','') %}
+                  {{ game|replace(winner,'<strong>'~winner~'</strong>')|raw }}
                 {% else %}
                   {{ game }}
                 {% endif %}
               {%- else -%}
                 {% set playedGame = gamesThatHaveBeenPlayed|filter(thisGame => thisGame.title == game)|first %}
-                <span class="hidden sm:inline text-gray-400"><a href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " ) }}</a></span>
+                {% set winner = playedGame.player1LegsWon > playedGame.player2LegsWon ? playedGame.player1[0].title : playedGame.player2[0].title %}
+                <a class="underline" href="{{ playedGame.url }}">{{ playedGame.title|replace(' vs ', " #{playedGame.player1LegsWon} vs #{playedGame.player2LegsWon} " )|replace(winner,'<strong>'~winner~'</strong>')|raw }}</a>
               {%- endif -%}
             </li>
           {% endfor %}
         </ul>
+      {% endfor %}
+      <div class="bg-yellow-400">
+        <h3 class="text-5xl text-center">{{ competition.title }} Winner</h3>
+        {% set game = roundsToBePlayed|last|last %}
+        <p class="text-4xl text-center pb-5">
+          {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
+            {%- if '[BYE]' in game -%}
+              {% set winnerName =  game|replace(' vs [BYE]','')|replace('[BYE] vs ','') %}
+              {% set winner = craft.entries.section('players').title(winnerName).one() %}
+              <a class="underline" href="{{ winner.url }}">{{ winner.title }}</a>
+            {% else %}
+              Winner of ({{ game }})
+            {% endif %}
+          {%- else -%}
+            {% set playedGame = gamesThatHaveBeenPlayed|filter(thisGame => thisGame.title == game)|first %}
+            {% set winner = playedGame.player1LegsWon > playedGame.player2LegsWon ? playedGame.player1[0] : playedGame.player2[0] %}
+            <a class="underline" href="{{ winner.url }}">{{ winner.title }}</a>
+          {%- endif -%}
+        </p>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
-</div>
+{% endfor %}

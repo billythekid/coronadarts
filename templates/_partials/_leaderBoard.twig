@@ -1,0 +1,25 @@
+<table class="border-collapse border-2 border-gray-500 mt-10 mx-auto shadow-xl">
+  <thead>
+  <tr class="bg-gray-100">
+    <th colspan="8" class="text-center p-2">{{ competition.title }}</th>
+  </tr>
+  {{ tableHeadings }}
+  </thead>
+  <tbody>
+
+  {% for row in craft.league.getLeaderBoard(competition) %}
+    <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
+      <th class="border border-gray-400 px-4 py-2 text-left">
+        <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
+      <th class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</th>
+      <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
+      <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
+      <td class="border border-gray-400 px-4 py-2 text-right hidden sm:table-cell">{{ row.totalGamesPlayed - row.totalGamesWon }}</td>
+      <td class="border border-gray-400 px-4 py-2 text-right hidden sm:table-cell">{{ row.totalLegsFor }}</td>
+      <td class="border border-gray-400 px-4 py-2 text-right hidden sm:table-cell">{{ row.totalLegsAgainst }}</td>
+      <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalLegsFor - row.totalLegsAgainst }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
