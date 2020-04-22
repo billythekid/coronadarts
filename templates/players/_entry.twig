@@ -177,8 +177,10 @@
   <div class="leading-loose sm:leading-normal">
     <p class="align-top">
       {% for competition in competitions %}
-        {{ entry.title }} is sitting
-        <strong>{{ craft.league.position(entry, competition) }}</strong> in {{ competition.title }}.
+        {% if competition.competitionType == "roundRobin" %}
+          {{ entry.title }} is sitting
+          <strong>{{ craft.league.position(entry, competition) }}</strong> in {{ competition.title }}.
+        {% endif %}
       {% endfor %}
       {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
