@@ -2,6 +2,7 @@
 
 namespace modules\twigextensions;
 
+use Craft;
 use craft\elements\Entry;
 use Twig\Extension\AbstractExtension;
 
@@ -13,7 +14,7 @@ class LeagueTwigExtension extends AbstractExtension
 
   public function getPosition($player)
   {
-    for ($i = 0; $i <= count($this->getLeaderboard()); $i++)
+    for ($i = 0; $i < count($this->getLeaderboard()) - 1; $i++)
     {
       $leaguePlayer = $this->getLeaderBoard()[$i];
       if ($leaguePlayer->playerName === $player->title)
@@ -28,9 +29,17 @@ class LeagueTwigExtension extends AbstractExtension
 
   public function mostPlayed($player)
   {
-    $gamesQuery = Entry::find()->section('games')->with(['player1', 'player2']);
+    $liveLeagues = Entry::find()->section('games')->level(1)->status(Entry::STATUS_LIVE)->ids();
+
+    if(empty($liveLeagues))
+    {
+      return null;
+    }
+
+    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($liveLeagues)->with(['player1', 'player2']);
 
     $opponents = [];
+
     foreach ($gamesQuery->relatedTo($player)->all() as $game)
     {
       $opponents[] = (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player1[0]->url}'>" . $game->player1[0]->title)) . "</a>";
@@ -86,39 +95,48 @@ class LeagueTwigExtension extends AbstractExtension
 
   public function getLeaderboard()
   {
-    $gamesQuery = Entry::find()->section('games')->with(['player1', 'player2']);
+    $liveLeagues = Entry::find()->section('games')->level(1)->status(Entry::STATUS_LIVE)->ids();
+
+    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($liveLeagues)->with(['player1', 'player2']);
     $players    = Entry::find()->section('players')->all();
+
 
     $leaderboard = [];
     foreach ($players as $player)
     {
-      $homeGames        = clone ($gamesQuery)->relatedTo([
-          'element' => $player,
-          'field'   => 'player1',
-      ]);
-      $awayGames        = clone ($gamesQuery)->relatedTo([
-          'element' => $player,
-          'field'   => 'player2',
-      ]);
-      $gamesPlayed      = clone ($gamesQuery)->relatedTo($player);
-      $totalGamesPlayed = $gamesPlayed->count();
-      $homeLegsFor      = $homeGames->sum('field_player1LegsWon');
-      $homeLegsAgainst  = $homeGames->sum('field_player2LegsWon');
-      $awayLegsFor      = $awayGames->sum('field_player2LegsWon');
-      $awayLegsAgainst  = $awayGames->sum('field_player1LegsWon');
-      $totalLegsFor     = $homeLegsFor + $awayLegsFor;
-      $totalLegsAgainst = $homeLegsAgainst + $awayLegsAgainst;
-      $homeGamesWon     = $homeGames->where('field_player1LegsWon > field_player2LegsWon')->count();
-      $awayGamesWon     = $awayGames->where('field_player2LegsWon > field_player1LegsWon')->count();
-      $totalGamesWon    = $homeGamesWon + $awayGamesWon;
-      $leaderboard[]    = (object)[
-          'playerUrl'        => $player->url,
-          'playerName'       => $player->title,
-          'totalGamesWon'    => $totalGamesWon,
-          'totalGamesPlayed' => $totalGamesPlayed,
-          'totalLegsFor'     => $totalLegsFor,
-          'totalLegsAgainst' => $totalLegsAgainst,
-      ];
+      if (empty($liveLeagues))
+      {
+        return $leaderboard;
+      } else
+      {
+        $homeGames = clone ($gamesQuery)->relatedTo(['element' => $player, 'field' => 'player1']);
+        $awayGames = clone ($gamesQuery)->relatedTo(['element' => $player, 'field' => 'player2']);
+        $homeGames = $homeGames->all();
+        $awayGames = $awayGames->all();
+
+        $totalGamesPlayed = count($homeGames) + count($awayGames);
+        $homeLegsFor      = array_sum(array_column($homeGames, 'player1LegsWon'));
+        $homeLegsAgainst  = array_sum(array_column($homeGames, 'field_player2LegsWon'));
+        $awayLegsFor      = array_sum(array_column($awayGames, 'player2LegsWon'));
+        $awayLegsAgainst  = array_sum(array_column($awayGames, 'player1LegsWon'));
+        $totalLegsFor     = $homeLegsFor + $awayLegsFor;
+        $totalLegsAgainst = $homeLegsAgainst + $awayLegsAgainst;
+        $homeGamesWon     = count(array_filter($homeGames, function ($game) {
+          return $game->player1LegsWon > $game->player2LegsWon;
+        }));
+        $awayGamesWon     = count(array_filter($awayGames, function ($game) {
+          return $game->player2LegsWon > $game->player1LegsWon;
+        }));
+        $totalGamesWon    = $homeGamesWon + $awayGamesWon;
+        $leaderboard[]    = (object)[
+            'playerUrl'        => $player->url,
+            'playerName'       => $player->title,
+            'totalGamesWon'    => $totalGamesWon,
+            'totalGamesPlayed' => $totalGamesPlayed,
+            'totalLegsFor'     => $totalLegsFor,
+            'totalLegsAgainst' => $totalLegsAgainst,
+        ];
+      }
 
       usort($leaderboard, function ($a, $b) {
         // if the player has won more games they're higher

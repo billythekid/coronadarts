@@ -2,7 +2,13 @@
 {% set title = entry.title ~ "'s Stats | Players" %}
 
 {% block content %}
-  {% set gamesPlayed = craft.entries.section('games').with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
+  {% set liveLeagues = craft.entries.section('games').level(1).ids() %}
+  {% if liveLeagues is not empty %}
+    {% set gamesPlayed = craft.entries.section('games').descendantOf(liveLeagues).level(2).with(['player1', 'player2', 'highScores.player', 'highCheckouts.player']).orderBy('postDate DESC').relatedTo(entry).all() %}
+  {% else %}
+    {% set gamesPlayed = [] %}
+  {% endif %}
+
   {% set lastGame = gamesPlayed[0] ?? null %}
   {% set extremeAdverbs = [
     "",
@@ -172,8 +178,12 @@
 
   <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
   <div class="leading-loose sm:leading-normal">
-    <p class="align-top">{{ entry.title }} is sitting
-      <strong>{{ craft.league.position(entry) }}</strong> in the league. {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
+    <p class="align-top">
+      {% if liveLeagues is not empty %}
+        {{ entry.title }} is sitting
+        <strong>{{ craft.league.position(entry) }}</strong> in the league.
+      {% endif %}
+      {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
         , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
         {% if gamesPlayed|length != 1 %}

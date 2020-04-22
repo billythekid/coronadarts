@@ -1,24 +1,24 @@
 {% set players = craft.entries.section('players').select('title').column() %}
-{% set gamesToBePlayed = [] %}
-{% for player in players %}
-  {% set homeGames = [] %}
-  {% set awayGames = [] %}
-  {% for opponent in players|filter(possibleOpponent => possibleOpponent != player) %}
-    {% if player ~ " vs " ~ opponent not in gamesToBePlayed %}
-      {% set homeGames = homeGames|merge([player ~ " vs " ~ opponent]) %}
-    {% endif %}
-    {% if opponent ~ " vs " ~ player not in gamesToBePlayed %}
-      {% set awayGames = awayGames|merge([opponent ~ " vs " ~ player]) %}
-    {% endif %}
+  {% set gamesToBePlayed = [] %}
+  {% for player in players %}
+    {% set homeGames = [] %}
+    {% set awayGames = [] %}
+    {% for opponent in players|filter(possibleOpponent => possibleOpponent != player) %}
+      {% if player ~ " vs " ~ opponent not in gamesToBePlayed %}
+        {% set homeGames = homeGames|merge([player ~ " vs " ~ opponent]) %}
+      {% endif %}
+      {% if opponent ~ " vs " ~ player not in gamesToBePlayed %}
+        {% set awayGames = awayGames|merge([opponent ~ " vs " ~ player]) %}
+      {% endif %}
+    {% endfor %}
+    {% set gamesToBePlayed = gamesToBePlayed|merge(homeGames)|merge(awayGames) %}
   {% endfor %}
-  {% set gamesToBePlayed = gamesToBePlayed|merge(homeGames)|merge(awayGames) %}
-{% endfor %}
 
-{% set rounds = players|length / 2 %}
+  {% set rounds = players|length / 2 %}
 
-{% set gamesToBePlayed = craft.league.roundRobin(players) %}
+  {% set gamesToBePlayed = craft.league.roundRobin(players) %}
 
-{% set gamesThatHaveBeenPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
+  {% set gamesThatHaveBeenPlayed = craft.entries.section('games').title(gamesToBePlayed).all() %}
 
 <div>
   <h2 class="text-center text-3xl py-5">Games still to be played</h2>

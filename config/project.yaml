@@ -1,0 +1,537 @@
+dateModified: 1587491237
+email:
+  fromEmail: billy@the-kid.org
+  fromName: 'Coronavirus United Newton Tigers Singles League'
+  transportType: craft\mail\transportadapters\Sendmail
+fieldGroups:
+  741963c9-a9f3-46a4-b3cf-b5325fefb762:
+    name: Common
+fields:
+  01708089-e9c5-4433-ae94-ac087bad598c:
+    contentColumnType: smallint(1)
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: player2LegsWon
+    instructions: ''
+    name: 'Player 2 Legs Won'
+    searchable: false
+    settings:
+      decimals: 0
+      defaultValue: '0'
+      max: '2'
+      min: '0'
+      prefix: ''
+      size: null
+      suffix: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Number
+  022f1b02-5045-493c-8ea3-47f05eecf73f:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: highCheckouts
+    instructions: ''
+    name: 'High Checkouts (100+)'
+    searchable: false
+    settings:
+      columns:
+        __assoc__:
+          -
+            - 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+          -
+            - f7e93046-8f41-412f-abd5-89ca673abce7
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+      contentTable: '{{%stc_highcheckouts}}'
+      fieldLayout: row
+      maxRows: '3'
+      minRows: ''
+      propagationMethod: all
+      selectionLabel: 'Add a high checkout'
+      staticField: ''
+    translationKeyFormat: null
+    translationMethod: site
+    type: verbb\supertable\fields\SuperTableField
+  0900cd97-c6b2-4a38-b2a0-0704a2955d60:
+    contentColumnType: smallint(1)
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: player1LegsWon
+    instructions: ''
+    name: 'Player 1 Legs Won'
+    searchable: false
+    settings:
+      decimals: 0
+      defaultValue: '0'
+      max: '2'
+      min: '0'
+      prefix: ''
+      size: null
+      suffix: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Number
+  22676616-9ffa-4539-834c-4f5730c47cf8:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: highScores
+    instructions: ''
+    name: 'High Scores (140+)'
+    searchable: false
+    settings:
+      columns:
+        __assoc__:
+          -
+            - 9873217d-3925-4849-a106-c6ac0138f3b5
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+          -
+            - 67596c10-9a3b-4e20-a52e-5817c6bbd329
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+      contentTable: '{{%stc_highscores}}'
+      fieldLayout: row
+      maxRows: ''
+      minRows: ''
+      propagationMethod: all
+      selectionLabel: 'Add high score'
+      staticField: ''
+    translationKeyFormat: null
+    translationMethod: site
+    type: verbb\supertable\fields\SuperTableField
+  3e98bd9b-16c1-4297-8be8-f06faf29e166:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: player1
+    instructions: ''
+    name: 'Player 1'
+    searchable: false
+    settings:
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  b46c53b9-a36e-4ca2-8ac7-ce9e753120af:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: coronaCups
+    instructions: ''
+    name: 'Corona Cups'
+    searchable: true
+    settings:
+      columns:
+        __assoc__:
+          -
+            - c60d46d0-b32e-4258-b0fd-1e4260d4ba4d
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+          -
+            - b37016bd-1249-45b9-9f32-e68a73af6f0a
+            -
+              __assoc__:
+                -
+                  - width
+                  - ''
+      contentTable: '{{%stc_coronacups}}'
+      fieldLayout: table
+      maxRows: ''
+      minRows: ''
+      propagationMethod: all
+      selectionLabel: 'Add a Corona Cup play'
+      staticField: ''
+    translationKeyFormat: null
+    translationMethod: site
+    type: verbb\supertable\fields\SuperTableField
+  bee18029-c323-4668-8fc5-25beeb03a0e8:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: player2
+    instructions: ''
+    name: 'Player 2'
+    searchable: false
+    settings:
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+plugins:
+  super-table:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.2.1
+routes:
+  c19b80db-cb9d-4f88-bc8e-f55411ed10c8:
+    siteUid: null
+    sortOrder: 1
+    template: player/index
+    uriParts:
+      - player/
+      -
+        - '*'
+        - '[^\/]+'
+    uriPattern: 'player/<any:[^\/]+>'
+sections:
+  1603eea6-0c0e-4863-92c8-a25ff80c277a:
+    enableVersioning: false
+    entryTypes:
+      18c9a554-f439-419b-848b-ac271be53b2e:
+        fieldLayouts:
+          a1fdba88-fd27-4e25-94cd-21262a50ef6e:
+            tabs:
+              -
+                fields:
+                  01708089-e9c5-4433-ae94-ac087bad598c:
+                    required: true
+                    sortOrder: 4
+                  022f1b02-5045-493c-8ea3-47f05eecf73f:
+                    required: false
+                    sortOrder: 5
+                  0900cd97-c6b2-4a38-b2a0-0704a2955d60:
+                    required: true
+                    sortOrder: 3
+                  22676616-9ffa-4539-834c-4f5730c47cf8:
+                    required: false
+                    sortOrder: 6
+                  3e98bd9b-16c1-4297-8be8-f06faf29e166:
+                    required: false
+                    sortOrder: 1
+                  bee18029-c323-4668-8fc5-25beeb03a0e8:
+                    required: false
+                    sortOrder: 2
+                name: Common
+                sortOrder: 1
+        handle: games
+        hasTitleField: false
+        name: Games
+        sortOrder: 1
+        titleFormat: '{ player1.one().title } vs { player2.one().title }'
+        titleLabel: Title
+      fe94bfac-3367-4b74-8c0a-b198f5093b79:
+        handle: league
+        hasTitleField: true
+        name: League
+        sortOrder: 2
+        titleFormat: ''
+        titleLabel: Title
+    handle: games
+    name: Games
+    propagationMethod: all
+    siteSettings:
+      9ef2b075-2c8e-48f2-acf4-b42629480270:
+        enabledByDefault: true
+        hasUrls: true
+        template: games/_entry
+        uriFormat: 'games/{slug}'
+    structure:
+      maxLevels: 2
+      uid: 5cfcf9a1-2501-41eb-a0c2-76703a7620d9
+    type: structure
+  5aa6b3a0-9cda-48d1-a96d-136848c948a4:
+    enableVersioning: false
+    entryTypes:
+      33781942-7f20-46f9-a605-44b191466dab:
+        fieldLayouts:
+          c0cfb05f-b939-403a-a810-709620cbf4d7:
+            tabs:
+              -
+                fields:
+                  b46c53b9-a36e-4ca2-8ac7-ce9e753120af:
+                    required: false
+                    sortOrder: 1
+                name: Details
+                sortOrder: 1
+        handle: players
+        hasTitleField: true
+        name: Players
+        sortOrder: 1
+        titleFormat: ''
+        titleLabel: Title
+    handle: players
+    name: Players
+    propagationMethod: all
+    siteSettings:
+      9ef2b075-2c8e-48f2-acf4-b42629480270:
+        enabledByDefault: true
+        hasUrls: true
+        template: players/_entry
+        uriFormat: 'players/{slug}'
+    structure:
+      maxLevels: 1
+      uid: c5230701-390d-40bc-8349-d00d2a88997e
+    type: structure
+  cdb4c033-e6a3-4935-9f46-d45d450649ff:
+    enableVersioning: false
+    entryTypes:
+      642efcff-df39-4ede-84f4-c08dbb0f4287:
+        handle: leagueStanding
+        hasTitleField: false
+        name: 'League Standing'
+        sortOrder: 1
+        titleFormat: '{section.name|raw}'
+        titleLabel: null
+    handle: leagueStanding
+    name: 'League Standing'
+    propagationMethod: all
+    siteSettings:
+      9ef2b075-2c8e-48f2-acf4-b42629480270:
+        enabledByDefault: true
+        hasUrls: true
+        template: ''
+        uriFormat: __home__
+    type: single
+siteGroups:
+  98c3a7c2-70ec-44da-a147-b2acf4a813d4:
+    name: 'Coronavirus United Newton Tigers Singles League'
+sites:
+  9ef2b075-2c8e-48f2-acf4-b42629480270:
+    baseUrl: $DEFAULT_SITE_URL
+    handle: default
+    hasUrls: true
+    language: en-GB
+    name: 'Coronavirus United Newton Tigers Singles League'
+    primary: true
+    siteGroup: 98c3a7c2-70ec-44da-a147-b2acf4a813d4
+    sortOrder: 1
+superTableBlockTypes:
+  8073cde4-f247-40ac-b01d-ae61a2852643:
+    field: 22676616-9ffa-4539-834c-4f5730c47cf8
+    fieldLayouts:
+      7f1630ad-7b1c-461e-a783-cbc8ca3c50d7:
+        tabs:
+          -
+            fields:
+              67596c10-9a3b-4e20-a52e-5817c6bbd329:
+                required: true
+                sortOrder: 2
+              9873217d-3925-4849-a106-c6ac0138f3b5:
+                required: true
+                sortOrder: 1
+            name: Content
+            sortOrder: 1
+    fields:
+      67596c10-9a3b-4e20-a52e-5817c6bbd329:
+        contentColumnType: smallint(3)
+        fieldGroup: null
+        handle: score
+        instructions: ''
+        name: Score
+        searchable: false
+        settings:
+          decimals: 0
+          defaultValue: null
+          max: '180'
+          min: '140'
+          prefix: ''
+          size: null
+          suffix: ''
+        translationKeyFormat: null
+        translationMethod: none
+        type: craft\fields\Number
+      9873217d-3925-4849-a106-c6ac0138f3b5:
+        contentColumnType: string
+        fieldGroup: null
+        handle: player
+        instructions: ''
+        name: Player
+        searchable: false
+        settings:
+          limit: '1'
+          localizeRelations: false
+          selectionLabel: 'Choose player'
+          source: null
+          sources:
+            - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+          targetSiteId: null
+          validateRelatedElements: ''
+          viewMode: null
+        translationKeyFormat: null
+        translationMethod: site
+        type: craft\fields\Entries
+  a6a3bec3-457e-4736-8793-c046b2b64cfd:
+    field: b46c53b9-a36e-4ca2-8ac7-ce9e753120af
+    fieldLayouts:
+      112e8447-3fb8-46cc-af2d-c0325f0fe349:
+        tabs:
+          -
+            fields:
+              b37016bd-1249-45b9-9f32-e68a73af6f0a:
+                required: false
+                sortOrder: 2
+              c60d46d0-b32e-4258-b0fd-1e4260d4ba4d:
+                required: false
+                sortOrder: 1
+            name: Content
+            sortOrder: 1
+    fields:
+      b37016bd-1249-45b9-9f32-e68a73af6f0a:
+        contentColumnType: string
+        fieldGroup: null
+        handle: result
+        instructions: 'Where did this player get to in the cup'
+        name: Result
+        searchable: true
+        settings:
+          optgroups: true
+          options:
+            -
+              __assoc__:
+                -
+                  - label
+                  - 'Quarter final'
+                -
+                  - value
+                  - quarterFinal
+                -
+                  - default
+                  - ''
+            -
+              __assoc__:
+                -
+                  - label
+                  - 'Semi final'
+                -
+                  - value
+                  - semiFinal
+                -
+                  - default
+                  - ''
+            -
+              __assoc__:
+                -
+                  - label
+                  - Finalist
+                -
+                  - value
+                  - finalist
+                -
+                  - default
+                  - ''
+            -
+              __assoc__:
+                -
+                  - label
+                  - Winner
+                -
+                  - value
+                  - winner
+                -
+                  - default
+                  - ''
+        translationKeyFormat: null
+        translationMethod: none
+        type: craft\fields\Dropdown
+      c60d46d0-b32e-4258-b0fd-1e4260d4ba4d:
+        contentColumnType: integer(10)
+        fieldGroup: null
+        handle: cupNumber
+        instructions: ''
+        name: 'Cup Number'
+        searchable: true
+        settings:
+          decimals: 0
+          defaultValue: '1'
+          max: null
+          min: '1'
+          prefix: ''
+          size: null
+          suffix: ''
+        translationKeyFormat: null
+        translationMethod: none
+        type: craft\fields\Number
+  c3bd5d5d-f30a-4332-8474-2bdc340ef31b:
+    field: 022f1b02-5045-493c-8ea3-47f05eecf73f
+    fieldLayouts:
+      06b7ef1d-75e3-4b81-9a7f-879c7d2bd3ac:
+        tabs:
+          -
+            fields:
+              76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
+                required: true
+                sortOrder: 1
+              f7e93046-8f41-412f-abd5-89ca673abce7:
+                required: true
+                sortOrder: 2
+            name: Content
+            sortOrder: 1
+    fields:
+      76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
+        contentColumnType: string
+        fieldGroup: null
+        handle: player
+        instructions: ''
+        name: Player
+        searchable: false
+        settings:
+          limit: '1'
+          localizeRelations: false
+          selectionLabel: 'Choose player'
+          source: null
+          sources:
+            - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+          targetSiteId: null
+          validateRelatedElements: ''
+          viewMode: null
+        translationKeyFormat: null
+        translationMethod: site
+        type: craft\fields\Entries
+      f7e93046-8f41-412f-abd5-89ca673abce7:
+        contentColumnType: smallint(3)
+        fieldGroup: null
+        handle: checkout
+        instructions: ''
+        name: Checkout
+        searchable: false
+        settings:
+          decimals: 0
+          defaultValue: '0'
+          max: '170'
+          min: '100'
+          prefix: ''
+          size: null
+          suffix: ''
+        translationKeyFormat: null
+        translationMethod: none
+        type: craft\fields\Number
+system:
+  edition: solo
+  live: true
+  name: 'Coronavirus United Newton Tigers Singles League'
+  schemaVersion: 3.4.10
+  timeZone: Europe/London
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: ''
+  photoVolumeUid: null
+  requireEmailVerification: true
