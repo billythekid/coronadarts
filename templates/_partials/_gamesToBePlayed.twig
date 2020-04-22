@@ -67,7 +67,7 @@
             Round {{ loop.index }}
           {% endif %}
         </h3>
-        <ul class="mb-5 flex justify-around">
+        <ul class="{% if not loop.last %}mb-5 {% endif %}pb-5 flex justify-around border-b">
           {% for game in round %}
             <li class="text-center">
               {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
