@@ -166,7 +166,7 @@ class LeagueTwigExtension extends AbstractExtension
 
         $totalGamesPlayed = count($homeGames) + count($awayGames);
         $homeLegsFor      = array_sum(array_column($homeGames, 'player1LegsWon'));
-        $homeLegsAgainst  = array_sum(array_column($homeGames, 'field_player2LegsWon'));
+        $homeLegsAgainst  = array_sum(array_column($homeGames, 'player2LegsWon'));
         $awayLegsFor      = array_sum(array_column($awayGames, 'player2LegsWon'));
         $awayLegsAgainst  = array_sum(array_column($awayGames, 'player1LegsWon'));
         $totalLegsFor     = $homeLegsFor + $awayLegsFor;
