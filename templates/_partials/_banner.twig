@@ -2,11 +2,9 @@
   <div class="bg-white bg-blue-800 bg-no-repeat bg-contain bg-scroll max-w-6xl mx-auto h-64 sm:h-56 relative mb-5 sm:mt-5" style="background-image:url(bg.png)">
 
     <h1 class="text-3xl sm:text-4xl text-white w-40 sm:w-auto sm:text-left pl-5 sm:pl-64 sm:pt-10 z-10">
-      <span class="font-bold">C</span><span class="">oronavirus</span>
-      <span class="font-bold">U</span><span class="">nited</span>
-      <span class="font-bold">N</span><span class="">ewton</span>
-      <span class="font-bold">T</span><span class="">igers</span>
-      <span class="font-bold">S</span><span class="">ingles</span>
+      {% for word in siteName|split(' ') %}
+        <span class="font-bold">{{ word[:1] }}</span><span class="">{{ word[1:] }}</span>
+      {% endfor %}
     </h1>
     <h2 class="text-left text-white pl-5 sm:pl-64">Darts League</h2>
   </div>
