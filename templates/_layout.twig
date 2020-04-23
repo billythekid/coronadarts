@@ -12,7 +12,7 @@
 
     {% include "_partials/_banner.twig" %}
 
-    <div class="block mx-auto p-2 sm:p-8 max-w-screen-xl relative text-blue-800 text-lg pb-16">
+    <div class="block mx-auto p-2 sm:p-8 max-w-screen-xl relative text-blue-800 text-lg pb-64">
       <ul class="list-inline text-center">
         <li class="inline-block mb-5">
           <a class="bg-gray-100 rounded-sm border-2 px-2 py-1 {% if craft.app.request.segments is empty %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/">Home</a>
@@ -27,7 +27,7 @@
           <a class="bg-gray-100 rounded-sm border-2 px-2 py-1 {% if 'order-of-merit' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/order-of-merit">Order of Merit</a>
         </li>
       </ul>
-      <div class="pt-5">
+      <div class="py-10">
         {% block content %}{% endblock %}
       </div>
     </div>
