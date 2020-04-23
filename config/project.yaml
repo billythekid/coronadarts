@@ -1,4 +1,4 @@
-dateModified: 1587560449
+dateModified: 1587631319
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -412,7 +412,7 @@ sites:
     handle: default
     hasUrls: true
     language: en-GB
-    name: 'Coronavirus United Newton Tigers Singles League'
+    name: 'Coronavirus United Newton Tigers Singles'
     primary: true
     siteGroup: 98c3a7c2-70ec-44da-a147-b2acf4a813d4
     sortOrder: 1
