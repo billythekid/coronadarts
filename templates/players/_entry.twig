@@ -305,7 +305,7 @@
 
         {% set lastResult = lastResult ~ ", " ~ lastGame.player1LegsWon ~ " - " ~ lastGame.player2LegsWon %}
         <p>{{ lastGame.postDate|date }} -
-          <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }}.</p>
+          <a class="underline" href="{{ lastGame.url }}"><strong>{{ lastGame.title }}</strong></a> - {{ lastResult }} in {{ lastGame.parent.title }}.</p>
       {% endfor %}
     </div>
   {% endif %}
