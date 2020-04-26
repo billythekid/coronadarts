@@ -12,7 +12,7 @@
             <li><span class="text-2xl">{{ league }} Games</span>
               <ul>
                 {% for game in games %}
-                  <li>
+                  <li class="m-3">
                     <a class="underline" href="{{ game.url }}">{{ game.title|replace(" vs ", " #{game.player1LegsWon} vs #{game.player2LegsWon} ") }}</a>
                   </li>
                 {% endfor %}
