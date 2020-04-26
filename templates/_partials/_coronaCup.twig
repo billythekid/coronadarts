@@ -1,2 +1,30 @@
-<h1 class="text-center text-3xl">Corona Cup Winners</h1>
-<p class="text-center">Corona Cup 1 - Saturday 18th April 2020 - <strong><a class="underline" href="/players/martyn">Martyn</a></strong></p>
+{% set cupTournaments = craft.entries.section('games').level(1).competitionType("elimination").with(['children.player1','children.player2','players']).orderBy('postDate DESC').all() %}
+
+<h1 class="text-center text-3xl">Elimination Tournament Winners</h1>
+{% for competition in cupTournaments %}
+  {% set roundsToBePlayed = craft.league.elimination(competition) %}
+  {% set gamesThatHaveBeenPlayed = competition.children %}
+  {% set allGamesPlayed = true %}
+  {% set lastGame = null %}
+  {% for round in roundsToBePlayed %}
+    {% for game in round %}
+      {% if loop.last %}
+        {% set lastGame = game %}
+      {% endif %}
+      {% if '[BYE]' not in game and game not in gamesThatHaveBeenPlayed|map(game => game.title) %}
+        {% set allGamesPlayed = false %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <p class="text-center">{{ competition.title }} - {{ competition.postDate|date('l jS F Y') }} -
+    {% if allGamesPlayed %}
+      {% set lastGameEntry = gamesThatHaveBeenPlayed|filter(game=> game.title == lastGame)|first %}
+      {% set winner = lastGameEntry.player1LegsWon > lastGameEntry.player2LegsWon ? lastGameEntry.player1[0] : lastGameEntry.player2[0] %}
+      <strong><a class="underline" href="{{ winner.url }}">{{ winner.title }}</a></strong>
+    {% else %}
+      Winner to be confirmed.
+    {% endif %}
+  </p>
+
+{% endfor %}
