@@ -9,10 +9,10 @@
         <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
         <ul class="flex justify-center">
           {% for league, games in games|group('parent.title') %}
-            <li><span class="text-2xl">{{ league }} Games</span>
+            <li class="m-3"><span class="text-2xl">{{ league }} Games</span>
               <ul>
                 {% for game in games %}
-                  <li class="m-3">
+                  <li>
                     <a class="underline" href="{{ game.url }}">{{ game.title|replace(" vs ", " #{game.player1LegsWon} vs #{game.player2LegsWon} ") }}</a>
                   </li>
                 {% endfor %}
