@@ -1,4 +1,4 @@
-dateModified: 1588071305
+dateModified: 1588091342
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -187,40 +187,6 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: craft\fields\Entries
-  b46c53b9-a36e-4ca2-8ac7-ce9e753120af:
-    contentColumnType: string
-    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
-    handle: coronaCups
-    instructions: ''
-    name: 'Corona Cups'
-    searchable: true
-    settings:
-      columns:
-        __assoc__:
-          -
-            - c60d46d0-b32e-4258-b0fd-1e4260d4ba4d
-            -
-              __assoc__:
-                -
-                  - width
-                  - ''
-          -
-            - b37016bd-1249-45b9-9f32-e68a73af6f0a
-            -
-              __assoc__:
-                -
-                  - width
-                  - ''
-      contentTable: '{{%stc_coronacups}}'
-      fieldLayout: table
-      maxRows: ''
-      minRows: ''
-      propagationMethod: all
-      selectionLabel: 'Add a Corona Cup play'
-      staticField: ''
-    translationKeyFormat: null
-    translationMethod: site
-    type: verbb\supertable\fields\SuperTableField
   bee18029-c323-4668-8fc5-25beeb03a0e8:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -378,10 +344,6 @@ sections:
           c0cfb05f-b939-403a-a810-709620cbf4d7:
             tabs:
               -
-                fields:
-                  b46c53b9-a36e-4ca2-8ac7-ce9e753120af:
-                    required: false
-                    sortOrder: 1
                 name: Details
                 sortOrder: 1
         handle: players
@@ -471,97 +433,6 @@ superTableBlockTypes:
         translationKeyFormat: null
         translationMethod: site
         type: craft\fields\Entries
-  a6a3bec3-457e-4736-8793-c046b2b64cfd:
-    field: b46c53b9-a36e-4ca2-8ac7-ce9e753120af
-    fieldLayouts:
-      112e8447-3fb8-46cc-af2d-c0325f0fe349:
-        tabs:
-          -
-            fields:
-              b37016bd-1249-45b9-9f32-e68a73af6f0a:
-                required: false
-                sortOrder: 2
-              c60d46d0-b32e-4258-b0fd-1e4260d4ba4d:
-                required: false
-                sortOrder: 1
-            name: Content
-            sortOrder: 1
-    fields:
-      b37016bd-1249-45b9-9f32-e68a73af6f0a:
-        contentColumnType: string
-        fieldGroup: null
-        handle: result
-        instructions: 'Where did this player get to in the cup'
-        name: Result
-        searchable: true
-        settings:
-          optgroups: true
-          options:
-            -
-              __assoc__:
-                -
-                  - label
-                  - 'Quarter final'
-                -
-                  - value
-                  - quarterFinal
-                -
-                  - default
-                  - ''
-            -
-              __assoc__:
-                -
-                  - label
-                  - 'Semi final'
-                -
-                  - value
-                  - semiFinal
-                -
-                  - default
-                  - ''
-            -
-              __assoc__:
-                -
-                  - label
-                  - Finalist
-                -
-                  - value
-                  - finalist
-                -
-                  - default
-                  - ''
-            -
-              __assoc__:
-                -
-                  - label
-                  - Winner
-                -
-                  - value
-                  - winner
-                -
-                  - default
-                  - ''
-        translationKeyFormat: null
-        translationMethod: none
-        type: craft\fields\Dropdown
-      c60d46d0-b32e-4258-b0fd-1e4260d4ba4d:
-        contentColumnType: integer(10)
-        fieldGroup: null
-        handle: cupNumber
-        instructions: ''
-        name: 'Cup Number'
-        searchable: true
-        settings:
-          decimals: 0
-          defaultValue: '1'
-          max: null
-          min: '1'
-          prefix: ''
-          size: null
-          suffix: ''
-        translationKeyFormat: null
-        translationMethod: none
-        type: craft\fields\Number
   c3bd5d5d-f30a-4332-8474-2bdc340ef31b:
     field: 022f1b02-5045-493c-8ea3-47f05eecf73f
     fieldLayouts:
