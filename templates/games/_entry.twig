@@ -1,4 +1,9 @@
 {% extends "_layout" %}
+
+{% if entry.level == 1 %}
+  {% redirect "/games" %}
+{% endif %}
+
 {% set title = entry.title ~ " | Games" %}
 
 {% set winner = entry.player1LegsWon > entry.player2LegsWon ? 'player1' : 'player2' %}
