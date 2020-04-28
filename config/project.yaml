@@ -1,4 +1,4 @@
-dateModified: 1587631319
+dateModified: 1588071305
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -365,7 +365,7 @@ sections:
         enabledByDefault: true
         hasUrls: true
         template: games/_entry
-        uriFormat: 'games/{slug}'
+        uriFormat: '{%if object.parent %}{{ object.parent.uri }}{% else %}games{% endif %}/{slug}'
     structure:
       maxLevels: 2
       uid: 5cfcf9a1-2501-41eb-a0c2-76703a7620d9
