@@ -3,7 +3,16 @@
   <tr class="bg-gray-100">
     <th colspan="8" class="text-center p-2">{{ competition.title }}</th>
   </tr>
-  {{ tableHeadings }}
+  <tr class="bg-gray-100">
+    <th class="p-2 text-center">Player</th>
+    <th class="p-2 text-center"><span class="sm:hidden">Pts</span><span class="hidden sm:inline">Points</span></th>
+    <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Played</span></th>
+    <th class="p-2 text-center">Won</th>
+    <th class="p-2 text-center hidden sm:table-cell">Lost</th>
+    <th class="p-2 text-center hidden sm:table-cell">Legs For</th>
+    <th class="p-2 text-center hidden sm:table-cell">Against</th>
+    <th class="p-2 text-center"><span class="sm:hidden">L/D</span><span class="hidden sm:inline">Leg Diff</span></th>
+  </tr>
   </thead>
   <tbody>
 

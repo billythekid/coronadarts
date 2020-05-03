@@ -7,9 +7,9 @@
     {% for playedDate, games in craft.entries.section('games').level(2).orderBy('postDate DESC').all()|group('postDate|date') %}
       <li class="border-t-2 py-5">
         <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
-        <ul class="flex justify-center">
+        <ul class="md:flex justify-center">
           {% for league, games in games|group('parent.title') %}
-            <li class="m-3"><span class="text-2xl">{{ league }} Games</span>
+            <li class="m-3"><span class="text-2xl"><a class="underline" href="{{ games[0].parent.url }}">{{ league }}</a> Games</span>
               <ul>
                 {% for game in games %}
                   <li>

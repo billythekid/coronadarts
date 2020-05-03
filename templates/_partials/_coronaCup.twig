@@ -17,7 +17,7 @@
     {% endfor %}
   {% endfor %}
 
-  <p class="text-center">{{ competition.title }} - {{ competition.postDate|date('l jS F Y') }} -
+  <p class="text-center"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a> - {{ competition.postDate|date('l jS F Y') }} -
     {% if allGamesPlayed %}
       {% set lastGameEntry = gamesThatHaveBeenPlayed|filter(game=> game.title == lastGame)|first %}
       {% set winner = lastGameEntry.player1LegsWon > lastGameEntry.player2LegsWon ? lastGameEntry.player1[0] : lastGameEntry.player2[0] %}

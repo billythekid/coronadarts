@@ -1,1 +1,50 @@
-{% include 'competitions/_types/#{entry.type}' %}
+{% set competitions = craft.entries.id(entry.id).with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
+{% set competition = competitions|first %}
+{% set gamesThatHaveBeenPlayed = competition.children %}
+
+<h1 class="text-5xl text-center mb-4">{{ entry.title }}</h1>
+<div class="leading-loose sm:leading-normal">
+
+  <p>This {{ entry.competitionType.label|lower }} competition between {{ entry.players.count() }} players; {{ entry.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
+  {% if entry.competitionType == "roundRobin" %}
+    {% set gamesToBePlayed = craft.league.roundRobin(competition.players, competition.roundRobinRounds) %}
+    <p>Over the course of the competition players meet each other {{ entry.roundRobinRounds == 1 ? 'once' : entry.roundRobinRounds == 2 ? 'twice' : entry.roundRobinRounds ~ " times" }}.</p>
+    {% set actualGamesToBePlayed = gamesToBePlayed|filter(game=>"[BYE]" not in game) %}
+    {% set allGamesPlayed = actualGamesToBePlayed|length == gamesThatHaveBeenPlayed|length %}
+    {% set leaderBoard = craft.league.getLeaderBoard(entry) %}
+    {% set winner = leaderBoard|first %}
+    {% if allGamesPlayed %}
+      <p>The competition was played to an end,
+        <a href="{{ winner.playerUrl }}" class="underline">{{ winner.playerName }}</a> coming out on top with {{ winner.totalGamesWon * 3 }} points after winning {{ winner.totalGamesWon }} of the {{ winner.totalGamesPlayed }} games played.
+      </p>
+    {% else %}
+      <p>The competition is still running as all games have not been played.</p>
+      <p>Currently
+        <a href="{{ winner.playerUrl }}" class="underline">{{ winner.playerName }}</a> is in the lead with {{ winner.totalGamesWon * 3 }} points after winning {{ winner.totalGamesWon }} of the {{ winner.totalGamesPlayed }} games played so far.
+      </p>
+    {% endif %}
+
+    {% include '_partials/_leaderBoard.twig' with {competition: entry} %}
+  {% endif %}
+
+  {% if entry.competitionType == "elimination" %}
+    {% if entry.blindDrawForEachRound %}
+      {% set roundsToBePlayed = craft.league.eliminationBlindDraw(competition) %}
+      <p>Each round of the competition is a blind draw and there are {{ roundsToBePlayed|length }} rounds in total.</p>
+    {% else %}
+      {% set roundsToBePlayed = craft.league.elimination(competition) %}
+    {% endif %}
+    {% set final = entry.children|filter(child=>child.title == roundsToBePlayed|last|last)|last %}
+    {% if final is not empty %}
+      {% set player1Win = final.player1LegsWon > final.player2LegsWon %}
+      {% set winningLegs = player1Win ? final.player1LegsWon : final.player2LegsWon %}
+      {% set losingLegs = player1Win ? final.player2LegsWon : final.player1LegsWon %}
+      <p>The final was played on {{ final.postDate|date('l jS F Y') }} between {{ final.player1[0].title }} and {{ final.player2[0].title }}, {{ player1Win ? final.player1[0].title : final.player2[0].title }} going on to take the win by {{ winningLegs != 1 ? winningLegs ~ ' legs' : winningLegs ~ ' leg' }} to {{ losingLegs }}.</p>
+    {% endif %}
+
+  {% endif %}
+</div>
+
+<div class="mt-10">
+  {% include "_partials/_gamesToBePlayed.twig" with {competitions:competitions} %}
+</div>
