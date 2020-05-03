@@ -6,9 +6,22 @@
 <div class="leading-loose sm:leading-normal">
 
   <p>This {{ entry.competitionType.label|lower }} competition between {{ entry.players.count() }} players; {{ entry.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
+
+  {% set highStats %}
+    {% set highScoreGames = competition.children|filter(game=>game.highScores is not empty) %}
+    {% set highCheckoutGames = competition.children|filter(game=>game.highCheckouts is not empty) %}
+    {% if highScoreGames is not empty %}
+      <p>It featured {{ highScoreGames|length }} game{{ highScoreGames|length != 1 ? 's' }} with high scores of 140 or above; {{ highScoreGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ' and ') | raw }}!</p>
+    {% endif %}
+    {% if highCheckoutGames is not empty %}
+      <p>The competition saw {{ highCheckoutGames|length }} game{{ highCheckoutGames|length != 1 ? 's' }} where the checkout was 100 points or more; {{ highCheckoutGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ' and ') | raw }}!</p>
+    {% endif %}
+  {% endset %}
+
   {% if entry.competitionType == "roundRobin" %}
     {% set gamesToBePlayed = craft.league.roundRobin(competition.players, competition.roundRobinRounds) %}
     <p>Over the course of the competition players meet each other {{ entry.roundRobinRounds == 1 ? 'once' : entry.roundRobinRounds == 2 ? 'twice' : entry.roundRobinRounds ~ " times" }}.</p>
+    {{ highStats }}
     {% set actualGamesToBePlayed = gamesToBePlayed|filter(game=>"[BYE]" not in game) %}
     {% set allGamesPlayed = actualGamesToBePlayed|length == gamesThatHaveBeenPlayed|length %}
     {% set leaderBoard = craft.league.getLeaderBoard(entry) %}
@@ -23,7 +36,6 @@
         <a href="{{ winner.playerUrl }}" class="underline">{{ winner.playerName }}</a> is in the lead with {{ winner.totalGamesWon * 3 }} points after winning {{ winner.totalGamesWon }} of the {{ winner.totalGamesPlayed }} games played so far.
       </p>
     {% endif %}
-
     {% include '_partials/_leaderBoard.twig' with {competition: entry} %}
   {% endif %}
 
@@ -41,7 +53,6 @@
       {% set losingLegs = player1Win ? final.player2LegsWon : final.player1LegsWon %}
       <p>The final was played on {{ final.postDate|date('l jS F Y') }} between {{ final.player1[0].title }} and {{ final.player2[0].title }}, {{ player1Win ? final.player1[0].title : final.player2[0].title }} going on to take the win by {{ winningLegs != 1 ? winningLegs ~ ' legs' : winningLegs ~ ' leg' }} to {{ losingLegs }}.</p>
     {% endif %}
-
   {% endif %}
 </div>
 
