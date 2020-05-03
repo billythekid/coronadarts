@@ -10,7 +10,7 @@
     {% include "competitions/_entry.twig" %}
   {% else %}
 
-    <h1 class="text-5xl text-center mt-5">{{ entry.parent.title }} - {{ entry.title }} </h1>
+    <h1 class="text-5xl text-center mt-5"><a href="{{ entry.parent.url }}" class="underline">{{ entry.parent.title }}</a> - {{ entry.title }} </h1>
     <p class="text-center">{{ entry.postDate|date('l jS F Y') }}</p>
 
     <div class="flex justify-center text-center">
