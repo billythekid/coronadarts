@@ -58,18 +58,22 @@ class LeagueTwigExtension extends AbstractExtension
     for ($thisRound = 0; $thisRound < $rounds; $thisRound++)
     {
       $players = $allPlayers;
-      if ($thisRound % 2 !== 0)
-      {
-        $players = array_reverse($players);
-      }
-      $round = [];
-      $away  = array_splice($players, (count($players) / 2));
-      $home  = $players;
+      $round   = [];
+      $away    = array_splice($players, (count($players) / 2));
+      $home    = $players;
+
+
       for ($i = 0; $i < count($home) + count($away) - 1; $i++)
       {
         for ($j = 0; $j < count($home); $j++)
         {
-          $round[] = $home[$j] . ' vs ' . $away[$j];
+          if ($thisRound % 2 === 0)
+          {
+            $round[] = $home[$j] . ' vs ' . $away[$j];
+          } else
+          {
+            $round[] = $away[$j] . ' vs ' . $home[$j];
+          }
         }
         if (count($home) + count($away) - 1 > 2)
         {
