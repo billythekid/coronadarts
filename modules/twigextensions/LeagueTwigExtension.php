@@ -4,6 +4,7 @@ namespace modules\twigextensions;
 
 use Craft;
 use craft\elements\Entry;
+use craft\helpers\ArrayHelper;
 use Twig\Extension\AbstractExtension;
 
 class LeagueTwigExtension extends AbstractExtension
@@ -106,7 +107,6 @@ class LeagueTwigExtension extends AbstractExtension
       return $game->title;
     }, Entry::find()->descendantOf($competition)->all());
 
-    $firstRoundGames        = $this->getNextRoundGames($allPlayers);
     $totalMatchesLeftToPlay = count($allPlayers) - 1;
     $totalRounds            = 0;
 
@@ -119,7 +119,14 @@ class LeagueTwigExtension extends AbstractExtension
     $playersStillIn = $allPlayers;
     for ($i = 0; $i < $totalRounds; $i++)
     {
-      $games          = $this->getNextRoundGames($playersStillIn);
+      $games = $this->getNextRoundGames($playersStillIn);
+      if (count($games) % 2 !== 0 && count($games) > 1)
+      {
+        $byeGame    = array_pop($games);
+        $byePlayers = explode(' vs ', $byeGame);
+        $games[] = $byePlayers[0] . ' vs [BYE]';
+        $games[] = $byePlayers[1] . ' vs [BYE]';
+      }
       $rounds[$i]     = $games;
       $playersStillIn = [];
       foreach ($games as $game)
@@ -228,7 +235,7 @@ class LeagueTwigExtension extends AbstractExtension
         $gameTitle = $players[$i] . ' vs ' . $players[$i + 1];
       } else
       {
-        $gameTitle = "WINNER!";
+        $gameTitle = $players[$i] . ' vs [BYE]';
       }
       $round[] = $gameTitle;
     }
