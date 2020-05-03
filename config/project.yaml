@@ -1,4 +1,4 @@
-dateModified: 1588521566
+dateModified: 1588529187
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -197,6 +197,24 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number
+  6fcf820f-5057-4f40-996a-bf82db739663:
+    contentColumnType: text
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: specialInformation
+    instructions: ''
+    name: 'Special information'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: '1'
+      placeholder: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
   761b0da4-cfeb-4171-b48d-aeb96464be42:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -403,28 +421,31 @@ sections:
                 fields:
                   02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
                     required: false
-                    sortOrder: 7
+                    sortOrder: 8
                   1fc6fae0-fb7e-4af4-b6e6-25a3c463db2e:
                     required: false
-                    sortOrder: 8
+                    sortOrder: 9
                   22337b3e-aad9-4fa1-9db9-7bf2b4eb7156:
                     required: false
-                    sortOrder: 3
+                    sortOrder: 4
                   608f1f15-eead-4798-9900-48ee61e4e4f2:
                     required: false
-                    sortOrder: 5
+                    sortOrder: 6
+                  6fcf820f-5057-4f40-996a-bf82db739663:
+                    required: false
+                    sortOrder: 2
                   761b0da4-cfeb-4171-b48d-aeb96464be42:
                     required: false
-                    sortOrder: 6
+                    sortOrder: 7
                   af3615af-c06f-4804-b179-040281bb1151:
                     required: false
                     sortOrder: 1
                   bdd67a8b-0d17-49a2-97bc-f86f7e543c13:
                     required: false
-                    sortOrder: 4
+                    sortOrder: 5
                   dd191238-04e4-486e-9029-d27780b2ce11:
                     required: false
-                    sortOrder: 2
+                    sortOrder: 3
                 name: Settings
                 sortOrder: 1
         handle: competition

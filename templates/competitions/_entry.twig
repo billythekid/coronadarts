@@ -7,6 +7,10 @@
 
   <p>This {{ entry.competitionType.label|lower }} competition between {{ entry.players.count() }} players; {{ entry.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
 
+  {% if entry.specialInformation is not empty %}
+    <p>{{ entry.specialInformation|nl2br }}</p>
+  {% endif %}
+
   {% set highStats %}
     {% set highScoreGames = competition.children|filter(game=>game.highScores is not empty) %}
     {% set highCheckoutGames = competition.children|filter(game=>game.highCheckouts is not empty) %}
