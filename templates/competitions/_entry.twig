@@ -5,7 +5,7 @@
 <h1 class="text-5xl text-center mb-4">{{ entry.title }}</h1>
 <div class="leading-loose sm:leading-normal">
 
-  <p>This {{ entry.competitionType.label|lower }} competition between {{ entry.players.count() }} players; {{ entry.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
+  <p>This {{ competition.competitionType.label|lower }} competition between {{ competition.players|length }} players; {{ competition.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
 
   {% if entry.specialInformation is not empty %}
     <p>{{ entry.specialInformation|nl2br }}</p>
@@ -50,7 +50,7 @@
     {% else %}
       {% set roundsToBePlayed = craft.league.elimination(competition) %}
     {% endif %}
-    {% set final = entry.children|filter(child=>child.title == roundsToBePlayed|last|last)|last %}
+    {% set final = competition.children|filter(child=>child.title == roundsToBePlayed|last|last)|last %}
     {% if final is not empty %}
       {% set player1Win = final.player1LegsWon > final.player2LegsWon %}
       {% set winningLegs = player1Win ? final.player1LegsWon : final.player2LegsWon %}

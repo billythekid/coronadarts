@@ -1,4 +1,4 @@
-dateModified: 1588529187
+dateModified: 1588529752
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -211,7 +211,7 @@ fields:
       columnType: null
       initialRows: '4'
       multiline: '1'
-      placeholder: ''
+      placeholder: 'Games in this league are 501 double-out.'
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\PlainText
