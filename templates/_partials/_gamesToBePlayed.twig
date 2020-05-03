@@ -1,4 +1,4 @@
-{% for competition in craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players']).all() %}
+{% for competition in craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
   {% set gamesThatHaveBeenPlayed = competition.children %}
 
   <div class="my-5 {{ loop.index is even ? 'bg-gray-100' : 'bg-white' }} border shadow">
@@ -38,12 +38,16 @@
       </div>
 
     {% else %}
-
-      {% set roundsToBePlayed = craft.league.elimination(competition) %}
+      {% if competition.blindDrawForEachRound %}
+        {% set roundsToBePlayed = craft.league.eliminationBlindDraw(competition) %}
+      {% else %}
+        {% set roundsToBePlayed = craft.league.elimination(competition) %}
+      {% endif %}
       {% set actualGamesToBePlayed = [] %}
       {% for round in roundsToBePlayed %}
         {% set actualGamesToBePlayed = actualGamesToBePlayed|merge(round|filter(game=>"[BYE]" not in game)) %}
       {% endfor %}
+
       {% set allGamesPlayed = actualGamesToBePlayed|length == gamesThatHaveBeenPlayed|length %}
 
       {% if allGamesPlayed %}<h4 class="text-center text-2xl pb-5">All games have been played</h4>{% endif %}
@@ -59,6 +63,7 @@
           {% else %}
             Round {{ loop.index }}
           {% endif %}
+          {% if competition.blindDrawForEachRound and not loop.last%}<br><small class="block -mt-2 mb-6">(Blind draw)</small>{% endif %}
         </h3>
         <ul class="{% if not loop.last %}mb-5 {% endif %}pb-5 flex justify-around border-b">
           {% for game in round %}

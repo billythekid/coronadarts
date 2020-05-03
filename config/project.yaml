@@ -1,4 +1,4 @@
-dateModified: 1588091342
+dateModified: 1588521566
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -95,6 +95,36 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number
+  1fc6fae0-fb7e-4af4-b6e6-25a3c463db2e:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: showBlindDrawRoundsIfBlindDrawForEachRoundIsOn
+    instructions: ''
+    name: 'Show blind draw rounds if blind draw for each round is on'
+    searchable: true
+    settings:
+      conditionalOnField: blindDrawForEachRound
+      conditionalShow: '1'
+      conditionalShowOrHideFields:
+        - blindDrawRounds
+      conditionalShowOrHideTabs: ''
+      conditionalValue: conditional-true
+      exactlyValue: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: billythekid\conditionalfields\fields\Conditional
+  22337b3e-aad9-4fa1-9db9-7bf2b4eb7156:
+    contentColumnType: boolean
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: blindDrawForEachRound
+    instructions: 'To automatically generate the whole tournament draw leave this turned off. If games are drawn between rounds, turn this on.'
+    name: 'Blind Draw for each round?'
+    searchable: true
+    settings:
+      default: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
   22676616-9ffa-4539-834c-4f5730c47cf8:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -167,6 +197,24 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number
+  761b0da4-cfeb-4171-b48d-aeb96464be42:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: showBlindDrawLightswitchIfCompetitionTypeIsElimination
+    instructions: ''
+    name: 'Show blind draw lightswitch if competition type is elimination'
+    searchable: true
+    settings:
+      conditionalOnField: competitionType
+      conditionalShow: '1'
+      conditionalShowOrHideFields:
+        - blindDrawForEachRound
+      conditionalShowOrHideTabs: ''
+      conditionalValue: conditional-exactly
+      exactlyValue: elimination
+    translationKeyFormat: null
+    translationMethod: none
+    type: billythekid\conditionalfields\fields\Conditional
   af3615af-c06f-4804-b179-040281bb1151:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -187,6 +235,21 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: craft\fields\Entries
+  bdd67a8b-0d17-49a2-97bc-f86f7e543c13:
+    contentColumnType: string
+    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+    handle: blindDrawRounds
+    instructions: 'Add the games for each round as drawn in the blind draw.'
+    name: 'Blind Draw Rounds'
+    searchable: false
+    settings:
+      contentTable: '{{%matrixcontent_blinddrawrounds}}'
+      maxBlocks: ''
+      minBlocks: ''
+      propagationMethod: all
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Matrix
   bee18029-c323-4668-8fc5-25beeb03a0e8:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -241,6 +304,41 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\RadioButtons
+matrixBlockTypes:
+  1c91957f-362f-41f4-8645-e9766e9c8dce:
+    field: bdd67a8b-0d17-49a2-97bc-f86f7e543c13
+    fieldLayouts:
+      b451ebe9-0a4b-46cd-af9b-06412dfedae3:
+        tabs:
+          -
+            fields:
+              5c94933e-5413-4c0f-8782-cee0e955cf08:
+                required: false
+                sortOrder: 1
+            name: Content
+            sortOrder: 1
+    fields:
+      5c94933e-5413-4c0f-8782-cee0e955cf08:
+        contentColumnType: string
+        fieldGroup: null
+        handle: games
+        instructions: ''
+        name: Games
+        searchable: true
+        settings:
+          contentTable: '{{%stc_games}}'
+          fieldLayout: table
+          maxRows: ''
+          minRows: ''
+          propagationMethod: all
+          selectionLabel: 'Add a game'
+          staticField: ''
+        translationKeyFormat: null
+        translationMethod: site
+        type: verbb\supertable\fields\SuperTableField
+    handle: round
+    name: Round
+    sortOrder: 1
 plugins:
   conditional-fields:
     edition: standard
@@ -305,16 +403,28 @@ sections:
                 fields:
                   02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
                     required: false
-                    sortOrder: 2
-                  608f1f15-eead-4798-9900-48ee61e4e4f2:
+                    sortOrder: 7
+                  1fc6fae0-fb7e-4af4-b6e6-25a3c463db2e:
+                    required: false
+                    sortOrder: 8
+                  22337b3e-aad9-4fa1-9db9-7bf2b4eb7156:
                     required: false
                     sortOrder: 3
+                  608f1f15-eead-4798-9900-48ee61e4e4f2:
+                    required: false
+                    sortOrder: 5
+                  761b0da4-cfeb-4171-b48d-aeb96464be42:
+                    required: false
+                    sortOrder: 6
                   af3615af-c06f-4804-b179-040281bb1151:
+                    required: false
+                    sortOrder: 1
+                  bdd67a8b-0d17-49a2-97bc-f86f7e543c13:
                     required: false
                     sortOrder: 4
                   dd191238-04e4-486e-9029-d27780b2ce11:
                     required: false
-                    sortOrder: 1
+                    sortOrder: 2
                 name: Settings
                 sortOrder: 1
         handle: competition
@@ -433,6 +543,62 @@ superTableBlockTypes:
         translationKeyFormat: null
         translationMethod: site
         type: craft\fields\Entries
+  825cfde3-de72-4c59-aaed-18d031db136f:
+    field: 5c94933e-5413-4c0f-8782-cee0e955cf08
+    fieldLayouts:
+      ac3bf22b-b7e5-478a-ac6f-f15242aa197e:
+        tabs:
+          -
+            fields:
+              48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
+                required: true
+                sortOrder: 1
+              a44bb3c5-38ba-495a-90d8-ccbf246f319d:
+                required: false
+                sortOrder: 2
+            name: Content
+            sortOrder: 1
+    fields:
+      48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
+        contentColumnType: string
+        fieldGroup: null
+        handle: player1
+        instructions: ''
+        name: 'Player 1'
+        searchable: false
+        settings:
+          limit: '1'
+          localizeRelations: false
+          selectionLabel: 'Choose player 1'
+          source: null
+          sources:
+            - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+          targetSiteId: null
+          validateRelatedElements: ''
+          viewMode: null
+        translationKeyFormat: null
+        translationMethod: site
+        type: craft\fields\Entries
+      a44bb3c5-38ba-495a-90d8-ccbf246f319d:
+        contentColumnType: string
+        fieldGroup: null
+        handle: player2
+        instructions: 'Leave blank if player 1 gets a bye.'
+        name: 'Player 2'
+        searchable: false
+        settings:
+          limit: '1'
+          localizeRelations: false
+          selectionLabel: 'Choose player 2'
+          source: null
+          sources:
+            - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+          targetSiteId: null
+          validateRelatedElements: ''
+          viewMode: null
+        translationKeyFormat: null
+        translationMethod: site
+        type: craft\fields\Entries
   c3bd5d5d-f30a-4332-8474-2bdc340ef31b:
     field: 022f1b02-5045-493c-8ea3-47f05eecf73f
     fieldLayouts:
@@ -487,6 +653,96 @@ superTableBlockTypes:
         translationKeyFormat: null
         translationMethod: none
         type: craft\fields\Number
+  fdfde0fd-a350-4e0a-a772-6b14a0827bf6:
+    field: bdd67a8b-0d17-49a2-97bc-f86f7e543c13
+    fieldLayouts:
+      926069a6-ccb3-4017-bdd6-d6d67b9eb1a5:
+        tabs:
+          -
+            fields:
+              c758c904-71cc-4f44-a7ff-6ac8576b6724:
+                required: false
+                sortOrder: 1
+            name: Content
+            sortOrder: 1
+    fields:
+      c758c904-71cc-4f44-a7ff-6ac8576b6724:
+        contentColumnType: text
+        fieldGroup: null
+        handle: games
+        instructions: ''
+        name: Games
+        searchable: true
+        settings:
+          addRowLabel: 'Add a game'
+          columnType: text
+          columns:
+            __assoc__:
+              -
+                - col1
+                -
+                  __assoc__:
+                    -
+                      - heading
+                      - 'Player 1'
+                    -
+                      - handle
+                      - player1
+                    -
+                      - width
+                      - ''
+                    -
+                      - type
+                      - singleline
+              -
+                - col4
+                -
+                  __assoc__:
+                    -
+                      - heading
+                      - 'Player 1 gets a bye?'
+                    -
+                      - handle
+                      - player1GetsABye
+                    -
+                      - width
+                      - 120px
+                    -
+                      - type
+                      - lightswitch
+              -
+                - col2
+                -
+                  __assoc__:
+                    -
+                      - heading
+                      - 'Player 2'
+                    -
+                      - handle
+                      - player2
+                    -
+                      - width
+                      - ''
+                    -
+                      - type
+                      - time
+          defaults:
+            -
+              __assoc__:
+                -
+                  - col1
+                  - ''
+                -
+                  - col4
+                  - ''
+                -
+                  - col2
+                  - null
+          maxRows: ''
+          minRows: ''
+        translationKeyFormat: null
+        translationMethod: none
+        type: craft\fields\Table
 system:
   edition: solo
   live: true

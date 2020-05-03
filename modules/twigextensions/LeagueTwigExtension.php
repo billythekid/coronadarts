@@ -120,12 +120,14 @@ class LeagueTwigExtension extends AbstractExtension
     for ($i = 0; $i < $totalRounds; $i++)
     {
       $games = $this->getNextRoundGames($playersStillIn);
+
+      // if the round has an uneven number of games, the last 2 players both get a bye
       if (count($games) % 2 !== 0 && count($games) > 1)
       {
         $byeGame    = array_pop($games);
         $byePlayers = explode(' vs ', $byeGame);
-        $games[] = $byePlayers[0] . ' vs [BYE]';
-        $games[] = $byePlayers[1] . ' vs [BYE]';
+        $games[]    = $byePlayers[0] . ' vs [BYE]';
+        $games[]    = $byePlayers[1] . ' vs [BYE]';
       }
       $rounds[$i]     = $games;
       $playersStillIn = [];
@@ -148,6 +150,28 @@ class LeagueTwigExtension extends AbstractExtension
       }
     }
 
+    return $rounds;
+  }
+
+
+  public function eliminationBlindDraw($competition)
+  {
+    $rounds = [];
+    foreach ($competition->blindDrawRounds as $round)
+    {
+      $roundGames = [];
+      foreach ($round->games as $game)
+      {
+        if (empty($game->player2))
+        {
+          $roundGames[] = $game->player1[0]->title . ' vs [BYE]';
+        } else
+        {
+          $roundGames[] = $game->player1[0]->title . ' vs ' . $game->player2[0]->title;
+        }
+      }
+      $rounds[] = $roundGames;
+    }
     return $rounds;
   }
 
