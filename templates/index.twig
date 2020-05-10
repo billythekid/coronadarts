@@ -5,7 +5,7 @@
 
 
   <div class="mb-5">
-    {% include "_partials/_coronaCup.twig" %}
+    {% include "_partials/_eliminationTournaments.twig" %}
   </div>
 
   {% for competition in craft.entries.section('games').level(1).where('field_competitionType = "roundRobin"').orderBy('postDate DESC').all() %}

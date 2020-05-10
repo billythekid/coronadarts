@@ -1,4 +1,4 @@
-dateModified: 1588529845
+dateModified: 1589122062
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -316,6 +316,17 @@ fields:
             -
               - value
               - elimination
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - 'Winner Stays On'
+            -
+              - value
+              - winnerStaysOn
             -
               - default
               - ''

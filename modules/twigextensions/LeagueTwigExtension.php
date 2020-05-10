@@ -44,7 +44,7 @@ class LeagueTwigExtension extends AbstractExtension
     return $opponentsByGames;
   }
 
-  function roundRobin($players, $rounds = 1)
+  public function roundRobin($players, $rounds = 1)
   {
     $allPlayers = $players;
 
@@ -90,7 +90,7 @@ class LeagueTwigExtension extends AbstractExtension
     return array_merge(...$response);
   }
 
-  function elimination($competition)
+  public function elimination($competition)
   {
     $rounds = [];
 
@@ -153,7 +153,6 @@ class LeagueTwigExtension extends AbstractExtension
     return $rounds;
   }
 
-
   public function eliminationBlindDraw($competition)
   {
     $rounds = [];
@@ -172,10 +171,81 @@ class LeagueTwigExtension extends AbstractExtension
       }
       $rounds[] = $roundGames;
     }
+
     return $rounds;
   }
 
-  public function getLeaderboard($competition = null)
+  public function winnerStaysOn($competition)
+  {
+    $totalWins  = [];
+    $totalLosses = [];
+    $winners = [];
+    $losers  = [];
+    $games   = [];
+
+    foreach ($competition->children as $game)
+    {
+      $winner    = $game->player1LegsWon > $game->player2LegsWon ? $game->player1[0] : $game->player2[0];
+      $loser     = $game->player1LegsWon > $game->player2LegsWon ? $game->player2[0] : $game->player1[0];
+      $winners[] = $winner;
+      $losers[]  = $loser;
+      if (array_key_exists($winner->title, $totalWins))
+      {
+        $totalWins[$winner->title] += 1;
+      } else
+      {
+        $totalWins[$winner->title] = 1;
+      }
+      if (array_key_exists($loser->title, $totalLosses))
+      {
+        $totalLosses[$loser->title] += 1;
+      } else
+      {
+        $totalLosses[$loser->title] = 1;
+      }
+      $games[] = [
+          'winner' => $winner,
+          'loser'  => $loser,
+          'game'   => $game,
+      ];
+    }
+    arsort($totalWins);
+    arsort($totalLosses);
+
+    $streaks      = [];
+    $streakNumber = 0;
+
+    $previousWinner = $games[0]['winner']->title;
+
+    foreach ($games as $game)
+    {
+      if ($game['winner']->title == $previousWinner)
+      {
+        if (array_key_exists($streakNumber, $streaks))
+        {
+          $streaks[$streakNumber]['length'] += 1;
+        } else
+        {
+          $streaks[$streakNumber]['length'] = 1;
+          $streaks[$streakNumber]['player'] = $game['winner']->title;
+        }
+      } else
+      {
+        $streakNumber++;
+        $streaks[$streakNumber]['length'] = 1;
+        $streaks[$streakNumber]['player'] = $game['winner']->title;
+      }
+      $previousWinner = $game['winner']->title;
+    }
+
+    usort($streaks, function ($a, $b) {
+      return $b['length'] <=> $a['length'];
+    });
+    return compact('winners', 'losers', 'totalWins', 'totalLosses', 'games', 'streaks');
+  }
+
+  public
+  function getLeaderboard($competition = null)
   {
     if ($competition === null)
     {
@@ -249,7 +319,8 @@ class LeagueTwigExtension extends AbstractExtension
    * @param array $gamesThatHaveBeenPlayed
    * @return array
    */
-  private function getNextRoundGames(array $players): array
+  private
+  function getNextRoundGames(array $players): array
   {
     $round = [];
     for ($i = 0; $i < count($players); $i += 2)

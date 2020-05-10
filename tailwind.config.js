@@ -5,6 +5,7 @@ module.exports = {
     mixBlendMode: ['responsive'],
     backgroundBlendMode: ['responsive'],
     isolation: ['responsive'],
+    backgroundColor: ['odd','even']
   },
 
   plugins: [

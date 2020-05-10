@@ -5,8 +5,8 @@
 <h1 class="text-5xl text-center mb-4">{{ entry.title }}</h1>
 <div class="leading-loose sm:leading-normal">
 
-  <p>This {{ competition.competitionType.label|lower }} competition between {{ competition.players|length }} players; {{ competition.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ' and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
-
+  <p>This {{ competition.competitionType.label|lower }} competition between {{ competition.players|length }} players; {{ competition.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ', and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
+  <p>There have been a total of {{ gamesThatHaveBeenPlayed|length }} games played in the competition.</p>
   {% if entry.specialInformation is not empty %}
     <p>{{ entry.specialInformation|nl2br }}</p>
   {% endif %}
@@ -15,10 +15,10 @@
     {% set highScoreGames = competition.children|filter(game=>game.highScores is not empty) %}
     {% set highCheckoutGames = competition.children|filter(game=>game.highCheckouts is not empty) %}
     {% if highScoreGames is not empty %}
-      <p>It featured {{ highScoreGames|length }} game{{ highScoreGames|length != 1 ? 's' }} with high scores of 140 or above; {{ highScoreGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ' and ') | raw }}!</p>
+      <p>It featured {{ highScoreGames|length }} game{{ highScoreGames|length != 1 ? 's' }} with high scores of 140 or above; {{ highScoreGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ', and ') | raw }}!</p>
     {% endif %}
     {% if highCheckoutGames is not empty %}
-      <p>The competition saw {{ highCheckoutGames|length }} game{{ highCheckoutGames|length != 1 ? 's' }} where the checkout was 100 points or more; {{ highCheckoutGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ' and ') | raw }}!</p>
+      <p>The competition saw {{ highCheckoutGames|length }} game{{ highCheckoutGames|length != 1 ? 's' }} where the checkout was 100 points or more; {{ highCheckoutGames | map(game=>"<a href='#{game.url}' class='underline'>#{game.title}</a>") | join(', ', ', and ') | raw }}!</p>
     {% endif %}
   {% endset %}
 
@@ -57,6 +57,21 @@
       {% set losingLegs = player1Win ? final.player2LegsWon : final.player1LegsWon %}
       <p>The final was played on {{ final.postDate|date('l jS F Y') }} between {{ final.player1[0].title }} and {{ final.player2[0].title }}, {{ player1Win ? final.player1[0].title : final.player2[0].title }} going on to take the win by {{ winningLegs != 1 ? winningLegs ~ ' legs' : winningLegs ~ ' leg' }} to {{ losingLegs }}.</p>
     {% endif %}
+  {% endif %}
+
+
+  {% if entry.competitionType == "winnerStaysOn" %}
+    {% set competitionInfo = craft.league.winnerStaysOn(competition) %}
+    <p>The winner of the competition was {{ competitionInfo.totalWins|keys|first }} with a total of {{ competitionInfo.totalWins | first }} game wins.</p>
+    <p>Other game winners include {{ competitionInfo.totalWins | without(competitionInfo.totalWins|first) | map((total,player)=> "#{player} (#{total} win" ~ (total != 1 ? "s") ~ ")" )  | join(', ', ', and ') }}.</p>
+    <p>The biggest losses were felt by {{ competitionInfo.totalLosses | map((total,player)=> "#{player} (#{total} loss" ~ (total != 1 ? "es") ~ ")" ) | join(', ', ', and ') }}.</p>
+    <p>The longest unbroken win streak was {{ (competitionInfo.streaks|first).length }} by {{ (competitionInfo.streaks|first).player }}.</p>
+    <p>The win streaks were {{ competitionInfo.streaks | map((streak)=> "#{streak.player} (#{streak.length})") | join(', ', ' & ') }}.</p>
+    <p>
+      {% for player in competition.players %}
+        {% if loop.last %}and {% endif %} {{ player.title }} played {{ competitionInfo.games|filter(game=>game.winner.title == player.title or game.loser.title == player.title) | length }} games{% if not loop.last %},{% else %}.{% endif %}
+      {% endfor %}
+    </p>
   {% endif %}
 </div>
 
