@@ -322,34 +322,30 @@ class LeagueTwigExtension extends AbstractExtension
     $games       = Entry::find()->section('games')->with(['player1', 'player2'])->level(2)->all();
     foreach ($players as $player)
     {
-      $myHomeGames      = array_filter($games, function ($game) use ($player) {
+      $homeGames      = array_filter($games, function ($game) use ($player) {
         return $game->player1[0]->id === $player->id;
       });
-      $myAwayGames      = array_filter($games, function ($game) use ($player) {
+      $awayGames      = array_filter($games, function ($game) use ($player) {
         return $game->player2[0]->id === $player->id;
       });
-      $myHomeGamesWon   = array_filter($myHomeGames, function ($game) {
+      $homeGamesWon   = array_filter($homeGames, function ($game) {
         return $game->player1LegsWon > $game->player2LegsWon;
       });
-      $myAwayGamesWon   = array_filter($myAwayGames, function ($game) {
+      $awayGamesWon   = array_filter($awayGames, function ($game) {
         return $game->player2LegsWon > $game->player1LegsWon;
       });
-      $totalGamesPlayed = count($myHomeGames) + count($myAwayGames);
-      $totalGamesWon    = count($myHomeGamesWon) + count($myAwayGamesWon);
+      $totalGamesPlayed = count($homeGames) + count($awayGames);
+      $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
+
       $playerStats[]    = [
           'playerUrl'        => $player->url,
           'playerName'       => $player->title,
           'totalGamesPlayed' => $totalGamesPlayed,
           'totalGamesWon'    => $totalGamesWon,
-          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100) . '%',
+          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100),
       ];
-//      playerUrl
-//      playerName
-//      totalGamesPlayed
-//      totalGamesWon
-//      percentage
-
     }
+
     return $playerStats;
   }
 

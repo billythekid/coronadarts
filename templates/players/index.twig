@@ -10,17 +10,16 @@
       <th class="p-2 text-center">Player</th>
       <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Games Played</span></th>
       <th class="p-2 text-center"><span class="sm:hidden">Won</span><span class="hidden sm:inline">Games Won</span></th>
-      <th class="p-2 text-center"><span class="sm:hidden">Win %</span><span class="hidden sm:inline">Win Percentage</span></th>
+      <th class="p-2 text-center"><span class="sm:hidden">%</span><span class="hidden sm:inline">Win Percentage</span></th>
     </tr>
 
-
-    {% for row in craft.league.getPlayerStats()|sort((a,b)=>a.percentage<=>b.percentage)|reverse %}
+    {% for row in craft.league.getPlayerStats() | sort((a,b)=>a.percentage<=>b.percentage) | reverse %}
       <tr class="{% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
         <th class="border border-gray-400 px-4 py-2 text-left">
           <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
         <td class="border border-gray-400 px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
-        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.percentage }}</td>
+        <td class="border border-gray-400 px-4 py-2 text-right">{{ row.percentage }}%</td>
       </tr>
     {% endfor %}
 
