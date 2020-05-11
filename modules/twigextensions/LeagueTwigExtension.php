@@ -177,11 +177,11 @@ class LeagueTwigExtension extends AbstractExtension
 
   public function winnerStaysOn($competition)
   {
-    $totalWins  = [];
+    $totalWins   = [];
     $totalLosses = [];
-    $winners = [];
-    $losers  = [];
-    $games   = [];
+    $winners     = [];
+    $losers      = [];
+    $games       = [];
 
     foreach ($competition->children as $game)
     {
@@ -241,11 +241,11 @@ class LeagueTwigExtension extends AbstractExtension
     usort($streaks, function ($a, $b) {
       return $b['length'] <=> $a['length'];
     });
+
     return compact('winners', 'losers', 'totalWins', 'totalLosses', 'games', 'streaks');
   }
 
-  public
-  function getLeaderboard($competition = null)
+  public function getLeaderboard($competition = null)
   {
     if ($competition === null)
     {
@@ -314,13 +314,51 @@ class LeagueTwigExtension extends AbstractExtension
     return array_reverse($leaderboard);
   }
 
+
+  public function getPlayerStats()
+  {
+    $playerStats = [];
+    $players     = Entry::find()->section('players')->all();
+    $games       = Entry::find()->section('games')->with(['player1', 'player2'])->level(2)->all();
+    foreach ($players as $player)
+    {
+      $myHomeGames      = array_filter($games, function ($game) use ($player) {
+        return $game->player1[0]->id === $player->id;
+      });
+      $myAwayGames      = array_filter($games, function ($game) use ($player) {
+        return $game->player2[0]->id === $player->id;
+      });
+      $myHomeGamesWon   = array_filter($myHomeGames, function ($game) {
+        return $game->player1LegsWon > $game->player2LegsWon;
+      });
+      $myAwayGamesWon   = array_filter($myAwayGames, function ($game) {
+        return $game->player2LegsWon > $game->player1LegsWon;
+      });
+      $totalGamesPlayed = count($myHomeGames) + count($myAwayGames);
+      $totalGamesWon    = count($myHomeGamesWon) + count($myAwayGamesWon);
+      $playerStats[]    = [
+          'playerUrl'        => $player->url,
+          'playerName'       => $player->title,
+          'totalGamesPlayed' => $totalGamesPlayed,
+          'totalGamesWon'    => $totalGamesWon,
+          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100) . '%',
+      ];
+//      playerUrl
+//      playerName
+//      totalGamesPlayed
+//      totalGamesWon
+//      percentage
+
+    }
+    return $playerStats;
+  }
+
   /**
    * @param array $players
    * @param array $gamesThatHaveBeenPlayed
    * @return array
    */
-  private
-  function getNextRoundGames(array $players): array
+  private function getNextRoundGames(array $players): array
   {
     $round = [];
     for ($i = 0; $i < count($players); $i += 2)
