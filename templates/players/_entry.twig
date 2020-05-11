@@ -187,6 +187,7 @@
         , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
         {% if gamesPlayed|length != 1 %}
           won {{ homeGamesWon|length + awayGamesWon|length == gamesPlayed|length ? "all" }} {{ homeGamesWon|length + awayGamesWon|length }} of them.
+          That's a {{ ( (homeGamesWon|length + awayGamesWon|length) / gamesPlayed|length * 100) | round }}% win rate.
         {% else %}
           {{ homeGamesWon|length + awayGamesWon|length > 0 ? "won it": "lost it" }}.
         {% endif %}
