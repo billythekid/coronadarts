@@ -184,7 +184,7 @@
       {% endfor %}
       {{ entry.title }} has played {{ gamesPlayed|length }} game{{ gamesPlayed|length != 1 ? 's' }} so far
       {%- if gamesPlayed is not empty -%}
-        , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ' and ') }}) and
+        , against {{ uniquePlayers|length }} other player{{ uniquePlayers|length != 1 ? 's' }} ({{ uniquePlayers|join(', ', ', and ') }}) and
         {% if gamesPlayed|length != 1 %}
           won {{ homeGamesWon|length + awayGamesWon|length == gamesPlayed|length ? "all" }} {{ homeGamesWon|length + awayGamesWon|length }} of them.
           That's a {{ ( (homeGamesWon|length + awayGamesWon|length) / gamesPlayed|length * 100) | round }}% win rate.
@@ -214,10 +214,10 @@
       <p>
         {{ entry.title }} has played
         {% if homeGames|length %}
-          {{ uniqueHomeAgainstPlayers|join(', ', ' and ') }} at home{% if awayGames|length %} and {% else %}.{% endif %}
+          {{ uniqueHomeAgainstPlayers|join(', ', ', and ') }} at home{% if awayGames|length %} and {% else %}.{% endif %}
         {% endif %}
         {% if awayGames|length %}
-          {{ uniqueAwayAgainstPlayers|join(', ', ' and ') }} away.
+          {{ uniqueAwayAgainstPlayers|join(', ', ', and ') }} away.
         {% endif %}
       </p>
     {% endif %}
@@ -237,7 +237,7 @@
         {{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points.
         {{ highScores
         | map(score => score.score ~ " (<a class='underline' href='#{score.game.url}'>against #{score.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
-        | join(', ', ' and ') | raw }}.
+        | join(', ', ', and ') | raw }}.
       </p>
 
     {% endif %}
@@ -247,7 +247,7 @@
         {{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highScores|length != 1 ? 's' }} with 100 or more.
         {{ highCheckouts
         | map(checkout => checkout.checkout ~ " (<a class='underline' href='#{checkout.game.url}'>against #{checkout.game.title}</a>)"|replace(entry.title,'')|replace(' vs ', ''))
-        | join(', ', ' and ') | raw }}.
+        | join(', ', ', and ') | raw }}.
       </p>
     {% endif %}
   </div>
