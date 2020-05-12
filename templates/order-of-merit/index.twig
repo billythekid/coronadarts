@@ -9,21 +9,21 @@
 
     <div>
       <h2 class="text-3xl text-center">High Checkouts (100+)</h2>
-      <table class="border-collapse border-2 border-gray-500 my-5 mx-auto shadow-xl">
+      <table class="overflow-hidden rounded-lg my-5 mx-auto shadow-xl">
         <tr class="bg-gray-100">
           <th class="px-4 py-2">Player</th>
           <th class="px-4 py-2">Checked out</th>
           <th class="px-4 py-2">Game</th>
         </tr>
         {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).all()|sort((a,b) => b.checkout <=> a.checkout ) %}
-        <tr class="{% if loop.first or checkout.checkout == 170 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %}">
-          <td class="border border-gray-400 px-4 py-2">
+        <tr class="{% if loop.first or checkout.checkout == 170 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100{% endif %} border-t border-gray-600 ">
+          <td class="px-4 py-2">
             <a class="underline" href="{{ checkout.player[0].url }}">{{ checkout.player[0].title }}</a>
           </td>
-          <td class="border border-gray-400 px-4 py-2">
+          <td class="px-4 py-2">
             {{ checkout.checkout }}
           </td>
-          <td class="border border-gray-400 px-4 py-2">
+          <td class="px-4 py-2">
             <a class="underline" href="{{ checkout.owner.url }}">{{ checkout.owner.title }}</a>
           </td>
         {% else %}
@@ -52,7 +52,7 @@
 
       <div class="">
         {% for number, scores in scores | group('score') %}
-          <table class="border-collapse border-2 border-gray-500 mt-5 mx-auto shadow-xl w-full">
+          <table class="overflow-hidden rounded-lg mt-5 mx-auto shadow-xl w-full">
             {% set bg = loop.first or number == 180 ? "bg-yellow-400" : loop.index == 2 ? "bg-gray-300" : loop.index == 3 ? "bg-yellow-700 text-white" : 'bg-green-100' %}
             <tr class="{{ bg }}">
               <th colspan="3">{{ number }}</th>
@@ -68,19 +68,19 @@
             {% endfor %}
             {% set sortedScores = sortedScores|sort((a,b) => b.count <=> a.count) %}
             {% for score in sortedScores %}
-              <tr class="{{ bg }}">
-                <td class="border border-gray-400 px-4 py-2">
+              <tr class="{{ bg }} border-t border-gray-600">
+                <td class="px-4 py-2">
                   <a class="underline" href="{{ score.player.url }}">{{ score.player.title }}</a>
                 </td>
-                <td class="border border-gray-400 px-4 py-2">
+                <td class="px-4 py-2">
                   {{ score.count }}
                 </td>
-                <td class="border border-gray-400 px-4 py-2 text-center">
-                  <button onclick="this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden');this.classList.toggle('rotate-180')" class="transform transition-transform duration-200">⇵</button>
+                <td class="px-4 py-2 text-center">
+                  <button onclick="this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden');this.classList.toggle('rotate-180');" class="transform transition-transform duration-200">▼</button>
                 </td>
               </tr>
               <tr class="hidden {{ bg }}">
-                <td class="border border-gray-400 px-4 py-2" colspan="3">
+                <td class="px-4 py-2" colspan="3">
                   <div class="flex justify-around flex-wrap">
                     {% for scoreSuperTableField in score.scores %}
                       <a class="underline px-3" href="{{ scoreSuperTableField.owner.url }}">{{ scoreSuperTableField.owner.title }}</a>
@@ -102,7 +102,7 @@
 
       {#  {% for score in scores %}#}
       {#  <tr class="{% if loop.first or score.score == 180 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100 odd:bg-green-200{% endif %}">#}
-      {#    <td class="border border-gray-400 px-4 py-2">#}
+      {#    <td class="px-4 py-2">#}
       {#      {% if score.player is not defined %}#}
       {#        <a class="underline" href="{{ score.link }}">#}
       {#          {{ score.coronaPlayer }}#}
@@ -111,10 +111,10 @@
       {#        <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>#}
       {#      {% endif %}#}
       {#    </td>#}
-      {#    <td class="border border-gray-400 px-4 py-2">#}
+      {#    <td class="px-4 py-2">#}
       {#      {{ score.score }}#}
       {#    </td>#}
-      {#    <td class="border border-gray-400 px-4 py-2">#}
+      {#    <td class="px-4 py-2">#}
       {#      {% if score.player is not defined %}#}
       {#        {{ score.game }}#}
       {#      {% else %}#}
@@ -123,7 +123,7 @@
       {#    </td>#}
       {#  {% else %}#}
       {#    <tr>#}
-      {#      <td class="border border-gray-400 px-4 py-2" colspan="3">No high checkouts</td>#}
+      {#      <td class="px-4 py-2" colspan="3">No high checkouts</td>#}
       {#    </tr>#}
       {#  {% endfor %}#}
       {#</table>#}
