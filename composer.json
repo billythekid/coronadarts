@@ -1,7 +1,6 @@
 {
   "require": {
-    "billythekid/conditional-fields": "0.0.6",
-    "craftcms/cms": "3.4.18",
+    "craftcms/cms": "3.4.20",
     "verbb/super-table": "^2.4",
     "vlucas/phpdotenv": "^3.4.0"
   },

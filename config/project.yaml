@@ -1,4 +1,4 @@
-dateModified: 1589122062
+dateModified: 1590339865
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -59,24 +59,6 @@ fields:
     translationKeyFormat: null
     translationMethod: site
     type: verbb\supertable\fields\SuperTableField
-  02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
-    contentColumnType: string
-    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
-    handle: showRoundsIfCompetitionTypeIsARoundRobin
-    instructions: ''
-    name: 'Show rounds if competition type is a round robin'
-    searchable: true
-    settings:
-      conditionalOnField: competitionType
-      conditionalShow: '1'
-      conditionalShowOrHideFields:
-        - roundRobinRounds
-      conditionalShowOrHideTabs: ''
-      conditionalValue: conditional-exactly
-      exactlyValue: roundRobin
-    translationKeyFormat: null
-    translationMethod: none
-    type: billythekid\conditionalfields\fields\Conditional
   0900cd97-c6b2-4a38-b2a0-0704a2955d60:
     contentColumnType: smallint(1)
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -95,24 +77,6 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number
-  1fc6fae0-fb7e-4af4-b6e6-25a3c463db2e:
-    contentColumnType: string
-    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
-    handle: showBlindDrawRoundsIfBlindDrawForEachRoundIsOn
-    instructions: ''
-    name: 'Show blind draw rounds if blind draw for each round is on'
-    searchable: true
-    settings:
-      conditionalOnField: blindDrawForEachRound
-      conditionalShow: '1'
-      conditionalShowOrHideFields:
-        - blindDrawRounds
-      conditionalShowOrHideTabs: ''
-      conditionalValue: conditional-true
-      exactlyValue: ''
-    translationKeyFormat: null
-    translationMethod: none
-    type: billythekid\conditionalfields\fields\Conditional
   22337b3e-aad9-4fa1-9db9-7bf2b4eb7156:
     contentColumnType: boolean
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -215,24 +179,6 @@ fields:
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\PlainText
-  761b0da4-cfeb-4171-b48d-aeb96464be42:
-    contentColumnType: string
-    fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
-    handle: showBlindDrawLightswitchIfCompetitionTypeIsElimination
-    instructions: ''
-    name: 'Show blind draw lightswitch if competition type is elimination'
-    searchable: true
-    settings:
-      conditionalOnField: competitionType
-      conditionalShow: '1'
-      conditionalShowOrHideFields:
-        - blindDrawForEachRound
-      conditionalShowOrHideTabs: ''
-      conditionalValue: conditional-exactly
-      exactlyValue: elimination
-    translationKeyFormat: null
-    translationMethod: none
-    type: billythekid\conditionalfields\fields\Conditional
   af3615af-c06f-4804-b179-040281bb1151:
     contentColumnType: string
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
@@ -430,12 +376,6 @@ sections:
             tabs:
               -
                 fields:
-                  02a7cfd7-fb98-4032-ba1c-98d2d4aa45a9:
-                    required: false
-                    sortOrder: 8
-                  1fc6fae0-fb7e-4af4-b6e6-25a3c463db2e:
-                    required: false
-                    sortOrder: 9
                   22337b3e-aad9-4fa1-9db9-7bf2b4eb7156:
                     required: false
                     sortOrder: 4
@@ -445,9 +385,6 @@ sections:
                   6fcf820f-5057-4f40-996a-bf82db739663:
                     required: false
                     sortOrder: 2
-                  761b0da4-cfeb-4171-b48d-aeb96464be42:
-                    required: false
-                    sortOrder: 7
                   af3615af-c06f-4804-b179-040281bb1151:
                     required: false
                     sortOrder: 1
