@@ -29,4 +29,4 @@ Please see (the wiki)[wiki] for details on how to use this app.
 
 # Roadmap
 
-Please see the [features roadmap](labels/roadmap) and [technical-roadmap](labels/technical roadmap) issues
+Please see the [features roadmap](labels/roadmap) and [technical roadmap](labels/technical-roadmap) issues
