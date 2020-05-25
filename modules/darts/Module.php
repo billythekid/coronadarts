@@ -107,7 +107,7 @@ class Module extends \yii\base\Module
       $event->isValid = false;
     }
 
-    if($entry->player1->ids[0] === $entry->player2->ids[0])
+    if ($entry->player1->ids()[0] === $entry->player2->ids()[0])
     {
       $message = "Players must be unique.";
       $entry->addError("player1", $message);
