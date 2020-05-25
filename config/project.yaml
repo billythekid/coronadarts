@@ -1,7 +1,11 @@
-dateModified: 1590427678
+dateModified: 1590434930
 email:
-  fromEmail: billy@the-kid.org
-  fromName: 'Coronavirus United Newton Tigers Singles League'
+  fromEmail: $MAIL_FROM
+  fromName: $MAIL_SENDER
+  replyToEmail: $MAIL_REPLY_TO
+  template: null
+  transportSettings:
+    command: ''
   transportType: craft\mail\transportadapters\Sendmail
 fieldGroups:
   741963c9-a9f3-46a4-b3cf-b5325fefb762:
