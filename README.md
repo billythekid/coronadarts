@@ -25,8 +25,8 @@ It should be noted that this is the free solo version of Craft CMS. If you requi
 
 ## Documentation
 
-Please see (the wiki)[wiki] for details on how to use this app.
+Please see [the wiki](https://github.com/billythekid/coronadarts/wiki) for details on how to use this app.
 
 # Roadmap
 
-Please see the [features roadmap](labels/roadmap) and [technical roadmap](labels/technical-roadmap) issues
+Please see the [features roadmap](https://github.com/billythekid/coronadarts/labels/roadmap) and [technical roadmap](https://github.com/billythekid/coronadarts/labels/technical-roadmap) issues
