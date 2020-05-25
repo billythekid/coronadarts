@@ -17,12 +17,14 @@ Feel free to raise PRs or issues if you find it helpful.
   - [Games Channel](#games-channel)
     - [Competitions](#competitions)
     - [Games](#games)
+- [Roadmap](#roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Corona Darts
 
 This is a [Craft CMS](https://craftcms.com) powered web app designed for running/recording your own darts leagues and competitions.
+Please see the roadmap for the plans to make this better. Please also raise issues for feature requests for items not on the roadmap.
 
 ## Installation 
 
@@ -89,3 +91,24 @@ Games will require all the following to pass validation:
 * The competition the game is in must still have outstanding games to be played.
 * The game must not already have been played (round robin games)
 
+# Roadmap
+
+* Allow games to be draws in round robin competitions
+* Allow admin to set awarded points for win, draw, lose in round robin competitions
+* Add non x01 game formats (so you don't need leg difference to determine the win)
+* Add Multiplayer game setups 
+    * Halvers (scores)
+    * Loopy (lives)
+    * (Killer) Shanghai (scores / knockout)
+    * Golf (scores)
+    * (Blind) Killer (knockout)
+    * 27 (lives)
+    * 25/Bull (lives)
+    * …
+* Add scoring capability
+    * Scoring stats
+    * Scoring for all game types
+    * Automatically update the game entry when scoring games
+* Embed Zoom meetings 
+* Add headless mode and JSON/GraphQL API
+* Better styling
