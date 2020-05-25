@@ -127,7 +127,7 @@ class Module extends \yii\base\Module
 
       $gamesThatHaveBeenPlayed = array_map(function (Entry $game) {
         return $game->title;
-      }, $competition->getChildren()->all());
+      }, $competition->getChildren()->id(['not', [$entry->id]])->all());
 
       // Check if all games have been played
       if (count($gamesThatHaveBeenPlayed) >= count($allGamesToBePlayed))

@@ -1,3 +1,8 @@
+# Please note, this is a work in progress and a personal project. 
+Feel free to raise PRs or issues if you find it helpful.
+
+----
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -17,7 +22,7 @@
 
 # Corona Darts
 
-This is a Craft CMS installation designed for running/recording your own darts leagues and tournaments.
+This is a Craft CMS powered web app designed for running/recording your own darts leagues and competitions.
 
 ## Installation 
 
@@ -66,7 +71,7 @@ If you select the competition type to be Round Robin you can choose the number o
 
 If you select Elimination as the competition type the system will generate all the games to the final for you. If you wish to do a blind draw at each stage of teh competition you can set that up here and record each round here.
 
-Competitions are top-level entries in teh structure with games beign children of the competition.
+Competitions are top-level entries in the structure with games being children of the competition.
 
 ### Games
 
@@ -74,5 +79,10 @@ Games are the default entry type in the games channel.
 
 Each game consists of 2 players, and their legs won. A game also holds some statistical information about high checkouts (where the player won the leg by hitting over 100 points) and high scores (where the player hit 140 points or more with 3 darts)
 
-**Note!** It is important that Player 1 and Player 2 are chosen correctly in these games are part of a Round Robin or Elimination competition. It may be helpful to think of these as the 'home' player and 'away' player. If the system sees the *same* game as having already been played it will likely ignore the second game when creating the draws/league tables so simply changing who is player 1 and who is player 2 (and reflecting the scores appropriately) will fix this.
+Games will require all the following to pass validation:
+
+* The game must be a child of a competition
+* The game must have a winner
+* The competition the game is in must still have outstanding games to be played.
+* The game must not already have been played (round robin games)
 
