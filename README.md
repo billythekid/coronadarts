@@ -93,6 +93,8 @@ Games will require all the following to pass validation:
 
 # Roadmap
 
+## Players / Competitions / Games roadmap
+
 * Allow games to be draws in round robin competitions
 * Allow admin to set awarded points for win, draw, lose in round robin competitions
 * Add non x01 game formats (so you don't need leg difference to determine the win)
@@ -109,6 +111,12 @@ Games will require all the following to pass validation:
     * Scoring stats
     * Scoring for all game types
     * Automatically update the game entry when scoring games
-* Embed Zoom meetings 
+* Restyling
+
+## Technical roadmap
+
+* Add custom validators to entry types rather than in the module
 * Add headless mode and JSON/GraphQL API
-* Better styling
+* Embed Zoom meetings (competition level)
+* Move complex data stuff away from twig layer into module for consistency/reuse
+* Any [other issues](https://github.com/billythekid/coronadarts/issues) that come up
