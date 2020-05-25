@@ -18,6 +18,8 @@ Feel free to raise PRs or issues if you find it helpful.
     - [Competitions](#competitions)
     - [Games](#games)
 - [Roadmap](#roadmap)
+  - [Players / Competitions / Games roadmap](#players--competitions--games-roadmap)
+  - [Technical roadmap](#technical-roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
