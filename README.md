@@ -10,8 +10,6 @@ Feel free to raise PRs or issues if you find it helpful.
   - [Installation](#installation)
   - [Documentation](#documentation)
 - [Roadmap](#roadmap)
-  - [Players / Competitions / Games roadmap](#players--competitions--games-roadmap)
-  - [Technical roadmap](#technical-roadmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -31,4 +29,4 @@ Please see (the wiki)[wiki] for details on how to use this app.
 
 # Roadmap
 
-Please see the [features roadmap](labels/roadmap) and [technical roadmap](labels/technical roadmap) issues
+Please see the [features roadmap](labels/roadmap) and [technical-roadmap](labels/technical roadmap) issues
