@@ -19,7 +19,7 @@
 
 return [
     'modules' => [
-        'my-module' => \modules\Module::class,
+        'darts' => \modules\darts\Module::class,
     ],
-    'bootstrap' => ['my-module'],
+    'bootstrap' => ['darts'],
 ];

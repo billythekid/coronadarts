@@ -1,4 +1,4 @@
-dateModified: 1590339865
+dateModified: 1590427678
 email:
   fromEmail: billy@the-kid.org
   fromName: 'Coronavirus United Newton Tigers Singles League'
@@ -357,10 +357,10 @@ sections:
                     required: false
                     sortOrder: 6
                   3e98bd9b-16c1-4297-8be8-f06faf29e166:
-                    required: false
+                    required: true
                     sortOrder: 1
                   bee18029-c323-4668-8fc5-25beeb03a0e8:
-                    required: false
+                    required: true
                     sortOrder: 2
                 name: Common
                 sortOrder: 1

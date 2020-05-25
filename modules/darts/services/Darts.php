@@ -1,18 +1,14 @@
 <?php
 
-namespace modules\twigextensions;
 
-use Craft;
+namespace modules\darts\services;
+
+
+use craft\base\Component;
 use craft\elements\Entry;
-use craft\helpers\ArrayHelper;
-use Twig\Extension\AbstractExtension;
 
-class LeagueTwigExtension extends AbstractExtension
+class Darts extends Component
 {
-
-  private $gamesQuery;
-  private $players;
-
   public function getPosition($player, $competition)
   {
     for ($i = 0; $i < count($this->getLeaderboard($competition)) - 1; $i++)
@@ -245,6 +241,40 @@ class LeagueTwigExtension extends AbstractExtension
     return compact('winners', 'losers', 'totalWins', 'totalLosses', 'games', 'streaks');
   }
 
+  public function getPlayerStats()
+  {
+    $playerStats = [];
+    $players     = Entry::find()->section('players')->all();
+    $games       = Entry::find()->section('games')->with(['player1', 'player2'])->level(2)->all();
+    foreach ($players as $player)
+    {
+      $homeGames        = array_filter($games, function ($game) use ($player) {
+        return $game->player1[0]->id === $player->id;
+      });
+      $awayGames        = array_filter($games, function ($game) use ($player) {
+        return $game->player2[0]->id === $player->id;
+      });
+      $homeGamesWon     = array_filter($homeGames, function ($game) {
+        return $game->player1LegsWon > $game->player2LegsWon;
+      });
+      $awayGamesWon     = array_filter($awayGames, function ($game) {
+        return $game->player2LegsWon > $game->player1LegsWon;
+      });
+      $totalGamesPlayed = count($homeGames) + count($awayGames);
+      $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
+
+      $playerStats[] = [
+          'playerUrl'        => $player->url,
+          'playerName'       => $player->title,
+          'totalGamesPlayed' => $totalGamesPlayed,
+          'totalGamesWon'    => $totalGamesWon,
+          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100),
+      ];
+    }
+
+    return $playerStats;
+  }
+
   public function getLeaderboard($competition = null)
   {
     if ($competition === null)
@@ -314,41 +344,6 @@ class LeagueTwigExtension extends AbstractExtension
     return array_reverse($leaderboard);
   }
 
-
-  public function getPlayerStats()
-  {
-    $playerStats = [];
-    $players     = Entry::find()->section('players')->all();
-    $games       = Entry::find()->section('games')->with(['player1', 'player2'])->level(2)->all();
-    foreach ($players as $player)
-    {
-      $homeGames      = array_filter($games, function ($game) use ($player) {
-        return $game->player1[0]->id === $player->id;
-      });
-      $awayGames      = array_filter($games, function ($game) use ($player) {
-        return $game->player2[0]->id === $player->id;
-      });
-      $homeGamesWon   = array_filter($homeGames, function ($game) {
-        return $game->player1LegsWon > $game->player2LegsWon;
-      });
-      $awayGamesWon   = array_filter($awayGames, function ($game) {
-        return $game->player2LegsWon > $game->player1LegsWon;
-      });
-      $totalGamesPlayed = count($homeGames) + count($awayGames);
-      $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
-
-      $playerStats[]    = [
-          'playerUrl'        => $player->url,
-          'playerName'       => $player->title,
-          'totalGamesPlayed' => $totalGamesPlayed,
-          'totalGamesWon'    => $totalGamesWon,
-          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100),
-      ];
-    }
-
-    return $playerStats;
-  }
-
   /**
    * @param array $players
    * @param array $gamesThatHaveBeenPlayed
@@ -371,5 +366,4 @@ class LeagueTwigExtension extends AbstractExtension
 
     return $round;
   }
-
 }
