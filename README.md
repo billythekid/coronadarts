@@ -22,7 +22,7 @@ Feel free to raise PRs or issues if you find it helpful.
 
 # Corona Darts
 
-This is a Craft CMS powered web app designed for running/recording your own darts leagues and competitions.
+This is a [Craft CMS](https://craftcms.com) powered web app designed for running/recording your own darts leagues and competitions.
 
 ## Installation 
 
@@ -31,6 +31,8 @@ This is a Craft CMS powered web app designed for running/recording your own dart
 3. Set the DEFAULT_SITE_URL to match your base url.
 4. Run `composer install` in the terminal.
 5. Hit /admin and set your user account.
+
+It should be noted that this is the free solo version of Craft CMS. If you require more users, such as admin or other league administrators, you will need to upgrade the site to Pro. More information about Craft CMS versions and pricing can be found on the [Craft CMS website](https://craftcms.com/pricing).  
 
 ## Players
 
@@ -81,6 +83,7 @@ Each game consists of 2 players, and their legs won. A game also holds some stat
 
 Games will require all the following to pass validation:
 
+* Both players must be selected and unique
 * The game must be a child of a competition
 * The game must have a winner
 * The competition the game is in must still have outstanding games to be played.

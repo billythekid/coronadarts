@@ -107,6 +107,14 @@ class Module extends \yii\base\Module
       $event->isValid = false;
     }
 
+    if($entry->player1->ids[0] === $entry->player2->ids[0])
+    {
+      $message = "Players must be unique.";
+      $entry->addError("player1", $message);
+      $entry->addError("player2", $message);
+      $event->isValid = false;
+    }
+
     /** @var Entry $competition */
     $competition = $entry->getParent();
 
