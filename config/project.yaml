@@ -1,4 +1,4 @@
-dateModified: 1590434930
+dateModified: 1590493956
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -323,6 +323,13 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 0.0.1
+  mix:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+    settings:
+      assetPath: assets
+      publicPath: web
   super-table:
     edition: standard
     enabled: true

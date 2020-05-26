@@ -5,10 +5,11 @@ module.exports = {
     mixBlendMode: ['responsive'],
     backgroundBlendMode: ['responsive'],
     isolation: ['responsive'],
-    backgroundColor: ['odd','even']
+    backgroundColor: ['odd', 'even']
   },
 
   plugins: [
     require('tailwindcss-blend-mode')(), // no options to configure
+    require('@tailwindcss/custom-forms'),
   ],
 }

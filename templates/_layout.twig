@@ -1,5 +1,8 @@
 <!doctype html>
 {% spaceless %}
+{% do view.registerJsFile(mix("/js/manifest.js")) %}
+{% do view.registerJsFile(mix("/js/vendor.js")) %}
+{% do view.registerJsFile(mix("/js/app.js")) %}
 <html lang="en-GB">
   <head>
     <meta charset="UTF-8">
@@ -35,8 +38,14 @@
         <li class="inline-block mb-5 mx-1">
           <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if 'order-of-merit' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/order-of-merit">Order of Merit</a>
         </li>
+        {% if currentUser %}
+        <li class="inline-block mb-5 mx-1">
+          <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if 'scoring' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/scoring">Scoring</a>
+        </li>
+        {% endif %}
+
       </ul>
-      <div class="py-10">
+      <div class="py-10" id="app">
         {% block content %}{% endblock %}
       </div>
     </div>
