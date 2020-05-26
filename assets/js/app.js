@@ -22,7 +22,7 @@ window.app = new Vue({
     competitions: [],
   },
   mounted() {
-    this.competitions = competitions ?? [];
+    this.competitions = typeof competitions !== 'undefined' ? competitions : [];
   },
   watch: {},
   methods: {

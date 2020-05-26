@@ -7,6 +7,7 @@ namespace modules\darts\services;
 use Craft;
 use craft\base\Component;
 use craft\elements\Entry;
+use craft\helpers\ArrayHelper;
 
 class Darts extends Component
 {
@@ -101,7 +102,7 @@ class Darts extends Component
 
     $gamesThatHaveBeenPlayed = array_map(function ($game) {
       return $game->title;
-    }, Entry::find()->descendantOf($competition)->all());
+    }, $competition->children);
 
     $totalMatchesLeftToPlay = count($allPlayers) - 1;
     $totalRounds            = 0;
@@ -132,7 +133,7 @@ class Darts extends Component
         if (in_array($game, $gamesThatHaveBeenPlayed))
         {
           // winner goes through
-          $gameThatWasPlayed = Entry::find()->descendantOf($competition)->title($game)->with(['player1', 'player2'])->one();
+          $gameThatWasPlayed = ArrayHelper::firstValue(array_filter($competition->children, function($child) use ($game) {return $child->title == $game;}));
           $playersStillIn[]  = $gameThatWasPlayed->player1LegsWon > $gameThatWasPlayed->player2LegsWon ? $gameThatWasPlayed->player1[0]->title : $gameThatWasPlayed->player2[0]->title;
         } elseif (strpos($game, "[BYE]") !== false)
         {
@@ -264,7 +265,7 @@ class Darts extends Component
       $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
 
       $playerStats[] = [
-          'playerUrl'        => $player->url,
+          'playerUrl'        => $player->getUrl(),
           'playerName'       => $player->title,
           'totalGamesPlayed' => $totalGamesPlayed,
           'totalGamesWon'    => $totalGamesWon,

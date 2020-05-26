@@ -2,9 +2,10 @@
 {% set title = "Games" %}
 
 {% block content %}
+  {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').all() %}
   <h1 class="text-5xl text-center">Competitions</h1>
   <ul class="md:flex flex-wrap justify-center text-center border-t-2 py-5">
-  {% for competition in craft.entries.section('games').level(1).orderBy('postDate DESC').all() %}
+  {% for competition in theCompetitions %}
     <li>{{ competition.link|attr({'class':'underline mx-5'}) }}</li>
   {% endfor %}
   </ul>

@@ -1,58 +1,64 @@
 {% extends "_layout" %}
-
+{% do craft.app.elements.eagerLoadElements(
+    className(entry),
+    [entry],
+    ['player1', 'player2', 'highScores.player', 'highCheckouts.player']
+    ) %}
 {% set title = entry.title ~ " | Games" %}
 
 {% set winner = entry.player1LegsWon > entry.player2LegsWon ? 'player1' : 'player2' %}
 
 {% block content %}
 
-  {% if entry.level == 1 %}
-    {% include "competitions/_entry.twig" %}
-  {% else %}
-
-    <h1 class="text-5xl text-center mt-5"><a href="{{ entry.parent.url }}" class="underline">{{ entry.parent.title }}</a> - {{ entry.title }} </h1>
-    <p class="text-center">{{ entry.postDate|date('l jS F Y') }}</p>
-
-    <div class="flex justify-center text-center">
-      <div class="player1 py-4 mx-5 {{ winner == 'player1' ? 'text-green-500' : 'text-red-500' }}">
-        <h2 class="text-2xl"><a class="underline" href="{{ entry.player1.one().url }}">{{ entry.player1.one().title }}</a></h2>
-        <p class="text-6xl">{{ entry.player1LegsWon + 0 }}</p>
-      </div>
-      <div class="player2 py-4 mx-5 {{ winner == 'player2' ? 'text-green-500' : 'text-red-500' }}">
-        <h2 class="text-2xl"><a class="underline" href="{{ entry.player2.one().url }}">{{ entry.player2.one().title }}</a></h2>
-        <p class="text-6xl">{{ entry.player2LegsWon + 0 }}</p>
-      </div>
-    </div>
-
-    {% if entry.highCheckouts is not empty or entry.highScores is not empty %}
-      <h2 class="text-3xl text-center py-5">Highlights</h2>
-
-      {% if entry.highScores is not empty %}
-        <h3 class="text-2xl text-center pb-5">High Scores (140+)</h3>
-        <div class="flex justify-around text-center content-center pb-10">
-          {% for row in entry.highScores.with(['player']).orderBy('score DESC').all() %}
-            <div>
-              <h4 class="text-2xl">{{ row.player[0].title }}</h4>
-              <p class="text-5xl">{{ row.score }}</p>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if entry.highCheckouts is not empty %}
-        <h3 class="text-2xl text-center pb-5">High Checkouts (100+)</h3>
-        <div class="flex justify-around text-center">
-          {% for row in entry.highCheckouts.with(['player']).orderBy('score DESC').all() %}
-            <div>
-              <h4 class="text-2xl">{{ row.player[0].title }}</h4>
-              <p class="text-5xl">{{ row.checkout }}</p>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
+    {% if entry.level == 1 %}
+        {% include "competitions/_entry.twig" %}
     {% else %}
-      <p class="text-center py-5">Nothing exciting happened.</p>
-    {% endif %}
 
-  {% endif %}
+
+        <h1 class="text-5xl text-center mt-5">
+            <a href="{{ entry.parent.url }}" class="underline">{{ entry.parent.title }}</a> - {{ entry.title }} </h1>
+        <p class="text-center">{{ entry.postDate|date('l jS F Y') }}</p>
+
+        <div class="flex justify-center text-center">
+            <div class="player1 py-4 mx-5 {{ winner == 'player1' ? 'text-green-500' : 'text-red-500' }}">
+                <h2 class="text-2xl"><a class="underline" href="{{ entry.player1[0].url }}">{{ entry.player1[0].title }}</a></h2>
+                <p class="text-6xl">{{ entry.player1LegsWon + 0 }}</p>
+            </div>
+            <div class="player2 py-4 mx-5 {{ winner == 'player2' ? 'text-green-500' : 'text-red-500' }}">
+                <h2 class="text-2xl"><a class="underline" href="{{ entry.player2[0].url }}">{{ entry.player2[0].title }}</a></h2>
+                <p class="text-6xl">{{ entry.player2LegsWon + 0 }}</p>
+            </div>
+        </div>
+
+        {% if entry.highCheckouts is not empty or entry.highScores is not empty %}
+            <h2 class="text-3xl text-center py-5">Highlights</h2>
+
+            {% if entry.highScores is not empty %}
+                <h3 class="text-2xl text-center pb-5">High Scores (140+)</h3>
+                <div class="flex justify-around text-center content-center pb-10">
+                    {% for row in entry.highScores | sort((a,b) => b.score <=> a.score) %}
+                        <div>
+                            <h4 class="text-2xl">{{ row.player[0].title }}</h4>
+                            <p class="text-5xl">{{ row.score }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if entry.highCheckouts is not empty %}
+                <h3 class="text-2xl text-center pb-5">High Checkouts (100+)</h3>
+                <div class="flex justify-around text-center">
+                    {% for row in entry.highCheckouts | sort((a,b) => b.checkout <=> a.checkout) %}
+                        <div>
+                            <h4 class="text-2xl">{{ row.player[0].title }}</h4>
+                            <p class="text-5xl">{{ row.checkout }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% else %}
+            <p class="text-center py-5">Nothing exciting happened.</p>
+        {% endif %}
+
+    {% endif %}
 {% endblock %}
