@@ -4,6 +4,7 @@
 namespace modules\darts\services;
 
 
+use Craft;
 use craft\base\Component;
 use craft\elements\Entry;
 
@@ -11,12 +12,13 @@ class Darts extends Component
 {
   public function getPosition($player, $competition)
   {
-    for ($i = 0; $i < count($this->getLeaderboard($competition)) - 1; $i++)
+    $leaderBoard = $this->getLeaderboard($competition);
+    for ($i = 1; $i < count($leaderBoard); $i++)
     {
-      $leaguePlayer = $this->getLeaderBoard($competition)[$i];
+      $leaguePlayer = $leaderBoard[$i-1];
       if ($leaguePlayer->playerName === $player->title)
       {
-        return $i + 1 . date("S", date_timestamp_get(date_create("2000-01-" . ($i + 1))));
+        return $i . date("S", date_timestamp_get(date_create("2000-01-" . ($i))));
       }
 
     }
@@ -26,14 +28,12 @@ class Darts extends Component
 
   public function mostPlayed($player)
   {
-    $gamesQuery = Entry::find()->section('games')->level(2)->with(['player1', 'player2']);
+    $games = Entry::find()->section('games')->level(2)->with(['player1', 'player2'])->relatedTo($player->id)->all();
 
-    $opponents = [];
+    $opponents = array_map(function ($game) use ($player) {
+      return (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->getUrl()}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player1[0]->getUrl()}'>" . $game->player1[0]->title)) . "</a>";
+    }, $games);
 
-    foreach ($gamesQuery->relatedTo($player)->all() as $game)
-    {
-      $opponents[] = (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->url}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player1[0]->url}'>" . $game->player1[0]->title)) . "</a>";
-    }
     $opponentsByGames = array_count_values($opponents);
     arsort($opponentsByGames);
 
@@ -282,20 +282,16 @@ class Darts extends Component
       return [];
     }
 
-    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($competition)->with(['player1', 'player2']);
-    $players    = $competition->players->all();
-
+    $gamesQuery = Entry::find()->section('games')->level(2)->descendantOf($competition);
+    $players    = $competition->players;
 
     $leaderboard = [];
-    foreach ($players as $player)
+    if (!empty($competition))
     {
-      if (empty($competition))
+      foreach ($players as $player)
       {
-        return $leaderboard;
-      } else
-      {
-        $homeGames = clone ($gamesQuery)->relatedTo(['element' => $player, 'field' => 'player1']);
-        $awayGames = clone ($gamesQuery)->relatedTo(['element' => $player, 'field' => 'player2']);
+        $homeGames = clone ($gamesQuery)->relatedTo(['targetElement' => $player, 'field' => 'player1']);
+        $awayGames = clone ($gamesQuery)->relatedTo(['targetElement' => $player, 'field' => 'player2']);
         $homeGames = $homeGames->all();
         $awayGames = $awayGames->all();
 
@@ -321,24 +317,24 @@ class Darts extends Component
             'totalLegsFor'     => $totalLegsFor,
             'totalLegsAgainst' => $totalLegsAgainst,
         ];
+
+
+        usort($leaderboard, function ($a, $b) {
+          // if the player has won more games they're higher
+          if ($a->totalGamesWon !== $b->totalGamesWon)
+          {
+            return $a->totalGamesWon <=> $b->totalGamesWon;
+            // if they've won the same number of games, check the leg difference
+          } elseif (($a->totalLegsFor - $a->totalLegsAgainst) !== ($b->totalLegsFor - $b->totalLegsAgainst))
+          {
+            return ($a->totalLegsFor - $a->totalLegsAgainst) <=> ($b->totalLegsFor - $b->totalLegsAgainst);
+          }
+
+          // if the leg difference is the same, check the games played (games in hand)
+          return ($a->totalGamesPlayed <=> $b->totalGamesPlayed);
+
+        });
       }
-
-      usort($leaderboard, function ($a, $b) {
-        // if the player has won more games they're higher
-        if ($a->totalGamesWon !== $b->totalGamesWon)
-        {
-          return $a->totalGamesWon <=> $b->totalGamesWon;
-          // if they've won the same number of games, check the leg difference
-        } elseif (($a->totalLegsFor - $a->totalLegsAgainst) !== ($b->totalLegsFor - $b->totalLegsAgainst))
-        {
-          return ($a->totalLegsFor - $a->totalLegsAgainst) <=> ($b->totalLegsFor - $b->totalLegsAgainst);
-        }
-
-        // if the leg difference is the same, check the games played (games in hand)
-        return ($a->totalGamesPlayed <=> $b->totalGamesPlayed);
-
-      });
-
     }
 
     return array_reverse($leaderboard);

@@ -1,4 +1,13 @@
 module.exports = {
+
+  purge: {
+    content: [
+      './templates/**/*.twig',
+      './templates/**/*.svg',
+      './assets/js/**/*.vue',
+      './web/assets/images/*.svg'
+    ],
+  },
   theme: {},  // no options to configure
 
   variants: { // all the following default to ['responsive']

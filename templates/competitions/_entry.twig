@@ -1,5 +1,9 @@
-{% set competitions = craft.entries.id(entry.id).with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
-{% set competition = competitions|first %}
+{% do craft.app.elements.eagerLoadElements(
+  className(entry),
+  [entry],
+  ['players','children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']
+  ) %}
+{% set competition = entry %}
 {% set gamesThatHaveBeenPlayed = competition.children %}
 
 <h1 class="text-5xl text-center mb-4">{{ entry.title }}</h1>
@@ -76,5 +80,5 @@
 </div>
 
 <div class="mt-10">
-  {% include "_partials/_gamesToBePlayed.twig" with {competitions:competitions} %}
+  {% include "_partials/_gamesToBePlayed.twig" with {competitions:[entry]} %}
 </div>

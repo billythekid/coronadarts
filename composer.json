@@ -1,9 +1,10 @@
 {
   "require": {
     "craftcms/cms": "3.4.20",
+    "misterbk/mix": "^1.5",
+    "putyourlightson/craft-elements-panel": "^1.0.0-beta.1",
     "verbb/super-table": "^2.4",
-    "vlucas/phpdotenv": "^3.4.0",
-    "misterbk/mix": "^1.5"
+    "vlucas/phpdotenv": "^3.4.0"
   },
   "require-dev": {
     "yiisoft/yii2-shell": "^2.0.3"

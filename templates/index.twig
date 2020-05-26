@@ -12,10 +12,8 @@
     {% include "_partials/_winnerStaysOnTournaments.twig" %}
   </div>
 
-  {% for competition in craft.entries.section('games').level(1).where('field_competitionType = "roundRobin"').orderBy('postDate DESC').all() %}
+  {% for competition in craft.entries.section('games').level(1).competitionType("roundRobin").with(['players']).orderBy('postDate DESC').all() %}
     {% include "_partials/_leaderBoard" with {competition:competition} %}
   {% endfor %}
-
-  {% include "_partials/_gamesToBePlayed.twig" %}
 
 {% endblock %}

@@ -1,4 +1,4 @@
-dateModified: 1590493956
+dateModified: 1590501245
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -323,6 +323,10 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 0.0.1
+  elements-panel:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
   mix:
     edition: standard
     enabled: true

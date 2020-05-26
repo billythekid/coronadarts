@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34d9f0a1bba2b8b9c503b751c191f747",
+    "content-hash": "45da91d46829014b1761fff2d184f00b",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -2618,6 +2618,45 @@
             "time": "2020-05-03T19:32:03+00:00"
         },
         {
+            "name": "putyourlightson/craft-elements-panel",
+            "version": "1.0.0-beta.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/putyourlightson/craft-elements-panel.git",
+                "reference": "dd712abad10bd573a12d5a3b14871cac188f8885"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/putyourlightson/craft-elements-panel/zipball/dd712abad10bd573a12d5a3b14871cac188f8885",
+                "reference": "dd712abad10bd573a12d5a3b14871cac188f8885",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Elements Panel",
+                "handle": "elements-panel",
+                "developer": "PutYourLightsOn",
+                "developerUrl": "https://putyourlightson.com/",
+                "documentationUrl": "https://github.com/putyourlightson/craft-elements-panel",
+                "changelogUrl": "https://raw.githubusercontent.com/putyourlightson/craft-elements-panel/v1/CHANGELOG.md",
+                "class": "putyourlightson\\elementspanel\\ElementsPanel"
+            },
+            "autoload": {
+                "psr-4": {
+                    "putyourlightson\\elementspanel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "mit"
+            ],
+            "description": "Adds an Elements and an Eager-Loading panel to the debug toolbar.",
+            "time": "2020-05-14T19:06:44+00:00"
+        },
+        {
             "name": "ralouphie/getallheaders",
             "version": "3.0.3",
             "source": {
@@ -5030,7 +5069,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "putyourlightson/craft-elements-panel": 10
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
