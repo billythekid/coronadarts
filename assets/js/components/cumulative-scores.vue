@@ -29,7 +29,7 @@
           <td v-for="(player, playerIndex) in players" class="border" :key="playerIndex">
             <div class="flex justify-between">
               <span class="w-20 text-center">{{ getPlayerCumulativeTotal(player,round) }}</span>
-              <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'halfit'">½</button>
+              <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
               <input type="number" class="w-20 text-right" v-model.number="player.roundTotals.filter(total => total.round == round)[0].score">
             </div>
           </td>
@@ -157,7 +157,7 @@
     },
     mounted() {
 
-      if (this.game === "shanghai") {
+      if (this.game === "Shanghai") {
         _.range(1, 10).forEach(round => this.rounds.push(round));
       } else {
         _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds)), this.finalRounds).forEach(round => this.rounds.push(round));
