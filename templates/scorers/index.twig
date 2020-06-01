@@ -1,4 +1,6 @@
 {% extends "_layout" %}
+{% set cumulativeGames = ['Halfit', 'Shanghai'] %}
+{% set loseLivesGames = ['25s and Bulls', '27s','50 to 60'] %}
 
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative">
@@ -8,13 +10,23 @@
       {% if currentUser %}
         <p><a class="underline" href="/scorers/n01">n01</a></p>
       {% endif %}
+      {% for game in cumulativeGames %}
+        <p>
+          <a class="underline" href="/scorers/cumulative-scores?game={{ game }}">{{ game }} (pre-filled with all system players)</a>
+        </p>
+        <p>
+          <a class="underline" href="/scorers/cumulative-scores?game={{ game }}&blank=true">{{ game }} (no players)</a>
+        </p>
+      {% endfor %}
+      {% for game in loseLivesGames %}
       <p>
-        <a class="underline" href="/scorers/half-it">Half It</a> (pre-filled with all system
-        <a href="players" class="underline">players</a>)
+        <a class="underline" href="/scorers/lose-lives?game={{ game }}">{{ game }} (pre-filled with all system players)</a>
       </p>
       <p>
-        <a class="underline" href="/scorers/half-it?blank=true">Half It (no players)</a>
+        <a class="underline" href="/scorers/lose-lives?game={{ game }}&blank=true">{{ game }} (no players)</a>
       </p>
+      {% endfor %}
+
     </div>
   </div>
 {% endblock %}

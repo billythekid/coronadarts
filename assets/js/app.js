@@ -5,6 +5,11 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+import VueSimpleAlert from "vue-simple-alert";
+
+Vue.use(VueSimpleAlert);
+
+import animate from "animate.css";
 
 const router = new VueRouter({
   mode: 'history',

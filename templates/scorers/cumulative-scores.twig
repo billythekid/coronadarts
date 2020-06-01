@@ -1,0 +1,27 @@
+{% extends "_layout" %}
+{% set game = craft.app.request.getParam('game') is not empty ? craft.app.request.getParam('game') : 'halfit' %}
+{% set withPlayers = craft.app.request.getParam('blank') is not empty ? '&blank=true' : '' %}
+{% block content %}
+  <div class="block mx-auto max-w-screen-xl relative mb-20 ">
+
+    <h1 class="text-5xl text-center mb-4">{{ game|title }} Scoreboard</h1>
+    <div class="leading-loose sm:leading-normal">
+      <p>Here's a randomly generated {{ game | title }} scoring system.</p>
+      {% if game == 'halfit' %}
+        <p>Refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ _.join( halfitData, ', ') }</p>
+      {% endif %}
+      <p>You can add, edit and remove player names and rounds. You can drag rounds into a different order.</p>
+      <p>To score just put in the score the player hit for that round, the table will work out the running totals for you.</p>
+      {% if game == 'halfit' %}
+        <p>You can set up
+          <a class="underline" href="/scorers/cumulative-scores?game=shanghai{{ withPlayers }}">a game of Shanghai</a> using this scoring too.</p>
+      {% elseif game == 'shanghai' %}
+        <p>You can set up
+          <a class="underline" href="/scorers/cumulative-scores?game=halfit{{ withPlayers }}">a game of Halfit</a> using this scoring too.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <cumulative-scores :start-players="{{ craft.app.request.getParam('blank') ? '[]' : shuffle(craft.entries.section('players').select('title').column()) | json_encode }}" @mounted="halfitMounted" game="{{ game }}"></cumulative-scores>
+
+{% endblock %}
