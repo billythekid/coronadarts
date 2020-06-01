@@ -6,11 +6,12 @@
     <h1 class="text-5xl text-center mb-4">Half It Scoreboard</h1>
     <div class="leading-loose sm:leading-normal">
       <p>Here's a randomly generated half-it scoring system.</p>
-      <p>Add or remove players and rounds to suit, refresh the page for a full reset or to re-randomise the players and rounds.</p>
+      <p>Add or remove players and rounds to suit, refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ _.join( halfitData, ', ') }</p>
+      <p>You can edit player names and rounds.</p>
     </div>
   </div>
 
-  <halfit :start-players="{{ craft.app.request.getParam('blank') ? '[]' : shuffle(craft.entries.section('players').select('title').column())|json_encode }}"></halfit>
+  <halfit :start-players="{{ craft.app.request.getParam('blank') ? '[]' : shuffle(craft.entries.section('players').select('title').column())|json_encode }}" @mounted="halfitMounted"></halfit>
 
 {% endblock %}
 

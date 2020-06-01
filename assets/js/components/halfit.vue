@@ -7,10 +7,10 @@
       <tr class="bg-gray-100 border">
         <th class="">Rounds</th>
         <th v-for="(player, playerIndex) in players" class="border px-2">
+          <input :value="player.name" type="text" class="w-24 text-center font-bold">
           <button type="button" @click="removePlayer(playerIndex)">x</button>
           <div class="flex justify-between">
             <span class="text-base">Running<br>Total</span>
-            <input :value="player.name" type="text" class="w-24 text-center font-bold">
             <span class="text-base">Round<br>Score</span>
           </div>
         </th>
@@ -31,7 +31,7 @@
           </div>
         </td>
       </tr>
-      <tr class="bg-gray-100">
+      <tr class="bg-gray-100 text-3xl">
         <th class="px-4 py-2">Scores</th>
         <th v-for="(player, playerIndex) in players">
           {{ player.name }}: {{ getPlayerTotal(player) }}
@@ -48,13 +48,30 @@
     },
     data() {
       return {
-        rounds: [
+        rounds: [],
+        startRounds:[
           'Any Score',
           '20s',
           'Doubles',
           '19s',
           'Trebles',
         ],
+        randomRounds: [
+          '18s',
+          'Reds',
+          'Greens',
+          '13s',
+          '14s',
+          '9s',
+          'Black white black',
+          '3 different big blacks',
+          '3 different small blacks',
+          '3 different big whites',
+          '3 different small whites',
+          'Hit 61 (3 different scoring darts)',
+          '3 different colours',
+        ],
+        finalRounds: ['25s', 'Bullseyes'],
         players: []
       }
     },
@@ -82,38 +99,24 @@
         this.$forceUpdate();
       },
       getPlayerTotal(player) {
-        return player.roundTotals.length > 0 ? player.roundTotals.reduce((accumulator, currentValue) => accumulator + currentValue) : 0;
+        return player.roundTotals.reduce((accumulator, currentValue) =>  accumulator + (currentValue !== '' ? currentValue : 0),0 )
       },
       getPlayerCumulativeTotal(player, roundIndex) {
         let playerTotal = 0;
         for (let i = 0; i < roundIndex; i++) {
-          playerTotal += player.roundTotals[i];
+          playerTotal = player.roundTotals[i] !== '' ? playerTotal + player.roundTotals[i] : 0;
         }
-
         return playerTotal;
       }
     },
     mounted() {
 
-      let randomRounds = [
-        '18s',
-        'Reds',
-        'Greens',
-        '13s',
-        '14s',
-        '9s',
-        '3 different big blacks',
-        '3 different small blacks',
-        '3 different big whites',
-        '3 different small whites',
-        'Hit 61 (3 different scoring darts)',
-        '3 different colours',
-      ];
-      _.concat(_.take(_.shuffle(randomRounds), 5), ['25s', 'Bullseyes']).forEach(round => this.rounds.push(round));
+      _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 5), this.finalRounds).forEach(round => this.rounds.push(round));
 
       if (this.startPlayers.length > 0) {
         this.startPlayers.forEach(starter => this.addPlayer(starter))
       }
+      this.$emit('mounted', _.concat(this.startRounds,this.randomRounds,this.finalRounds));
     }
   }
 </script>

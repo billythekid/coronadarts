@@ -20,6 +20,7 @@ window.app = new Vue({
     currentCompetition: null,
     players: [],
     competitions: [],
+    halfitData: []
   },
   mounted() {
     this.competitions = typeof competitions !== 'undefined' ? competitions : [];
@@ -40,6 +41,9 @@ window.app = new Vue({
     },
     playerChange(player, n) {
       this.players[n] = player;
+    },
+    halfitMounted(data) {
+      this.halfitData = data;
     }
   },
 
