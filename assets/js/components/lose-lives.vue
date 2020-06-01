@@ -210,7 +210,7 @@
           if (winners.length > 1) {
             this.$fire({
               title: "DRAW!",
-              text: _.join(winners.map(winner => winner.name), ', ') + " have drawn!\nAdding another round. Game on!",
+              html: _.join(winners.map(winner => winner.name), ', ') + " have drawn!<br>Adding another round. Game on!",
               type: "info"
             });
             // setup additional rounds
