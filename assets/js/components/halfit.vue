@@ -7,7 +7,7 @@
       <tr class="bg-gray-100 border">
         <th class="">Rounds</th>
         <th v-for="(player, playerIndex) in players" class="border px-2">
-          <input :value="player.name" type="text" class="w-24 text-center font-bold">
+          <input v-model="player.name" type="text" class="w-24 text-center font-bold">
           <button type="button" @click="removePlayer(playerIndex)">x</button>
           <div class="flex justify-between">
             <span class="text-base">Running<br>Total</span>
@@ -20,7 +20,7 @@
           <td class="px-2 border py-2">
             <div class="flex justify-between">
               <input type="text" class="w-56 text-center" :value="round">
-              <button type="button" @click="removeRound(round)">x</button>
+              <button type="button" @click="removeRound(roundIndex)">x</button>
             </div>
           </td>
 
@@ -35,7 +35,7 @@
       </draggable>
       <tr class="bg-gray-100 text-3xl">
         <th class="px-4 py-2">Scores</th>
-        <th v-for="(player, playerIndex) in players">
+        <th v-for="(player, playerIndex) in players" :key="playerIndex">
           {{ player.name }}: {{ getPlayerTotal(player) }}
         </th>
       </tr>
@@ -84,10 +84,10 @@
     },
     methods: {
       addRound() {
-        this.rounds.push('New Round');
+        this.rounds.push(_.sample(this.randomRounds));
       },
-      removeRound(index) {
-        this.rounds.splice(index, 1);
+      removeRound(roundIndex) {
+        this.rounds.splice(roundIndex, 1);
       },
       addPlayer(playerName) {
         playerName = typeof playerName === "object" ? 'Player' + (this.players.length + 1) : playerName;
@@ -148,7 +148,7 @@
     },
     mounted() {
 
-      _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 5), this.finalRounds).forEach(round => this.rounds.push(round));
+      _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds)), this.finalRounds).forEach(round => this.rounds.push(round));
 
       if (this.startPlayers.length > 0) {
         this.startPlayers.forEach(starter => this.addPlayer(starter))
