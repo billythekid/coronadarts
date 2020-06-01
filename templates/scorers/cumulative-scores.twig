@@ -1,5 +1,6 @@
 {% extends "_layout" %}
 {% set game = craft.app.request.getParam('game') is not empty ? craft.app.request.getParam('game') : 'Halfit' %}
+{% set games = ['Shanghai', 'Halfit'] %}
 {% set withPlayers = craft.app.request.getParam('blank') is not empty ? '&blank=true' : '' %}
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative mb-20 ">
@@ -12,13 +13,11 @@
       {% endif %}
       <p>You can add, edit and remove player names and rounds. You can drag rounds into a different order.</p>
       <p>To score just put in the score the player hit for that round, the table will work out the running totals for you.</p>
-      {% if game == 'Halfit' %}
+      {% for otherGame in games|without(game) %}
         <p>You can set up
-          <a class="underline" href="/scorers/cumulative-scores?game=Shanghai{{ withPlayers }}">a game of Shanghai</a> using this scoring too.</p>
-      {% elseif game == 'Shanghai' %}
-        <p>You can set up
-          <a class="underline" href="/scorers/cumulative-scores?game=Halfit{{ withPlayers }}">a game of Halfit</a> using this scoring too.</p>
-      {% endif %}
+          <a class="underline" href="/scorers/cumulative-scores?game={{ otherGame }}{{ withPlayers }}">a game of {{ otherGame }}</a> using this scoring too.
+        </p>
+      {% endfor %}
     </div>
   </div>
 
