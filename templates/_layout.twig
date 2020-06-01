@@ -21,11 +21,11 @@
     <meta name="description" content="'mon the Tigers!">
 
   </head>
-  <body class="min-h-screen bg-blue-100">
+  <body class="min-h-screen bg-blue-100 text-blue-800 text-lg pb-12">
 
     {% include "_partials/_banner.twig" %}
 
-    <div class="block mx-auto p-2 sm:p-8 max-w-screen-xl relative text-blue-800 text-lg pb-64">
+    <div class="block mx-auto p-2 sm:p-8 max-w-screen-xl relative">
       <ul class="list-inline text-center">
         <li class="inline-block mb-5 mx-1">
           <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if craft.app.request.segments is empty %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/">Home</a>
@@ -40,18 +40,21 @@
           <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if 'order-of-merit' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/order-of-merit">Order of Merit</a>
         </li>
         {% if currentUser %}
-        <li class="inline-block mb-5 mx-1">
-          <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if 'scoring' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/scoring">Scoring</a>
-        </li>
+          <li class="inline-block mb-5 mx-1">
+            <a class="bg-gray-100 rounded-lg border-2 px-2 py-1 {% if 'scoring' in craft.app.request.segments %}text-blue-600 border-blue-600{% else %}shadow-md border-blue-800 text-blue-800{% endif %}" href="/scorers">Scorers</a>
+          </li>
         {% endif %}
 
       </ul>
-      <div class="py-10" id="app">
-        {% block content %}{% endblock %}
-      </div>
     </div>
+
+    <div class="pb-10" id="app">
+      {% block content %}{% endblock %}
+    </div>
+
     <footer class="text-center text-sm text-gray-400 absolute bottom-0 left-0 right-0 min-h-5 pb-5">
-      <p>Copyright {{ now|date('Y') }} <a target="_blank" class="underline" href="https://billyfagan.co.uk">Billy Fagan</a> | <a target="_blank" class="underline" href="https://github.com/billythekid/coronadarts">View on GitHub</a></p>
+      <p>Copyright {{ now|date('Y') }} <a target="_blank" class="underline" href="https://billyfagan.co.uk">Billy Fagan</a> |
+        <a target="_blank" class="underline" href="https://github.com/billythekid/coronadarts">View on GitHub</a></p>
     </footer>
 
   </body>

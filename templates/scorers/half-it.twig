@@ -1,0 +1,16 @@
+{% extends "_layout" %}
+
+{% block content %}
+  <div class="block mx-auto max-w-screen-xl relative mb-20 ">
+
+    <h1 class="text-5xl text-center mb-4">Half It Scoreboard</h1>
+    <div class="leading-loose sm:leading-normal">
+      <p>Here's a randomly generated half-it scoring system.</p>
+      <p>Add or remove players and rounds to suit, refresh the page for a full reset or to re-randomise the players and rounds.</p>
+    </div>
+  </div>
+
+  <halfit :start-players="{{ craft.app.request.getParam('blank') ? '[]' : shuffle(craft.entries.section('players').select('title').column())|json_encode }}"></halfit>
+
+{% endblock %}
+

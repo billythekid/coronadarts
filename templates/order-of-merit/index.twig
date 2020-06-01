@@ -2,158 +2,159 @@
 {% set title = "Order of Merit" %}
 
 {% block content %}
+  <div class="block mx-auto max-w-screen-xl relative ">
 
     <h1 class="text-5xl text-center mb-5">Order of Merit</h1>
 
     <div class="md:grid grid-cols-2 gap-4">
 
-        <div>
-            <h2 class="text-3xl text-center">High Checkouts (100+)</h2>
-            <table class="overflow-hidden rounded-lg my-5 mx-auto shadow-xl">
-                <tr class="bg-gray-100">
-                    <th class="px-4 py-2">Player</th>
-                    <th class="px-4 py-2">Checked out</th>
-                    <th class="px-4 py-2">Game</th>
-                </tr>
-                {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).all() | sort((a,b) => b.checkout <=> a.checkout ) %}
-                <tr class="{% if loop.first or checkout.checkout == 170 %}bg-yellow-400{% else %}bg-green-100{% endif %} border-t border-gray-600 ">
-                    <td class="px-4 py-2 text-center">
-                        <a class="underline" href="{{ checkout.player[0].url }}">{{ checkout.player[0].title }}</a>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        {{ checkout.checkout }}
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <a class="underline" href="{{ checkout.owner.url }}">{{ checkout.owner.title }}</a>
-                    </td>
-                {% else %}
-                    <tr>
-                        <td>No high checkouts</td>
-                    </tr>
-                {% endfor %}
-            </table>
+      <div>
+        <h2 class="text-3xl text-center">High Checkouts (100+)</h2>
+        <table class="overflow-hidden rounded-lg my-5 mx-auto shadow-xl">
+          <tr class="bg-gray-100">
+            <th class="px-4 py-2">Player</th>
+            <th class="px-4 py-2">Checked out</th>
+            <th class="px-4 py-2">Game</th>
+          </tr>
+          {% for checkout in craft.superTable.blocks().fieldId(5).with(['player']).all() | sort((a,b) => b.checkout <=> a.checkout ) %}
+          <tr class="{% if loop.first or checkout.checkout == 170 %}bg-yellow-400{% else %}bg-green-100{% endif %} border-t border-gray-600 ">
+            <td class="px-4 py-2 text-center">
+              <a class="underline" href="{{ checkout.player[0].url }}">{{ checkout.player[0].title }}</a>
+            </td>
+            <td class="px-4 py-2 text-center">
+              {{ checkout.checkout }}
+            </td>
+            <td class="px-4 py-2 text-center">
+              <a class="underline" href="{{ checkout.owner.url }}">{{ checkout.owner.title }}</a>
+            </td>
+          {% else %}
+            <tr>
+              <td>No high checkouts</td>
+            </tr>
+          {% endfor %}
+        </table>
 
-            <div class="mb-5">
-                {% include "_partials/_eliminationTournaments.twig" %}
-            </div>
-
-            <div class="mb-5">
-                {% include "_partials/_winnerStaysOnTournaments.twig" %}
-            </div>
-
+        <div class="mb-5">
+          {% include "_partials/_eliminationTournaments.twig" %}
         </div>
 
-        <div>
-
-            {% set scores = craft.superTable.blocks().fieldId(6).with(['player']).all() %}
-            {% set scores = scores|sort((a,b) => b.score <=> a.score ) %}
-
-            <h2 class="text-3xl text-center">High Scores (140+)</h2>
-
-            <div class="">
-                {% for number, scores in scores | group('score') %}
-
-                    {% if loop.index < 4 %}
-                        {% set concatenated = false %}
-                        <table class="overflow-hidden rounded-lg mt-5 mx-auto shadow-xl w-full">
-                    {% elseif loop.index == 4 %}
-                        {% set concatenated = true %}
-                        <table class="overflow-hidden rounded-lg mt-5 mx-auto shadow-xl w-full">
-                    {% endif %}
-
-                    {% set bg = loop.first or number == 180 ? "bg-yellow-400" : 'bg-green-100' %}
-                    {% if not concatenated %}
-                        <tr class="{{ bg }}">
-                            <th colspan="3">{{ number }}</th>
-                        </tr>
-                    {% endif %}
-
-                    {% if loop.index <= 4 %}
-                        <tr class="{{ bg }}">
-                            <th>Player</th>
-                            {% if concatenated %}
-                                <th>Score</th>
-                            {% endif %}
-                            <th>Count</th>
-                            <th>Games</th>
-                        </tr>
-                    {% endif %}
-
-                    {% set sortedScores = [] %}
-                    {% for player, scores in scores | group('player[0]') %}
-                        {% set sortedScores = sortedScores|merge([{player:scores[0].player[0], scores: scores, count:scores|length}]) %}
-                    {% endfor %}
-                    {% set sortedScores = sortedScores|sort((a,b) => b.count <=> a.count) %}
-                    {% for score in sortedScores %}
-                        <tr class="{{ bg }} border-t border-gray-600">
-                            <td class="px-4 py-2 text-center">
-                                <a class="underline" href="{{ score.player.url }}">{{ score.player.title }}</a>
-                            </td>
-                            {% if concatenated %}
-                                <td class="text-center">{{ number }}</td>
-                            {% endif %}
-                            <td class="px-4 py-2 text-center">
-                                {{ score.count }}
-                            </td>
-                            <td class="px-4 py-2 text-center">
-                                <button onclick="this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden');this.classList.toggle('rotate-180');" class="transform transition-transform duration-200">▼</button>
-                            </td>
-                        </tr>
-                        <tr class="hidden {{ bg }}">
-                            <td class="px-4 py-2" colspan="{{ concatenated ? 4 : 3 }}">
-                                <div class="flex justify-around flex-wrap">
-                                    {% for scoreSuperTableField in score.scores %}
-                                        <a class="underline px-3" href="{{ scoreSuperTableField.owner.url }}">{{ scoreSuperTableField.owner.title }}</a>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    {% if loop.index < 4 %}
-                        </table>
-                    {% elseif loop.last %}
-                        </table>
-                    {% endif %}
-
-                {% endfor %}
-            </div>
-
-            {#<table class="border-collapse border-2 border-gray-500 mt-5 mx-auto shadow-xl">#}
-            {#  <tr class="bg-gray-100">#}
-            {#    <th class="px-4 py-2">Player</th>#}
-            {#    <th class="px-4 py-2">Scored</th>#}
-            {#    <th class="px-4 py-2">Game</th>#}
-            {#  </tr>#}
-
-            {#  {% for score in scores %}#}
-            {#  <tr class="{% if loop.first or score.score == 180 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100 odd:bg-green-200{% endif %}">#}
-            {#    <td class="px-4 py-2">#}
-            {#      {% if score.player is not defined %}#}
-            {#        <a class="underline" href="{{ score.link }}">#}
-            {#          {{ score.coronaPlayer }}#}
-            {#        </a>#}
-            {#      {% else %}#}
-            {#        <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>#}
-            {#      {% endif %}#}
-            {#    </td>#}
-            {#    <td class="px-4 py-2">#}
-            {#      {{ score.score }}#}
-            {#    </td>#}
-            {#    <td class="px-4 py-2">#}
-            {#      {% if score.player is not defined %}#}
-            {#        {{ score.game }}#}
-            {#      {% else %}#}
-            {#        <a class="underline" href="{{ score.owner.url }}">{{ score.owner.title }}</a>#}
-            {#      {% endif %}#}
-            {#    </td>#}
-            {#  {% else %}#}
-            {#    <tr>#}
-            {#      <td class="px-4 py-2" colspan="3">No high checkouts</td>#}
-            {#    </tr>#}
-            {#  {% endfor %}#}
-            {#</table>#}
+        <div class="mb-5">
+          {% include "_partials/_winnerStaysOnTournaments.twig" %}
         </div>
+
+      </div>
+
+      <div>
+
+        {% set scores = craft.superTable.blocks().fieldId(6).with(['player']).all() %}
+        {% set scores = scores|sort((a,b) => b.score <=> a.score ) %}
+
+        <h2 class="text-3xl text-center">High Scores (140+)</h2>
+
+        <div class="">
+          {% for number, scores in scores | group('score') %}
+
+            {% if loop.index < 4 %}
+              {% set concatenated = false %}
+              <table class="overflow-hidden rounded-lg mt-5 mx-auto shadow-xl w-full">
+            {% elseif loop.index == 4 %}
+              {% set concatenated = true %}
+              <table class="overflow-hidden rounded-lg mt-5 mx-auto shadow-xl w-full">
+            {% endif %}
+
+            {% set bg = loop.first or number == 180 ? "bg-yellow-400" : 'bg-green-100' %}
+            {% if not concatenated %}
+              <tr class="{{ bg }}">
+                <th colspan="3">{{ number }}</th>
+              </tr>
+            {% endif %}
+
+            {% if loop.index <= 4 %}
+              <tr class="{{ bg }}">
+                <th>Player</th>
+                {% if concatenated %}
+                  <th>Score</th>
+                {% endif %}
+                <th>Count</th>
+                <th>Games</th>
+              </tr>
+            {% endif %}
+
+            {% set sortedScores = [] %}
+            {% for player, scores in scores | group('player[0]') %}
+              {% set sortedScores = sortedScores|merge([{player:scores[0].player[0], scores: scores, count:scores|length}]) %}
+            {% endfor %}
+            {% set sortedScores = sortedScores|sort((a,b) => b.count <=> a.count) %}
+            {% for score in sortedScores %}
+              <tr class="{{ bg }} border-t border-gray-600">
+                <td class="px-4 py-2 text-center">
+                  <a class="underline" href="{{ score.player.url }}">{{ score.player.title }}</a>
+                </td>
+                {% if concatenated %}
+                  <td class="text-center">{{ number }}</td>
+                {% endif %}
+                <td class="px-4 py-2 text-center">
+                  {{ score.count }}
+                </td>
+                <td class="px-4 py-2 text-center">
+                  <button onclick="this.parentElement.parentElement.nextElementSibling.classList.toggle('hidden');this.classList.toggle('rotate-180');" class="transform transition-transform duration-200">▼</button>
+                </td>
+              </tr>
+              <tr class="hidden {{ bg }}">
+                <td class="px-4 py-2" colspan="{{ concatenated ? 4 : 3 }}">
+                  <div class="flex justify-around flex-wrap">
+                    {% for scoreSuperTableField in score.scores %}
+                      <a class="underline px-3" href="{{ scoreSuperTableField.owner.url }}">{{ scoreSuperTableField.owner.title }}</a>
+                    {% endfor %}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+            {% if loop.index < 4 %}
+              </table>
+            {% elseif loop.last %}
+              </table>
+            {% endif %}
+
+          {% endfor %}
+        </div>
+
+        {#<table class="border-collapse border-2 border-gray-500 mt-5 mx-auto shadow-xl">#}
+        {#  <tr class="bg-gray-100">#}
+        {#    <th class="px-4 py-2">Player</th>#}
+        {#    <th class="px-4 py-2">Scored</th>#}
+        {#    <th class="px-4 py-2">Game</th>#}
+        {#  </tr>#}
+
+        {#  {% for score in scores %}#}
+        {#  <tr class="{% if loop.first or score.score == 180 %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% else %}bg-green-100 odd:bg-green-200{% endif %}">#}
+        {#    <td class="px-4 py-2">#}
+        {#      {% if score.player is not defined %}#}
+        {#        <a class="underline" href="{{ score.link }}">#}
+        {#          {{ score.coronaPlayer }}#}
+        {#        </a>#}
+        {#      {% else %}#}
+        {#        <a class="underline" href="{{ score.player[0].url }}">{{ score.player[0].title }}</a>#}
+        {#      {% endif %}#}
+        {#    </td>#}
+        {#    <td class="px-4 py-2">#}
+        {#      {{ score.score }}#}
+        {#    </td>#}
+        {#    <td class="px-4 py-2">#}
+        {#      {% if score.player is not defined %}#}
+        {#        {{ score.game }}#}
+        {#      {% else %}#}
+        {#        <a class="underline" href="{{ score.owner.url }}">{{ score.owner.title }}</a>#}
+        {#      {% endif %}#}
+        {#    </td>#}
+        {#  {% else %}#}
+        {#    <tr>#}
+        {#      <td class="px-4 py-2" colspan="3">No high checkouts</td>#}
+        {#    </tr>#}
+        {#  {% endfor %}#}
+        {#</table>#}
+      </div>
 
     </div>
-
+  </div>
 {% endblock %}

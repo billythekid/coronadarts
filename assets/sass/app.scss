@@ -19,4 +19,5 @@ body:before {
   background: url(/bg.png) no-repeat top left fixed;
   background-size: 50%;
   opacity: 0.1;
+  z-index: -1;
 }
