@@ -5,9 +5,16 @@
     <h1 class="text-5xl text-center">Scorers</h1>
 
     <div class="text-center">
-      <p><a class="underline" href="/scorers/n01">n01</a></p>
-      <p><a class="underline" href="/scorers/half-it">Half It (pre-filled with all system <a href="players" class="underline">players</a>)</p>
-      <p><a class="underline" href="/scorers/half-it?blank=true">Half It (no players)</a></p>
+      {% if currentUser %}
+        <p><a class="underline" href="/scorers/n01">n01</a></p>
+      {% endif %}
+      <p>
+        <a class="underline" href="/scorers/half-it">Half It</a> (pre-filled with all system
+        <a href="players" class="underline">players</a>)
+      </p>
+      <p>
+        <a class="underline" href="/scorers/half-it?blank=true">Half It (no players)</a>
+      </p>
     </div>
   </div>
 {% endblock %}
