@@ -74,7 +74,7 @@
       </tr>
 
       <tr v-if="showGameTotals">
-        <th v-if="game !== '27s'">
+        <th v-if="game !== '27s' && game !== '25s and Bulls'">
           <div v-if="hasRounds" class="inline-block">
             <button type="button" class="form-input" @click="addRound">Add a round</button>
           </div>
