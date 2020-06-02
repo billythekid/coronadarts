@@ -37,10 +37,10 @@ class Module extends \yii\base\Module
     // Set the controllerNamespace based on whether this is a console or web request
     if (Craft::$app->getRequest()->getIsConsoleRequest())
     {
-      $this->controllerNamespace = 'modules\\console\\controllers';
+      $this->controllerNamespace = 'modules\\darts\\console\\controllers';
     } else
     {
-      $this->controllerNamespace = 'modules\\controllers';
+      $this->controllerNamespace = 'modules\\darts\\controllers';
     }
 
     $this->setComponents([

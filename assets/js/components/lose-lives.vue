@@ -129,7 +129,7 @@
         this.players.push(
           {
             name: playerName,
-            lives: 0,
+            lives: this.decrementingLives ? this.startLives : 0,
             hitsOn50to60: [],
             missesOn50to60: []
           })
@@ -267,7 +267,7 @@
       }
 
       if (this.startPlayers.length > 0) {
-        this.startPlayers.forEach(starter => this.addPlayer(starter));
+        this.startPlayers.forEach(starter => this.addPlayer(starter.title));
       }
       if (this.decrementingLives) {
         this.players.forEach(player => player.lives = this.startLives);

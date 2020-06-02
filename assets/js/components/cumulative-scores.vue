@@ -163,7 +163,7 @@
         _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds)), this.finalRounds).forEach(round => this.rounds.push(round));
       }
       if (this.startPlayers.length > 0) {
-        this.startPlayers.forEach(starter => this.addPlayer(starter))
+        this.startPlayers.forEach(starter => this.addPlayer(starter.title))
       }
       this.$emit('mounted', _.concat(this.startRounds, this.randomRounds, this.finalRounds));
     }

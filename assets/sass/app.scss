@@ -23,3 +23,17 @@ body:before {
   opacity: 0.1;
   z-index: -1;
 }
+input + .check-label {
+  &:after {
+    content: ' ✓';
+    visibility: hidden;
+  }
+}
+input:checked + .check-label {
+  background: #3182ce;
+  color: white;
+
+  &:after {
+    visibility: visible;
+  }
+}
