@@ -9,7 +9,11 @@
   <p class="text-center">
     <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a>
     - {{ competition.postDate|date('l jS F Y') }}
-    - <strong>{{ winner.link|attr({'class':'underline'}) }}</strong> ({{ winnerTotalGames }} game wins)
+    {% if winner is not empty %}
+      - <strong>{{ winner.link|attr({'class':'underline'}) }}</strong> ({{ winnerTotalGames }} game wins)
+    {% else %}
+      - <strong>No games played yet</strong>
+    {% endif %}
   </p>
 
 {% endfor %}

@@ -212,7 +212,10 @@ class Darts extends Component
     $streaks      = [];
     $streakNumber = 0;
 
-    $previousWinner = $games[0]['winner']->title;
+    if(!empty($games))
+    {
+      $previousWinner = $games[0]['winner']->title;
+    }
 
     foreach ($games as $game)
     {

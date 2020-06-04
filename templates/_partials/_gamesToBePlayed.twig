@@ -111,7 +111,8 @@
   {% elseif competition.competitionType == "winnerStaysOn" %}
 
     {% set competitionInfo = craft.league.winnerStaysOn(competition) %}
-    {% set previousWinner = (competitionInfo['games']|first).winner.title %}
+    {% set previousWinner = (competitionInfo['games']|first).winner.title ?? null %}
+
     {% for gameInfo in competitionInfo['games'] %}
 
       {% if loop.first or gameInfo.winner.title != previousWinner %}

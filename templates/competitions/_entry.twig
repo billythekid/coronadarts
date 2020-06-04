@@ -66,11 +66,17 @@
 
   {% if entry.competitionType == "winnerStaysOn" %}
     {% set competitionInfo = craft.league.winnerStaysOn(competition) %}
-    <p>The winner of the competition was {{ competitionInfo.totalWins|keys|first }} with a total of {{ competitionInfo.totalWins | first }} game wins.</p>
-    <p>Other game winners include {{ competitionInfo.totalWins | without(competitionInfo.totalWins|first) | map((total,player)=> "#{player} (#{total} win" ~ (total != 1 ? "s") ~ ")" )  | join(', ', ', and ') }}.</p>
-    <p>The biggest losses were felt by {{ competitionInfo.totalLosses | map((total,player)=> "#{player} (#{total} loss" ~ (total != 1 ? "es") ~ ")" ) | join(', ', ', and ') }}.</p>
-    <p>The longest unbroken win streak was {{ (competitionInfo.streaks|first).length }} by {{ (competitionInfo.streaks|first).player }}.</p>
-    <p>The win streaks were {{ competitionInfo.streaks | map((streak)=> "#{streak.player} (#{streak.length})") | join(', ', ', and ') }}.</p>
+    {% if competitionInfo.totalWins is not empty %}
+      <p>The winner of the competition was {{ competitionInfo.totalWins|keys|first }} with a total of {{ competitionInfo.totalWins | first }} game wins.</p>
+      <p>Other game winners include {{ competitionInfo.totalWins | without(competitionInfo.totalWins|first) | map((total,player)=> "#{player} (#{total} win" ~ (total != 1 ? "s") ~ ")" )  | join(', ', ', and ') }}.</p>
+    {% endif %}
+    {% if competitionInfo.totalLosses is not empty %}
+      <p>The biggest losses were felt by {{ competitionInfo.totalLosses | map((total,player)=> "#{player} (#{total} loss" ~ (total != 1 ? "es") ~ ")" ) | join(', ', ', and ') }}.</p>
+    {% endif %}
+    {% if competitionInfo.streaks is not empty %}
+      <p>The longest unbroken win streak was {{ (competitionInfo.streaks|first).length }} by {{ (competitionInfo.streaks|first).player }}.</p>
+      <p>The win streaks were {{ competitionInfo.streaks | map((streak)=> "#{streak.player} (#{streak.length})") | join(', ', ', and ') }}.</p>
+    {% endif %}
     <p>
       {% for player in competition.players %}
         {% if loop.last %}and {% endif %} {{ player.title }} played {{ competitionInfo.games|filter(game=>game.winner.title == player.title or game.loser.title == player.title) | length }} games{% if not loop.last %},{% else %}.{% endif %}
