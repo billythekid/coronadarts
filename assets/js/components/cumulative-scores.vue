@@ -30,7 +30,7 @@
             <div class="flex justify-between">
               <span class="w-20 text-center">{{ getPlayerCumulativeTotal(player,round) }}</span>
               <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
-              <img class="rounded rounded-full w-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
+              <img class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
               <input type="number" class="w-20 text-right" v-model.number="player.roundTotals[roundIndex].score" :step="['Shanghai', 'Scotty\'s Game'].indexOf(game) > -1 ? round : 1" :max="['Shanghai', 'Scotty\'s Game'].indexOf(game) > -1 ? round * 9 : null">
             </div>
           </td>
