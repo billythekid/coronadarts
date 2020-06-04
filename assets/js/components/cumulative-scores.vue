@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <button type="button" class="form-input" @click="addPlayer" v-if="rounds.length > 0">Add a player</button>
-    <button type="button" class="form-input" @click="addRound">Add a round</button>
+    <button type="button" class="form-input" @click="addRound" v-if="['Shanghai', 'Scotty\'s Game'].indexOf(game) === -1">Add a round</button>
     <button type="button" class="form-input" @click="toggleKillers('even')">Toggle Even killers</button>
     <button type="button" class="form-input" @click="toggleKillers('odd')">Toggle Odd killers</button>
 
@@ -21,7 +21,7 @@
         <tr v-for="(round, roundIndex) in rounds" class="bg-white" :class="{'bg-red-200 text-red-700':((roundIndex % 2 !== 0 && evenKillers) ||(roundIndex % 2 === 0 && oddKillers) )}" :key="roundIndex">
           <td class="px-2 border py-2">
             <div class="flex justify-between">
-              <input type="text" class="w-56 text-center" v-model="rounds[roundIndex]">
+              <input type="text" class="w-56 text-center" v-model="rounds[roundIndex]" :readonly="players.length > 0 || ['Shanghai', 'Scotty\'s Game'].indexOf(game) > -1">
               <button type="button" @click="removeRound(roundIndex)" tabindex="-1">x</button>
             </div>
           </td>
@@ -30,7 +30,8 @@
             <div class="flex justify-between">
               <span class="w-20 text-center">{{ getPlayerCumulativeTotal(player,round) }}</span>
               <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
-              <input type="number" class="w-20 text-right" v-model.number="player.roundTotals.filter(total => total.round == round)[0].score">
+              <img class="rounded rounded-full w-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
+              <input type="number" class="w-20 text-right" v-model.number="player.roundTotals[roundIndex].score" :step="['Shanghai', 'Scotty\'s Game'].indexOf(game) > -1 ? round : 1" :max="['Shanghai', 'Scotty\'s Game'].indexOf(game) > -1 ? round * 9 : null">
             </div>
           </td>
         </tr>
@@ -90,6 +91,9 @@
     methods: {
       addRound() {
         let randomRound = _.sample(this.randomRounds);
+        if (this.game === "Shanghai") {
+          randomRound = this.rounds.length + 1;
+        }
         this.rounds.push(randomRound);
         this.players.forEach(player => player.roundTotals.push({round: randomRound, score: 0}));
       },
@@ -111,6 +115,10 @@
         let score = -1 * Math.floor(this.getPlayerCumulativeTotal(player, round) / 2);
         this.setPlayerRoundScore(player, round, score);
         this.$forceUpdate();
+      },
+      subtractRoundScore(player, round) {
+        let score = round * -1;
+        this.setPlayerRoundScore(player, round, score);
       },
       setPlayerRoundScore(player, round, score) {
         let playerRound = _.find(player.roundTotals, {round: round});
@@ -159,9 +167,12 @@
 
       if (this.game === "Shanghai") {
         _.range(1, 10).forEach(round => this.rounds.push(round));
-      } else {
+      } else if (this.game === "Halfit") {
         _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds)), this.finalRounds).forEach(round => this.rounds.push(round));
+      } else if (this.game === "Scotty's Game") {
+        _.range(1, 21).forEach(round => this.rounds.push(round));
       }
+
       if (this.startPlayers.length > 0) {
         this.startPlayers.forEach(starter => this.addPlayer(starter.title))
       }
