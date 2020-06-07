@@ -191,10 +191,6 @@
         }
         return true;
       },
-      isNextRound(player, round) {
-        let playerRound = _.find(player.roundTotals, {round: round});
-        return playerRound.score === 0;
-      },
     },
     mounted() {
 
