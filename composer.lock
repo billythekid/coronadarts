@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "847a741d3bdc77c056f86926818ea0e8",
+    "content-hash": "6b129dc2eb2313fbfa8036a1bde7984e",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -1690,6 +1690,58 @@
                 "mix"
             ],
             "time": "2018-07-20T14:32:06+00:00"
+        },
+        {
+            "name": "mmikkel/reasons",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mmikkel/Reasons-Craft3.git",
+                "reference": "4f3711eadcfd3a950db98bd5ec11260a366e29f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mmikkel/Reasons-Craft3/zipball/4f3711eadcfd3a950db98bd5ec11260a366e29f6",
+                "reference": "4f3711eadcfd3a950db98bd5ec11260a366e29f6",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.4.22.1"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Reasons",
+                "handle": "reasons",
+                "developer": "Mats Mikkel Rummelhoff",
+                "developerUrl": "https://vaersaagod.no",
+                "documentationUrl": "https://github.com/mmikkel/Reasons-Craft3/blob/master/README.md",
+                "changelogUrl": "https://github.com/mmikkel/Reasons-Craft3/blob/master/CHANGELOG.md",
+                "class": "mmikkel\\reasons\\Reasons"
+            },
+            "autoload": {
+                "psr-4": {
+                    "mmikkel\\reasons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mats Mikkel Rummelhoff",
+                    "homepage": "https://vaersaagod.no"
+                }
+            ],
+            "description": "Adds conditionals to field layouts.",
+            "keywords": [
+                "Craft",
+                "cms",
+                "craft-plugin",
+                "craftcms",
+                "reasons"
+            ],
+            "time": "2020-06-03T00:47:27+00:00"
         },
         {
             "name": "monolog/monolog",
