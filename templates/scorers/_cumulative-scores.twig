@@ -10,8 +10,37 @@
         <p>Refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ _.join( halfitData, ', ') }</p>
       {% endif %}
       <p>Drag rounds into a different order.</p>
-      <p>To score just put in the score the player hit for that round, the table will work out the running totals for you.</p>
 
+      <p class="text-2xl my-5">The Rules</p>
+      {% if game == "Halfit" %}
+        <p>Throw 3 darts to hit each challenge. Each round scores the number of points hit.</p>
+        <p>If you do not hit any points click the
+          <button type="button" class="px-2 bg-red-600 text-white text-2xl rounded-full">½</button>
+          button. Your current score will be halved and play continues.
+        </p>
+      {% elseif game in ["Scotty's Game","Martyn's Game", "Shanghai"] %}
+        <p>Throw three dart at each number. Count the number of hits on each number.</p>
+        <p>A single counts as 1 point, doubles count as 2 points and trebles count as 3 for a maximum of 9 points per round.</p>
+        {% if game == "Scotty's Game" %}
+          <p>If you do not hit any points click
+            <img class="rounded rounded-full w-8 h-8 cursor-pointer inline-block" src="/assets/images/scotty.png" alt="Scotty!" title="Scotty!"> You'll lose the number of points equal to the current number being thrown.
+          </p>
+        {% elseif game == "Martyn's Game" %}
+          <p>If you do not hit any points click
+            <img class="rounded rounded-full w-8 h-8 cursor-pointer inline-block" src="/assets/images/martyn.png" alt="Martyn!" title="Martyn!"> You'll lose a random number of points between 1 and 5.
+          </p>
+          <p>Scores will be revealed as each player finishes the game.</p>
+        {% elseif game == "Shanghai" %}
+          <p>If killers are enabled a player <strong>must</strong> hit at least one mark on any number that's a killer. Failure to do so results in that player being knocked out.</p>
+          <p>
+            If a player hits a Shanghai (a double, treble and single in the one number) any one of the remaining players
+            <strong>must</strong> hit a Shanghai. Failure to do so results in an immediate win by the first player to hit a Shanghai.
+          </p>
+          <p>If a second player manages to hit a Shanghai all currently knocked-out players are back in and play continues from that point (players who were knocked-out start again from the current play, not from where they got knocked out).</p>
+        {% endif %}
+      {% endif %}
+      <p>To score just put in the score the player hit for that round, the table will work out the running totals for you.</p>
+      <p class="my-2">Good Luck!</p>
     </div>
   </div>
 

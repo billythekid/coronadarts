@@ -5,7 +5,10 @@
     <h1 class="text-5xl text-center mb-4">{{ game | ucfirst }} Scoreboard</h1>
     <div class="leading-loose sm:leading-normal">
       <p>Here's a randomly generated {{ game | ucfirst }} scoring system.</p>
-      <p>You can add, edit and remove player names and rounds. You can drag rounds into a different order.</p>
+      <p>You can add, edit and remove player names and rounds.</p>
+      {% if game in ["50 to 60"] %}
+        <p>You can drag rounds into a different order.</p>
+      {% endif %}
       <p>To score just put in the score the player hit for that round, the table will work out the running totals for you.</p>
     </div>
   </div>

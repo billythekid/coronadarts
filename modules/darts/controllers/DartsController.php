@@ -14,7 +14,7 @@ class DartsController extends Controller
 
   public function actionScorers()
   {
-    $cumulativeGames = ['Halfit', 'Shanghai', "Scotty's Game"];
+    $cumulativeGames = ['Halfit', 'Shanghai', "Scotty's Game", "Martyn's Game"];
     $loseLivesGames  = ['25s and Bulls', '27s', '50 to 60'];
 
     $game = Craft::$app->getRequest()->getBodyParam('game');
