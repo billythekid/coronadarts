@@ -13,9 +13,9 @@
         <th v-for="(player, playerIndex) in players" class="border px-2">
           <input v-model="player.name" type="text" class="w-24 text-center font-bold">
           <button type="button" @click="removePlayer(playerIndex)" tabindex="-1">x</button>
-          <div class="flex justify-between">
-            <span class="text-base">Running<br>Total</span>
-            <span class="text-base">Round<br>Score</span>
+          <div :class="{'flex justify-between': showTotals(player), 'text-right': !showTotals(player)}">
+            <span class="text-base mr-2" v-if="showTotals(player)">Running<br>Total</span>
+            <span class="text-base ml-2">Round<br>Score</span>
           </div>
         </th>
       </tr>
@@ -33,8 +33,8 @@
             <div class="flex justify-between px-2">
               <span class="w-20 text-center" v-if="showTotals(player)">{{ getPlayerCumulativeTotal(player,round) }}</span>
               <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
-              <img class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
-              <img class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png" @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game'">
+              <img alt="Scotty!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
+              <img alt="Martyn!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png" @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game' && !showTotals(player)">
               <input type="number" class="w-20 text-right" v-show="showScore(player,round)" v-model.number="player.roundTotals[roundIndex].score" :step="['Shanghai'].indexOf(game) > -1 ? round : 1" :max="['Shanghai'].indexOf(game) > -1 ? round * 9 : ['Scotty\'s Game', 'Martyn\'s Game'].indexOf(game) > -1 ? 9 : null">
             </div>
             <p class="text-xs text-center px-5"><span>{{ player.name }}<br>Round: {{ round }}</span></p>

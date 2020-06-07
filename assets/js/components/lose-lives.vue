@@ -20,7 +20,7 @@
       <tr class="bg-gray-100 border">
         <th v-if="hasRounds">Rounds</th>
         <th v-for="(player, playerIndex) in players" class="border px-2" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}">
-          <input v-model="player.name" type="text" class="w-24 text-center font-bold" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}" >
+          <input v-model="player.name" type="text" class="w-24 text-center font-bold" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}">
           <button type="button" @click="removePlayer(playerIndex)" tabindex="-1">︎✗</button>
         </th>
       </tr>
@@ -149,6 +149,7 @@
             text: player.name + " is bust! Haha!",
             type: "error",
             timer: 2000,
+            showConfirmButton: false,
           });
           return true;
         }
@@ -227,7 +228,13 @@
       },
       missed27s(player) {
         player.lives--;
-        this.check27sWin();
+        this.$fire({
+          title: "MISS!",
+          text: player.name + " missed it! Haha!",
+          type: "error",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(result => this.check27sWin());
       },
       check27sWin() {
         let playersStillIn = this.players.filter(player => player.lives > 0);
