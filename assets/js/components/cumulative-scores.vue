@@ -1,10 +1,11 @@
 <template>
   <div class="text-center">
     <button type="button" class="form-input" @click="addPlayer" v-if="rounds.length > 0">Add a player</button>
-    <button type="button" class="form-input" @click="addRound" v-if="['Shanghai', 'Scotty\'s Game'].indexOf(game) === -1">Add a round</button>
-    <button type="button" class="form-input" @click="toggleKillers('even')">Toggle Even killers</button>
-    <button type="button" class="form-input" @click="toggleKillers('odd')">Toggle Odd killers</button>
-
+    <button type="button" class="form-input" @click="addRound" v-if="allowAddRounds">Add a round</button>
+    <div class="inline" v-if="allowKillers">
+      <button type="button" class="form-input" @click="toggleKillers('even')">Toggle Even killers</button>
+      <button type="button" class="form-input" @click="toggleKillers('odd')">Toggle Odd killers</button>
+    </div>
     <table class="table-auto rounded-lg my-5 mx-auto shadow-xl">
       <thead>
       <tr class="bg-gray-100 border">
@@ -23,7 +24,7 @@
         <tr v-for="(round, roundIndex) in rounds" class="bg-white" :class="{'bg-red-200 text-red-700':((roundIndex % 2 !== 0 && evenKillers) ||(roundIndex % 2 === 0 && oddKillers) )}" :key="roundIndex">
           <td class="px-2 border py-2">
             <div class="flex justify-between">
-              <input type="text" class="text-center text-2xl" :class="{'w-24': game !== 'Halfit','w-56': game === 'Halfit'}" v-model="rounds[roundIndex]" :readonly="players.length > 0 || ['Shanghai', 'Scotty\'s Game', 'Martyn\'s Game'].indexOf(game) > -1">
+              <input type="text" class="text-center text-2xl" :class="{'w-24': game !== 'Halfit','w-56': game === 'Halfit'}" v-model="rounds[roundIndex]" :readonly="! allowEditRoundNames">
               <button type="button" @click="removeRound(roundIndex)" tabindex="-1">x</button>
             </div>
           </td>
@@ -87,7 +88,10 @@
           '3 different colours',
         ],
         finalRounds: ['25s', 'Bullseyes'],
+        allowEditRoundNames: false,
+        allowAddRounds: false,
         players: [],
+        allowKillers: false,
         oddKillers: false,
         evenKillers: false,
         highlightNegatives: false,
@@ -99,6 +103,10 @@
         let randomRound = _.sample(this.randomRounds);
         if (this.game === "Shanghai") {
           randomRound = this.rounds.length + 1;
+          if (randomRound === 20) {
+            // you can only add up to 20
+            this.allowAddRounds = false;
+          }
         }
         this.rounds.push(randomRound);
         this.players.forEach(player => player.roundTotals.push({round: randomRound, score: 0}));
@@ -108,6 +116,7 @@
         this.players.forEach(player => player.roundTotals.splice(roundIndex, 1));
       },
       addPlayer(playerName) {
+        this.allowEditRoundNames = false;
         playerName = typeof playerName === "object" ? 'Player' + (this.players.length + 1) : playerName;
         let roundTotals = _.map(this.rounds, function (round) {
           return {round: round, score: 0}
@@ -117,6 +126,13 @@
       },
       removePlayer(index) {
         this.players.splice(index, 1);
+        if (this.players.length === 0)
+        {
+          if (this.game === "Halfit")
+          {
+            this.allowEditRoundNames = true;
+          }
+        }
       },
       halfIt(player, round) {
         let score = -1 * Math.floor(this.getPlayerCumulativeTotal(player, round) / 2);
@@ -195,18 +211,28 @@
     mounted() {
 
       if (this.game === "Shanghai") {
+
         _.range(1, 10).forEach(round => this.rounds.push(round));
+        this.allowKillers = true;
+        this.allowAddRounds = true;
+
       } else if (this.game === "Halfit") {
+
         _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 3), this.finalRounds).forEach(round => this.rounds.push(round));
+        this.allowAddRounds = true;
+        this.allowEditRoundNames = true;
+
       } else if (["Scotty's Game", "Martyn's Game"].indexOf(this.game) > -1) {
+
         _.range(1, 21).forEach(round => this.rounds.push(round));
         this.highlightNegatives = true;
-      }
 
+      }
 
       if (this.startPlayers.length > 0) {
         this.startPlayers.forEach(starter => this.addPlayer(starter.title))
       }
+
       this.$emit('mounted', _.concat(this.startRounds, this.randomRounds, this.finalRounds));
     }
   }
