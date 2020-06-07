@@ -112,8 +112,8 @@
         this.players.forEach(player => player.roundTotals.push({round: randomRound, score: 0}));
       },
       removeRound(roundIndex) {
-        this.rounds.splice(roundIndex, 1);
         this.players.forEach(player => player.roundTotals.splice(roundIndex, 1));
+        this.rounds.splice(roundIndex, 1);
       },
       addPlayer(playerName) {
         this.allowEditRoundNames = false;
@@ -126,10 +126,8 @@
       },
       removePlayer(index) {
         this.players.splice(index, 1);
-        if (this.players.length === 0)
-        {
-          if (this.game === "Halfit")
-          {
+        if (this.players.length === 0) {
+          if (this.game === "Halfit") {
             this.allowEditRoundNames = true;
           }
         }
@@ -157,6 +155,9 @@
         this.$forceUpdate();
       },
       getPlayerTotal(player) {
+        if (player.roundTotals.length === 0) {
+          return;
+        }
         return player.roundTotals.map(round => round.score).reduce((previousValue, currentValue) => previousValue + currentValue)
       },
       getPlayerCumulativeTotal(player, round) {
@@ -166,9 +167,12 @@
             if (roundName === round) {
               found = true;
             }
-            let thisRoundScore = player.roundTotals.filter(total => total.round === roundName)[0].score;
-            if (!found) {
-              playerTotal += thisRoundScore;
+            let thisRound = player.roundTotals.filter(total => total.round === roundName);
+            if (thisRound.length > 0) {
+              let thisRoundScore = thisRound[0].score;
+              if (!found) {
+                playerTotal += thisRoundScore;
+              }
             }
           }
         );
@@ -179,9 +183,12 @@
         let _this = this;
         _this.players.forEach(function (player) {
           _this.rounds.forEach(function (roundName) {
-            let thisRoundScore = player.roundTotals.filter(total => total.round === roundName)[0].score;
-            if (thisRoundScore < 0) {
-              _this.halfIt(player, roundName);
+            let thisRound = player.roundTotals.filter(total => total.round === roundName);
+            if (thisRound.length > 0) {
+              let thisRoundScore = thisRound[0].score;
+              if (thisRoundScore < 0) {
+                _this.halfIt(player, roundName);
+              }
             }
           });
         });
