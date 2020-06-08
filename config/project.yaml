@@ -1,4 +1,4 @@
-dateModified: 1590501245
+dateModified: 1591623444
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -334,10 +334,18 @@ plugins:
     settings:
       assetPath: assets
       publicPath: web
+  reasons:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.1.1
   super-table:
     edition: standard
     enabled: true
     schemaVersion: 2.2.1
+reasons_conditionals:
+  cb1b968b-e412-4ef3-abe0-2e1253550ca3:
+    conditionals: '{"608f1f15-eead-4798-9900-48ee61e4e4f2":[[{"field":"dd191238-04e4-486e-9029-d27780b2ce11","compare":"==","value":"roundRobin"}]],"22337b3e-aad9-4fa1-9db9-7bf2b4eb7156":[[{"field":"dd191238-04e4-486e-9029-d27780b2ce11","compare":"==","value":"elimination"}]],"bdd67a8b-0d17-49a2-97bc-f86f7e543c13":[[{"field":"22337b3e-aad9-4fa1-9db9-7bf2b4eb7156","compare":"==","value":"true"}]]}'
+    fieldLayoutUid: 190985fb-4d05-4986-a0bd-65352912db15
 routes:
   c19b80db-cb9d-4f88-bc8e-f55411ed10c8:
     siteUid: null
@@ -419,6 +427,7 @@ sections:
         titleLabel: Title
     handle: games
     name: Games
+    previewTargets: null
     propagationMethod: all
     siteSettings:
       9ef2b075-2c8e-48f2-acf4-b42629480270:
@@ -434,12 +443,6 @@ sections:
     enableVersioning: false
     entryTypes:
       33781942-7f20-46f9-a605-44b191466dab:
-        fieldLayouts:
-          c0cfb05f-b939-403a-a810-709620cbf4d7:
-            tabs:
-              -
-                name: Details
-                sortOrder: 1
         handle: players
         hasTitleField: true
         name: Players
@@ -448,6 +451,7 @@ sections:
         titleLabel: Title
     handle: players
     name: Players
+    previewTargets: null
     propagationMethod: all
     siteSettings:
       9ef2b075-2c8e-48f2-acf4-b42629480270:
@@ -481,13 +485,13 @@ superTableBlockTypes:
           -
             fields:
               67596c10-9a3b-4e20-a52e-5817c6bbd329:
-                required: true
-                sortOrder: 2
+                required: '1'
+                sortOrder: '2'
               9873217d-3925-4849-a106-c6ac0138f3b5:
-                required: true
-                sortOrder: 1
+                required: '1'
+                sortOrder: '1'
             name: Content
-            sortOrder: 1
+            sortOrder: '1'
     fields:
       67596c10-9a3b-4e20-a52e-5817c6bbd329:
         contentColumnType: smallint(3)
@@ -495,7 +499,7 @@ superTableBlockTypes:
         handle: score
         instructions: ''
         name: Score
-        searchable: false
+        searchable: '0'
         settings:
           decimals: 0
           defaultValue: null
@@ -513,7 +517,7 @@ superTableBlockTypes:
         handle: player
         instructions: ''
         name: Player
-        searchable: false
+        searchable: '0'
         settings:
           limit: '1'
           localizeRelations: false
@@ -535,13 +539,13 @@ superTableBlockTypes:
           -
             fields:
               48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
-                required: true
-                sortOrder: 1
+                required: '1'
+                sortOrder: '1'
               a44bb3c5-38ba-495a-90d8-ccbf246f319d:
-                required: false
-                sortOrder: 2
+                required: '0'
+                sortOrder: '2'
             name: Content
-            sortOrder: 1
+            sortOrder: '1'
     fields:
       48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
         contentColumnType: string
@@ -549,7 +553,7 @@ superTableBlockTypes:
         handle: player1
         instructions: ''
         name: 'Player 1'
-        searchable: false
+        searchable: '0'
         settings:
           limit: '1'
           localizeRelations: false
@@ -569,7 +573,7 @@ superTableBlockTypes:
         handle: player2
         instructions: 'Leave blank if player 1 gets a bye.'
         name: 'Player 2'
-        searchable: false
+        searchable: '0'
         settings:
           limit: '1'
           localizeRelations: false
@@ -591,13 +595,13 @@ superTableBlockTypes:
           -
             fields:
               76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
-                required: true
-                sortOrder: 1
+                required: '1'
+                sortOrder: '1'
               f7e93046-8f41-412f-abd5-89ca673abce7:
-                required: true
-                sortOrder: 2
+                required: '1'
+                sortOrder: '2'
             name: Content
-            sortOrder: 1
+            sortOrder: '1'
     fields:
       76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
         contentColumnType: string
@@ -605,8 +609,9 @@ superTableBlockTypes:
         handle: player
         instructions: ''
         name: Player
-        searchable: false
+        searchable: '0'
         settings:
+          allowSelfRelations: false
           limit: '1'
           localizeRelations: false
           selectionLabel: 'Choose player'
@@ -625,7 +630,7 @@ superTableBlockTypes:
         handle: checkout
         instructions: ''
         name: Checkout
-        searchable: false
+        searchable: '0'
         settings:
           decimals: 0
           defaultValue: '0'
@@ -645,10 +650,10 @@ superTableBlockTypes:
           -
             fields:
               c758c904-71cc-4f44-a7ff-6ac8576b6724:
-                required: false
-                sortOrder: 1
+                required: '0'
+                sortOrder: '1'
             name: Content
-            sortOrder: 1
+            sortOrder: '1'
     fields:
       c758c904-71cc-4f44-a7ff-6ac8576b6724:
         contentColumnType: text
@@ -656,72 +661,31 @@ superTableBlockTypes:
         handle: games
         instructions: ''
         name: Games
-        searchable: true
+        searchable: '1'
         settings:
           addRowLabel: 'Add a game'
           columnType: text
           columns:
-            __assoc__:
-              -
-                - col1
-                -
-                  __assoc__:
-                    -
-                      - heading
-                      - 'Player 1'
-                    -
-                      - handle
-                      - player1
-                    -
-                      - width
-                      - ''
-                    -
-                      - type
-                      - singleline
-              -
-                - col4
-                -
-                  __assoc__:
-                    -
-                      - heading
-                      - 'Player 1 gets a bye?'
-                    -
-                      - handle
-                      - player1GetsABye
-                    -
-                      - width
-                      - 120px
-                    -
-                      - type
-                      - lightswitch
-              -
-                - col2
-                -
-                  __assoc__:
-                    -
-                      - heading
-                      - 'Player 2'
-                    -
-                      - handle
-                      - player2
-                    -
-                      - width
-                      - ''
-                    -
-                      - type
-                      - time
+            col1:
+              handle: player1
+              heading: 'Player 1'
+              type: singleline
+              width: ''
+            col2:
+              handle: player2
+              heading: 'Player 2'
+              type: time
+              width: ''
+            col4:
+              handle: player1GetsABye
+              heading: 'Player 1 gets a bye?'
+              type: lightswitch
+              width: 120px
           defaults:
             -
-              __assoc__:
-                -
-                  - col1
-                  - ''
-                -
-                  - col4
-                  - ''
-                -
-                  - col2
-                  - null
+              col1: ''
+              col2: null
+              col4: ''
           maxRows: ''
           minRows: ''
         translationKeyFormat: null

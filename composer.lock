@@ -1693,16 +1693,16 @@
         },
         {
             "name": "mmikkel/reasons",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mmikkel/Reasons-Craft3.git",
-                "reference": "4f3711eadcfd3a950db98bd5ec11260a366e29f6"
+                "reference": "b6fe2134c964a07535c945b4c1f49dc43a8a5710"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mmikkel/Reasons-Craft3/zipball/4f3711eadcfd3a950db98bd5ec11260a366e29f6",
-                "reference": "4f3711eadcfd3a950db98bd5ec11260a366e29f6",
+                "url": "https://api.github.com/repos/mmikkel/Reasons-Craft3/zipball/b6fe2134c964a07535c945b4c1f49dc43a8a5710",
+                "reference": "b6fe2134c964a07535c945b4c1f49dc43a8a5710",
                 "shasum": ""
             },
             "require": {
@@ -1741,7 +1741,7 @@
                 "craftcms",
                 "reasons"
             ],
-            "time": "2020-06-03T00:47:27+00:00"
+            "time": "2020-06-08T13:00:10+00:00"
         },
         {
             "name": "monolog/monolog",
