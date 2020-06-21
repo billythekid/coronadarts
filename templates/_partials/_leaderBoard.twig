@@ -1,31 +1,34 @@
 <table class="overflow-hidden rounded-lg mt-10 w-full sm:w-auto mx-auto shadow-xl">
   <tr class="bg-gray-100">
-    <th colspan="8" class="text-center p-2 hidden sm:table-cell"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a></th>
-    <th colspan="5" class="text-center p-2 sm:hidden"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a></th>
+    <th colspan="8" class="text-center p-2 hidden sm:table-cell">
+      <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a></th>
+    <th colspan="5" class="text-center p-2 sm:hidden">
+      <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a></th>
   </tr>
   <tr class="bg-gray-100">
     <th class="p-2 text-center">Player</th>
-    <th class="p-2 text-center"><span class="sm:hidden">Pts</span><span class="hidden sm:inline">Points</span></th>
     <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Played</span></th>
     <th class="p-2 text-center">Won</th>
     <th class="p-2 text-center hidden sm:table-cell">Lost</th>
     <th class="p-2 text-center hidden sm:table-cell">Legs For</th>
     <th class="p-2 text-center hidden sm:table-cell">Against</th>
     <th class="p-2 text-center"><span class="sm:hidden">L/D</span><span class="hidden sm:inline">Leg Diff</span></th>
+    <th class="p-2 text-center"><span class="sm:hidden">Pts</span><span class="hidden sm:inline">Points</span></th>
   </tr>
-
 
   {% for row in craft.league.getLeaderBoard(competition) %}
     <tr class="border-t border-gray-600 {% if loop.first %}bg-yellow-400{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
       <th class="px-4 py-2 text-left">
-        <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
-      <th class="px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</th>
+        <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a>
+      </th>
       <td class="px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
       <td class="px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
       <td class="px-4 py-2 text-right hidden sm:table-cell">{{ row.totalGamesPlayed - row.totalGamesWon }}</td>
       <td class="px-4 py-2 text-right hidden sm:table-cell">{{ row.totalLegsFor }}</td>
       <td class="px-4 py-2 text-right hidden sm:table-cell">{{ row.totalLegsAgainst }}</td>
       <td class="px-4 py-2 text-right">{{ row.totalLegsFor - row.totalLegsAgainst }}</td>
+      <th class="px-4 py-2 text-right">{{ row.totalGamesWon * 3 }}</th>
+
     </tr>
   {% endfor %}
 
