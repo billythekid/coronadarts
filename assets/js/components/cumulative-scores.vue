@@ -4,7 +4,11 @@
     <div v-if="game === 'Martyn\'s Game'">
       <label>
         <input type="checkbox" class="form-checkboxes" v-model="hideTotalsUntilEveryoneIsFinished">
-        Show all scores together
+        Hide totals until last score is entered
+      </label><br>
+      <label>
+        <input type="checkbox" class="form-checkboxes" v-model="showRunningTotals">
+        Show running totals
       </label>
     </div>
 
@@ -20,8 +24,8 @@
         <th v-for="(player, playerIndex) in players" class="border px-2">
           <input v-model="player.name" type="text" class="w-24 text-center font-bold">
           <button type="button" @click="removePlayer(playerIndex)" tabindex="-1">x</button>
-          <div :class="{'flex justify-between': showTotals(player), 'text-right': !showTotals(player)}">
-            <span class="text-base mr-2" v-if="showTotals(player)">Running<br>Total</span>
+          <div :class="{'flex justify-between': showCumulativeTotals(player), 'text-right': !showCumulativeTotals(player)}">
+            <span class="text-base mr-2" v-if="showCumulativeTotals(player)">Running<br>Total</span>
             <span class="text-base ml-2">Round<br>Score</span>
           </div>
         </th>
@@ -38,7 +42,7 @@
 
           <td v-for="(player, playerIndex) in players" class="border" :key="playerIndex" :class="{'bg-red-200 text-red-700': highlightNegatives && player.roundTotals[roundIndex].score < 0}">
             <div class="flex justify-between px-2">
-              <span class="w-20 text-center" v-if="showTotals(player)">{{ getPlayerCumulativeTotal(player,round) }}</span>
+              <span class="w-20 text-center" v-if="showCumulativeTotals(player)">{{ getPlayerCumulativeTotal(player,round) }}</span>
               <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
               <img alt="Scotty!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
               <img alt="Martyn!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png" @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game' && !showTotals(player)">
@@ -110,6 +114,7 @@
         evenKillers: false,
         highlightNegatives: false,
         hideTotalsUntilEveryoneIsFinished: false,
+        showRunningTotals: true,
         showMartynsMinuses: false
       }
     },
@@ -177,7 +182,7 @@
         if (this.game === "Martyn's Game" && !this.showMartynsMinuses) {
           return player.roundTotals.map(round => round.score).reduce(((previousValue, currentValue) => currentValue > 0 ? previousValue + currentValue : previousValue + 0), 0)
         }
-          return player.roundTotals.map(round => round.score).reduce((previousValue, currentValue) => previousValue + currentValue)
+        return player.roundTotals.map(round => round.score).reduce((previousValue, currentValue) => previousValue + currentValue)
       },
       getPlayerCumulativeTotal(player, round) {
         let playerTotal = 0;
@@ -234,6 +239,12 @@
         }
         return true;
       },
+      showCumulativeTotals(player) {
+        if (['Martyn\'s Game'].indexOf(this.game) > -1) {
+          return this.showRunningTotals;
+        }
+        return true;
+      },
       showTotals(player) {
         if (['Martyn\'s Game'].indexOf(this.game) > -1) {
           let playersWithRoundsLeft = [];
@@ -243,7 +254,6 @@
                 round.score === 0
               ).length > 0
             );
-            console.log(playersWithRoundsLeft.map(player=>player.name));
           }
           let roundsCompleted = player.roundTotals.filter(round => round.score !== 0);
           // probably don't need the first comparison here.
@@ -252,7 +262,8 @@
         // just show the totals if it's not handled above
         return true;
       },
-    },
+    }
+    ,
     mounted() {
 
       if (this.game === "Shanghai") {
