@@ -1,6 +1,13 @@
 <template>
   <div class="text-center">
     <button type="button" class="form-input" @click="addPlayer" v-if="rounds.length > 0">Add a player</button>
+    <div v-if="game === 'Martyn\'s Game'">
+      <label>
+        <input type="checkbox" class="form-checkboxes" v-model="hideTotalsUntilEveryoneIsFinished">
+        Show all scores together
+      </label>
+    </div>
+
     <button type="button" class="form-input" @click="addRound" v-if="allowAddRounds">Add a round</button>
     <div class="inline" v-if="allowKillers">
       <button type="button" class="form-input" @click="toggleKillers('even')">Toggle Even killers</button>
@@ -48,6 +55,13 @@
         </th>
       </tr>
     </table>
+
+    <div v-if="game === 'Martyn\'s Game'">
+      <button type="checkbox" class="bg-gray-100 rounded-lg border-2 px-2 py-1 shadow-md" :class="{'border-green-800 text-green-800':showMartynsMinuses,'border-red-800 text-red-800': !showMartynsMinuses}" @click="showMartynsMinuses = !showMartynsMinuses">
+        <span v-if="!showMartynsMinuses">Show</span><span v-else>Hide</span> "Martyn's face" scores
+      </button>
+    </div>
+
   </div>
 </template>
 
@@ -95,6 +109,8 @@
         oddKillers: false,
         evenKillers: false,
         highlightNegatives: false,
+        hideTotalsUntilEveryoneIsFinished: false,
+        showMartynsMinuses: false
       }
     },
     computed: {},
@@ -158,11 +174,15 @@
         if (player.roundTotals.length === 0) {
           return;
         }
-        return player.roundTotals.map(round => round.score).reduce((previousValue, currentValue) => previousValue + currentValue)
+        if (this.game === "Martyn's Game" && !this.showMartynsMinuses) {
+          return player.roundTotals.map(round => round.score).reduce(((previousValue, currentValue) => currentValue > 0 ? previousValue + currentValue : previousValue + 0), 0)
+        }
+          return player.roundTotals.map(round => round.score).reduce((previousValue, currentValue) => previousValue + currentValue)
       },
       getPlayerCumulativeTotal(player, round) {
         let playerTotal = 0;
         let found = false;
+        let _this = this;
         this.rounds.forEach(function (roundName) {
             if (roundName === round) {
               found = true;
@@ -171,7 +191,11 @@
             if (thisRound.length > 0) {
               let thisRoundScore = thisRound[0].score;
               if (!found) {
-                playerTotal += thisRoundScore;
+                if (_this.game === "Martyn's Game" && _this.showMartynsMinuses === false && thisRoundScore < 0) {
+                  playerTotal += 0; //don't show the minus score yet
+                } else {
+                  playerTotal += thisRoundScore;
+                }
               }
             }
           }
@@ -203,38 +227,49 @@
       showScore(player, round) {
         if (['Martyn\'s Game'].indexOf(this.game) > -1) {
           let playerRound = _.find(player.roundTotals, {round: round});
-          return (playerRound.score > -1 || this.showTotals(player));
+          if (!this.showMartynsMinuses && playerRound.score < 0) {
+            return false;
+          }
+          return ((playerRound.score > -1) || this.showTotals(player));
         }
         return true;
       },
       showTotals(player) {
         if (['Martyn\'s Game'].indexOf(this.game) > -1) {
+          let playersWithRoundsLeft = [];
+          if (this.hideTotalsUntilEveryoneIsFinished) {
+            playersWithRoundsLeft = this.players.filter(player =>
+              player.roundTotals.filter(round =>
+                round.score === 0
+              ).length > 0
+            );
+            console.log(playersWithRoundsLeft.map(player=>player.name));
+          }
           let roundsCompleted = player.roundTotals.filter(round => round.score !== 0);
-          return (player.roundTotals.length === roundsCompleted.length);
+          // probably don't need the first comparison here.
+          return (player.roundTotals.length === roundsCompleted.length && playersWithRoundsLeft.length === 0);
         }
+        // just show the totals if it's not handled above
         return true;
       },
     },
     mounted() {
 
       if (this.game === "Shanghai") {
-
         _.range(1, 10).forEach(round => this.rounds.push(round));
         this.allowKillers = true;
         this.allowAddRounds = true;
-
       } else if (this.game === "Halfit") {
-
         _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 3), this.finalRounds).forEach(round => this.rounds.push(round));
         this.allowAddRounds = true;
         this.allowEditRoundNames = true;
 
       } else if (["Scotty's Game", "Martyn's Game"].indexOf(this.game) > -1) {
-
         _.range(1, 21).forEach(round => this.rounds.push(round));
         this.highlightNegatives = true;
-
+        this.hideTotalsUntilEveryoneIsFinished = true;
       }
+
 
       if (this.startPlayers.length > 0) {
         this.startPlayers.forEach(starter => this.addPlayer(starter.title))
