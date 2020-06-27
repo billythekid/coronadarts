@@ -11,9 +11,8 @@
 
   <p>This {{ competition.competitionType.label|lower }} competition between {{ competition.players|length }} players; {{ competition.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ', and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
   <p>There have been a total of {{ gamesThatHaveBeenPlayed|length }} games played in the competition.</p>
-  {% if entry.specialInformation is not empty %}
-    <p>{{ entry.specialInformation|nl2br }}</p>
-  {% endif %}
+
+  {{ entry.specialInformation }}
 
   {% set highStats %}
     {% set highScoreGames = competition.children|filter(game=>game.highScores is not empty) %}
