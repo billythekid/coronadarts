@@ -1,4 +1,4 @@
-dateModified: 1595180074
+dateModified: 1596132701
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -12,7 +12,7 @@ fieldGroups:
     name: Common
 fields:
   01708089-e9c5-4433-ae94-ac087bad598c:
-    contentColumnType: smallint(1)
+    contentColumnType: integer(10)
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
     handle: player2LegsWon
     instructions: ''
@@ -21,7 +21,7 @@ fields:
     settings:
       decimals: 0
       defaultValue: '0'
-      max: '2'
+      max: null
       min: '0'
       prefix: ''
       size: null
@@ -64,7 +64,7 @@ fields:
     translationMethod: site
     type: verbb\supertable\fields\SuperTableField
   0900cd97-c6b2-4a38-b2a0-0704a2955d60:
-    contentColumnType: smallint(1)
+    contentColumnType: integer(10)
     fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
     handle: player1LegsWon
     instructions: ''
@@ -73,7 +73,7 @@ fields:
     settings:
       decimals: 0
       defaultValue: '0'
-      max: '2'
+      max: null
       min: '0'
       prefix: ''
       size: null
