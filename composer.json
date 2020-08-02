@@ -5,7 +5,7 @@
     "misterbk/mix": "^1.5",
     "mmikkel/reasons": "2.1.2",
     "putyourlightson/craft-elements-panel": "1.1.0",
-    "verbb/super-table": "2.5.2",
+    "verbb/super-table": "2.5.4",
     "vlucas/phpdotenv": "^3.4.0"
   },
   "require-dev": {

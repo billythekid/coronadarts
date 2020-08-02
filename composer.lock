@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a8f90d9a341e4d2b492ec8f7fd053c1",
+    "content-hash": "dce6488190e967bc3c38c1af0652d267",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -2344,16 +2344,6 @@
                 "php",
                 "type"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpoption/phpoption",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-20T17:29:33+00:00"
         },
         {
@@ -4059,20 +4049,20 @@
         },
         {
             "name": "verbb/super-table",
-            "version": "2.5.2",
+            "version": "2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/verbb/super-table.git",
-                "reference": "3aeaffc795c44edf11e48a00ebf4d2d418b6b230"
+                "reference": "cab9813fccb38da3284a0a6cce497ae4e2d78479"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/verbb/super-table/zipball/3aeaffc795c44edf11e48a00ebf4d2d418b6b230",
-                "reference": "3aeaffc795c44edf11e48a00ebf4d2d418b6b230",
+                "url": "https://api.github.com/repos/verbb/super-table/zipball/cab9813fccb38da3284a0a6cce497ae4e2d78479",
+                "reference": "cab9813fccb38da3284a0a6cce497ae4e2d78479",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.4.23",
+                "craftcms/cms": "^3.4.30",
                 "verbb/base": "^1.0.2"
             },
             "type": "craft-plugin",
@@ -4113,7 +4103,7 @@
                 "docs": "https://github.com/verbb/super-table",
                 "rss": "https://github.com/verbb/super-table/commits/v2.atom"
             },
-            "time": "2020-07-27T23:09:41+00:00"
+            "time": "2020-07-29T22:00:11+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
