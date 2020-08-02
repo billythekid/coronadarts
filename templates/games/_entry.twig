@@ -31,6 +31,8 @@
         </div>
       </div>
 
+
+
       {% if entry.highCheckouts is not empty or entry.highScores is not empty %}
         <h2 class="text-3xl text-center py-5">Highlights</h2>
 
@@ -58,7 +60,13 @@
           </div>
         {% endif %}
       {% else %}
-        <p class="text-center py-5">Nothing exciting happened.</p>
+        <div class="leading-loose sm:leading-normal text-center py-5">
+          {% if entry.specialInformation is not empty %}
+            {{ entry.specialInformation | markdown('gfm') }}
+          {% else %}
+            <p>Nothing exciting happened.</p>
+          {% endif %}
+        </div>
       {% endif %}
 
     {% endif %}
