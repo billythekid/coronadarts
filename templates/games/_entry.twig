@@ -61,11 +61,14 @@
         {% endif %}
       {% else %}
         <div class="leading-loose sm:leading-normal text-center py-5">
-          {% if entry.specialInformation is not empty %}
-            {{ entry.specialInformation | markdown('gfm') }}
-          {% else %}
-            <p>Nothing exciting happened.</p>
+            <p>No big scores in this one.</p>
           {% endif %}
+        </div>
+      {% endif %}
+
+      {% if entry.specialInformation is not empty %}
+        <div class="leading-loose sm:leading-normal text-center py-5">
+          {{ entry.specialInformation | markdown('gfm') }}
         </div>
       {% endif %}
 
