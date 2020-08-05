@@ -1,0 +1,53 @@
+field: 22676616-9ffa-4539-834c-4f5730c47cf8
+fieldLayouts:
+  7f1630ad-7b1c-461e-a783-cbc8ca3c50d7:
+    tabs:
+      -
+        fields:
+          67596c10-9a3b-4e20-a52e-5817c6bbd329:
+            required: '1'
+            sortOrder: '2'
+          9873217d-3925-4849-a106-c6ac0138f3b5:
+            required: '1'
+            sortOrder: '1'
+        name: Content
+        sortOrder: '1'
+fields:
+  67596c10-9a3b-4e20-a52e-5817c6bbd329:
+    contentColumnType: smallint(3)
+    fieldGroup: null
+    handle: score
+    instructions: ''
+    name: Score
+    searchable: '0'
+    settings:
+      decimals: 0
+      defaultValue: null
+      max: '180'
+      min: '140'
+      prefix: ''
+      size: null
+      suffix: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Number
+  9873217d-3925-4849-a106-c6ac0138f3b5:
+    contentColumnType: string
+    fieldGroup: null
+    handle: player
+    instructions: ''
+    name: Player
+    searchable: '0'
+    settings:
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries

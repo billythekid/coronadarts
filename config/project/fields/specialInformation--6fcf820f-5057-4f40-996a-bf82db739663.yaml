@@ -1,0 +1,17 @@
+contentColumnType: text
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: specialInformation
+instructions: Markdown
+name: 'Special information'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: '1'
+  placeholder: ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

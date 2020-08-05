@@ -1,0 +1,33 @@
+contentColumnType: string
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: highScores
+instructions: ''
+name: 'High Scores (140+)'
+searchable: false
+settings:
+  columns:
+    __assoc__:
+      -
+        - 9873217d-3925-4849-a106-c6ac0138f3b5
+        -
+          __assoc__:
+            -
+              - width
+              - ''
+      -
+        - 67596c10-9a3b-4e20-a52e-5817c6bbd329
+        -
+          __assoc__:
+            -
+              - width
+              - ''
+  contentTable: '{{%stc_highscores}}'
+  fieldLayout: row
+  maxRows: ''
+  minRows: ''
+  propagationMethod: all
+  selectionLabel: 'Add high score'
+  staticField: ''
+translationKeyFormat: null
+translationMethod: site
+type: verbb\supertable\fields\SuperTableField

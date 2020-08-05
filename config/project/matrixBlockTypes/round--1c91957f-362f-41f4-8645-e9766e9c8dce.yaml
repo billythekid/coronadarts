@@ -1,0 +1,33 @@
+field: bdd67a8b-0d17-49a2-97bc-f86f7e543c13
+fieldLayouts:
+  b451ebe9-0a4b-46cd-af9b-06412dfedae3:
+    tabs:
+      -
+        fields:
+          5c94933e-5413-4c0f-8782-cee0e955cf08:
+            required: false
+            sortOrder: 1
+        name: Content
+        sortOrder: 1
+fields:
+  5c94933e-5413-4c0f-8782-cee0e955cf08:
+    contentColumnType: string
+    fieldGroup: null
+    handle: games
+    instructions: ''
+    name: Games
+    searchable: true
+    settings:
+      contentTable: '{{%stc_games}}'
+      fieldLayout: table
+      maxRows: ''
+      minRows: ''
+      propagationMethod: all
+      selectionLabel: 'Add a game'
+      staticField: ''
+    translationKeyFormat: null
+    translationMethod: site
+    type: verbb\supertable\fields\SuperTableField
+handle: round
+name: Round
+sortOrder: 1

@@ -1,0 +1,44 @@
+contentColumnType: string
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: competitionType
+instructions: ''
+name: 'Competition Type'
+searchable: true
+settings:
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Round Robin'
+        -
+          - value
+          - roundRobin
+        -
+          - default
+          - '1'
+    -
+      __assoc__:
+        -
+          - label
+          - Elimination
+        -
+          - value
+          - elimination
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'Winner Stays On'
+        -
+          - value
+          - winnerStaysOn
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\RadioButtons

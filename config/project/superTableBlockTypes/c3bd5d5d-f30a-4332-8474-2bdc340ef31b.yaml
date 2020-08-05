@@ -1,0 +1,54 @@
+field: 022f1b02-5045-493c-8ea3-47f05eecf73f
+fieldLayouts:
+  06b7ef1d-75e3-4b81-9a7f-879c7d2bd3ac:
+    tabs:
+      -
+        fields:
+          76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
+            required: '1'
+            sortOrder: '1'
+          f7e93046-8f41-412f-abd5-89ca673abce7:
+            required: '1'
+            sortOrder: '2'
+        name: Content
+        sortOrder: '1'
+fields:
+  76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
+    contentColumnType: string
+    fieldGroup: null
+    handle: player
+    instructions: ''
+    name: Player
+    searchable: '0'
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  f7e93046-8f41-412f-abd5-89ca673abce7:
+    contentColumnType: smallint(3)
+    fieldGroup: null
+    handle: checkout
+    instructions: ''
+    name: Checkout
+    searchable: '0'
+    settings:
+      decimals: 0
+      defaultValue: '0'
+      max: '170'
+      min: '100'
+      prefix: ''
+      size: null
+      suffix: ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Number

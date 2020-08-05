@@ -1,0 +1,9 @@
+siteUid: null
+sortOrder: 1
+template: player/index
+uriParts:
+  - player/
+  -
+    - '*'
+    - '[^\/]+'
+uriPattern: 'player/<any:[^\/]+>'

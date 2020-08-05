@@ -1,0 +1,15 @@
+enableVersioning: false
+handle: games
+name: Games
+previewTargets: null
+propagationMethod: all
+siteSettings:
+  9ef2b075-2c8e-48f2-acf4-b42629480270:
+    enabledByDefault: true
+    hasUrls: true
+    template: games/_entry
+    uriFormat: '{%if object.parent %}{{ object.parent.uri }}{% else %}games{% endif %}/{slug}'
+structure:
+  maxLevels: 2
+  uid: 5cfcf9a1-2501-41eb-a0c2-76703a7620d9
+type: structure

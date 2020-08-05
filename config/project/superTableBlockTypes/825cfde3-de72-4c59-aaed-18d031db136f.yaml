@@ -1,0 +1,55 @@
+field: 5c94933e-5413-4c0f-8782-cee0e955cf08
+fieldLayouts:
+  ac3bf22b-b7e5-478a-ac6f-f15242aa197e:
+    tabs:
+      -
+        fields:
+          48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
+            required: '1'
+            sortOrder: '1'
+          a44bb3c5-38ba-495a-90d8-ccbf246f319d:
+            required: '0'
+            sortOrder: '2'
+        name: Content
+        sortOrder: '1'
+fields:
+  48ac97fc-80b3-4ad2-a9a4-30e09934a0ac:
+    contentColumnType: string
+    fieldGroup: null
+    handle: player1
+    instructions: ''
+    name: 'Player 1'
+    searchable: '0'
+    settings:
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player 1'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  a44bb3c5-38ba-495a-90d8-ccbf246f319d:
+    contentColumnType: string
+    fieldGroup: null
+    handle: player2
+    instructions: 'Leave blank if player 1 gets a bye.'
+    name: 'Player 2'
+    searchable: '0'
+    settings:
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose player 2'
+      source: null
+      sources:
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+      targetSiteId: null
+      validateRelatedElements: ''
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries

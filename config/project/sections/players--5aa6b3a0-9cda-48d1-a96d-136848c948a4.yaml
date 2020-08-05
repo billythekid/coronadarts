@@ -1,0 +1,15 @@
+enableVersioning: false
+handle: players
+name: Players
+previewTargets: null
+propagationMethod: all
+siteSettings:
+  9ef2b075-2c8e-48f2-acf4-b42629480270:
+    enabledByDefault: true
+    hasUrls: true
+    template: players/_entry
+    uriFormat: 'players/{slug}'
+structure:
+  maxLevels: 1
+  uid: c5230701-390d-40bc-8349-d00d2a88997e
+type: structure

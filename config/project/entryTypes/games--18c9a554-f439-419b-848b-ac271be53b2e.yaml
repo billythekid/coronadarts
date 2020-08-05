@@ -1,0 +1,103 @@
+fieldLayouts:
+  a1fdba88-fd27-4e25-94cd-21262a50ef6e:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            autofocus: false
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            required: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 3e98bd9b-16c1-4297-8be8-f06faf29e166
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: bee18029-c323-4668-8fc5-25beeb03a0e8
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 0900cd97-c6b2-4a38-b2a0-0704a2955d60
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 01708089-e9c5-4433-ae94-ac087bad598c
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 6fcf820f-5057-4f40-996a-bf82db739663
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 022f1b02-5045-493c-8ea3-47f05eecf73f
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 22676616-9ffa-4539-834c-4f5730c47cf8
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Common
+        sortOrder: 1
+handle: games
+hasTitleField: false
+name: Games
+section: 1603eea6-0c0e-4863-92c8-a25ff80c277a
+sortOrder: 1
+titleFormat: '{ player1.one().title } vs { player2.one().title }'
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

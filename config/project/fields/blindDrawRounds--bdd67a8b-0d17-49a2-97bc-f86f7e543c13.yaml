@@ -1,0 +1,14 @@
+contentColumnType: string
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: blindDrawRounds
+instructions: 'Add the games for each round as drawn in the blind draw.'
+name: 'Blind Draw Rounds'
+searchable: false
+settings:
+  contentTable: '{{%matrixcontent_blinddrawrounds}}'
+  maxBlocks: ''
+  minBlocks: ''
+  propagationMethod: all
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

@@ -1,0 +1,17 @@
+contentColumnType: integer(10)
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: player1LegsWon
+instructions: ''
+name: 'Player 1 Legs Won'
+searchable: false
+settings:
+  decimals: 0
+  defaultValue: '0'
+  max: null
+  min: '0'
+  prefix: ''
+  size: null
+  suffix: ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Number

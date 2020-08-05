@@ -1,0 +1,19 @@
+contentColumnType: string
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+handle: players
+instructions: ''
+name: Players
+searchable: true
+settings:
+  limit: ''
+  localizeRelations: false
+  selectionLabel: 'Add players'
+  source: null
+  sources:
+    - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+  targetSiteId: null
+  validateRelatedElements: ''
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries
