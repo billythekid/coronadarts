@@ -14,7 +14,7 @@ class Darts extends Component
   public function getPosition($player, $competition)
   {
     $leaderBoard = $this->getLeaderboard($competition);
-    for ($i = 1; $i < count($leaderBoard); $i++)
+    for ($i = 1; $i <= count($leaderBoard); $i++)
     {
       $leaguePlayer = $leaderBoard[$i-1];
       if ($leaguePlayer->playerName === $player->title)
