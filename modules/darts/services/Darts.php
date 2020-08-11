@@ -14,12 +14,23 @@ class Darts extends Component
   public function getPosition($player, $competition)
   {
     $leaderBoard = $this->getLeaderboard($competition);
-    for ($i = 1; $i <= count($leaderBoard); $i++)
+    $playersInComp = count($leaderBoard);
+    for ($i = 1; $i <= $playersInComp; $i++)
     {
       $leaguePlayer = $leaderBoard[$i-1];
       if ($leaguePlayer->playerName === $player->title)
       {
-        return $i . date("S", date_timestamp_get(date_create("2000-01-" . ($i))));
+        if($i === 1)
+        {
+          $beaten = $playersInComp - 1;
+          return "WINNER (beating {$beaten} others)";
+
+        }
+        elseif ($i === count($leaderBoard))
+        {
+          return "Last (of {$playersInComp} players)";
+        }
+        return $i . date("S", date_timestamp_get(date_create("2000-01-" . ($i)))) . " (of {$playersInComp} players)";
       }
 
     }
