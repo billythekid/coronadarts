@@ -2,7 +2,7 @@
 {% set games = ['Halfit', 'Shanghai', '25s and Bulls', '27s','50 to 60', "Scotty's Game", "Martyn's Game"] %}
 
 {% block content %}
-  <div class="block mx-auto max-w-screen-xl relative">
+  <div class="block mx-auto max-w-screen-xl relative px-2">
     <h1 class="text-5xl text-center">Scorers</h1>
 
     <div class="text-center">
@@ -24,7 +24,7 @@
           <h3 class="text-2xl">Choose game</h3>
           <div class="flex justify-around flex-wrap mb-5">
             {% for game in games %}
-              <button name="game" class="underline" value="{{ game }}">{{ game }}</button>
+              <button name="game" class="underline px-2" value="{{ game }}">{{ game }}</button>
             {% endfor %}
           </div>
         </form>

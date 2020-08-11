@@ -1,19 +1,21 @@
 {% set winnerStaysOnTournaments = craft.entries.section('games').level(1).competitionType("winnerStaysOn").with(['children.player1','children.player2','players']).orderBy('postDate DESC').all() %}
 
-<h1 class="text-center text-3xl">Winner Stays On Competition Winners</h1>
-{% for competition in winnerStaysOnTournaments %}
-  {% set tournamentInfo = craft.league.winnerStaysOn(competition) %}
-  {% set winnerName = tournamentInfo['totalWins'] | keys | first %}
-  {% set winnerTotalGames = tournamentInfo['totalWins'] | first %}
-  {% set winner = tournamentInfo.winners|filter(winner=>winner.title == winnerName)|first %}
-  <p class="text-center">
-    <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a>
-    - {{ competition.postDate|date('l jS F Y') }}
-    {% if winner is not empty %}
-      - <strong>{{ winner.link|attr({'class':'underline'}) }}</strong> ({{ winnerTotalGames }} game wins)
-    {% else %}
-      - <strong>No games played yet</strong>
-    {% endif %}
-  </p>
+<div class="px-5">
+  <h1 class="text-center text-3xl">Winner Stays On Competition Winners</h1>
+  {% for competition in winnerStaysOnTournaments %}
+    {% set tournamentInfo = craft.league.winnerStaysOn(competition) %}
+    {% set winnerName = tournamentInfo['totalWins'] | keys | first %}
+    {% set winnerTotalGames = tournamentInfo['totalWins'] | first %}
+    {% set winner = tournamentInfo.winners|filter(winner=>winner.title == winnerName)|first %}
+    <p class="text-center">
+      <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a>
+      - {{ competition.postDate|date('l jS F Y') }}
+      {% if winner is not empty %}
+        - <strong>{{ winner.link|attr({'class':'underline'}) }}</strong> ({{ winnerTotalGames }} game wins)
+      {% else %}
+        - <strong>No games played yet</strong>
+      {% endif %}
+    </p>
 
-{% endfor %}
+  {% endfor %}
+</div>

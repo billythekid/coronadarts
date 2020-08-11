@@ -5,7 +5,7 @@
   {% set gamesThatHaveBeenPlayed = competition.children %}
 
 <div class="my-5 {{ loop.index is even ? 'bg-gray-100' : 'bg-white' }} shadow rounded-lg">
-  <h2 class="text-center text-3xl py-5"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a> Games</h2>
+  <h2 class="text-center text-3xl py-5 px-2"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a> Games</h2>
 
   {% if competition.competitionType == "roundRobin" %}
     {% set players = competition.players|map((player)=>player.title) %}

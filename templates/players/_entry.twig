@@ -176,17 +176,17 @@
 
   {% endfor %}
 
-  <div class="block mx-auto max-w-screen-xl relative">
+  <div class="block mx-auto max-w-screen-xl relative px-2">
 
     <h1 class="text-5xl text-center mb-4">Player stats for {{ entry.title }}</h1>
     <div class="leading-loose sm:leading-normal">
-      <p class="align-top">
+      <p class="align-top mb-5">
         {% if competitions is not empty %}
         {{ entry.title }} current positions in round robin competitions;</p>
-      <ul class="p-5">
+      <ul class="px-2">
         {% for competition in competitions %}
           {% if competition.competitionType.value == "roundRobin" %}
-            <li><strong>{{ craft.league.position(entry, competition) }}</strong> in {{ competition.title }}</li>
+            <li class="ml-2 list-disc"><strong>{{ craft.league.position(entry, competition) }}</strong> in {{ competition.title }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -245,7 +245,7 @@
         <p>{{ entry.title }} has hit {{ highScores|length }} score{{ highScores|length != 1 ? 's' }} of at least 140 points;</p>
         <ul class="p-5">
           {% for score in highScores %}
-            <li>{{ score.score }}
+            <li class="ml-2 list-disc">{{ score.score }}
               <a class='underline' href='{{ score.game.url }}'>against {{ score.game.title | replace(entry.title, '') | replace(' vs ', '') }}</a>
             </li>
           {% endfor %}
@@ -256,7 +256,7 @@
         <p>{{ entry.title }} has checked out {{ highCheckouts|length }} time{{ highCheckouts|length != 1 ? 's' }} with 100 or more;</p>
         <ul class="p-5">
           {% for score in highCheckouts %}
-            <li>{{ score.checkout }}
+            <li class="ml-2 list-disc">{{ score.checkout }}
               <a class='underline' href='{{ score.game.url }}'>against {{ score.game.title | replace(entry.title, '') | replace(' vs ', '') }}</a>
             </li>
           {% endfor %}

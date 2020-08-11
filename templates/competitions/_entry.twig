@@ -7,7 +7,7 @@
 {% set gamesThatHaveBeenPlayed = competition.children %}
 
 <h1 class="text-5xl text-center mb-4">{{ entry.title }}</h1>
-<div class="leading-loose sm:leading-normal">
+<div class="leading-loose sm:leading-normal px-2">
 
   <p>This {{ competition.competitionType.label|lower }} competition between {{ competition.players|length }} players; {{ competition.players|map(player => "<a class='underline' href='#{player.url}'>#{player.title}</a></li>")|join(', ', ', and ')|raw }}, began on {{ entry.postDate|date('l jS F Y') }}.</p>
   <p>There have been a total of {{ gamesThatHaveBeenPlayed|length }} games played in the competition.</p>
@@ -84,6 +84,6 @@
   {% endif %}
 </div>
 
-<div class="mt-10">
+<div class="mt-10 px-2">
   {% include "_partials/_gamesToBePlayed.twig" with {competitions:[entry]} %}
 </div>

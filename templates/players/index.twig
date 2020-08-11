@@ -3,27 +3,29 @@
 
 
 {% block content %}
-  <h1 class="text-5xl text-center mb-5">Players Overview</h1>
+  <div class="px-2">
+    <h1 class="text-5xl text-center mb-5">Players Overview</h1>
 
-  <p class="text-center">Here is a quick overview of how each player is getting on. Click a player's name for more stats about that player.</p>
+    <p class="text-center">Here is a quick overview of how each player is getting on. Click a player's name for more stats about that player.</p>
 
-  <table class="overflow-hidden rounded-lg mt-10 w-full sm:w-auto mx-auto shadow-xl">
-    <tr class="bg-gray-100">
-      <th class="p-2 text-center">Player</th>
-      <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Games Played</span></th>
-      <th class="p-2 text-center"><span class="sm:hidden">Won</span><span class="hidden sm:inline">Games Won</span></th>
-      <th class="p-2 text-center"><span class="sm:hidden">%</span><span class="hidden sm:inline">Win Percentage</span></th>
-    </tr>
-
-    {% for row in craft.league.getPlayerStats() | sort((a,b)=>a.percentage<=>b.percentage) | reverse %}
-      <tr class="border-t border-gray-600 {% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
-        <th class="px-4 py-2 text-left">
-          <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
-        <td class="px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
-        <td class="px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
-        <td class="px-4 py-2 text-right">{{ row.percentage }}%</td>
+    <table class="overflow-hidden rounded-lg mt-10 w-full sm:w-auto mx-auto shadow-xl">
+      <tr class="bg-gray-100">
+        <th class="p-2 text-center">Player</th>
+        <th class="p-2 text-center"><span class="sm:hidden">Pld</span><span class="hidden sm:inline">Games Played</span></th>
+        <th class="p-2 text-center"><span class="sm:hidden">Won</span><span class="hidden sm:inline">Games Won</span></th>
+        <th class="p-2 text-center"><span class="sm:hidden">%</span><span class="hidden sm:inline">Win Percentage</span></th>
       </tr>
-    {% endfor %}
 
-  </table>
+      {% for row in craft.league.getPlayerStats() | sort((a,b)=>a.percentage<=>b.percentage) | reverse %}
+        <tr class="border-t border-gray-600 {% if loop.first %}bg-yellow-400{% elseif loop.index == 2 %}bg-gray-300{% elseif loop.index == 3 %}bg-yellow-700 text-white{% elseif loop.last %}bg-red-200{% else %}bg-green-100{% endif %}">
+          <th class="px-4 py-2 text-left">
+            <a class="underline" href="{{ row.playerUrl }}">{{ row.playerName }}</a></th>
+          <td class="px-4 py-2 text-right">{{ row.totalGamesPlayed }}</td>
+          <td class="px-4 py-2 text-right">{{ row.totalGamesWon }}</td>
+          <td class="px-4 py-2 text-right">{{ row.percentage }}%</td>
+        </tr>
+      {% endfor %}
+
+    </table>
+  </div>
 {% endblock %}

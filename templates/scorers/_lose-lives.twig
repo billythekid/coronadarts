@@ -1,7 +1,7 @@
 {% extends "_layout" %}
 {% set game = craft.app.request.getParam('game') is not empty ? craft.app.request.getParam('game') : '25s and Bulls' %}
 {% block content %}
-  <div class="block mx-auto max-w-screen-xl relative mb-20 ">
+  <div class="block mx-auto max-w-screen-xl relative mb-20 px-2">
     <h1 class="text-5xl text-center mb-4">{{ game | ucfirst }} Scoreboard</h1>
     <div class="leading-loose sm:leading-normal">
       <p>Here's a randomly generated {{ game | ucfirst }} scoring system.</p>
