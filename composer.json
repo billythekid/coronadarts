@@ -1,11 +1,11 @@
 {
   "require": {
-    "craftcms/cms": "3.5.2",
-    "craftcms/redactor": "2.7.0",
+    "craftcms/cms": "3.5.5",
+    "craftcms/redactor": "2.7.1",
     "misterbk/mix": "^1.5",
-    "mmikkel/reasons": "2.2.0",
+    "mmikkel/reasons": "2.2.1",
     "putyourlightson/craft-elements-panel": "1.1.0",
-    "verbb/super-table": "2.6.0.4",
+    "verbb/super-table": "2.6.1",
     "vlucas/phpdotenv": "^3.4.0"
   },
   "require-dev": {
