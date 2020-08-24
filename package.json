@@ -25,21 +25,21 @@
     "browser-sync": "^2.26.12",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cross-env": "^7.0.2",
-    "laravel-mix": "^5.0.4",
+    "laravel-mix": "^5.0.5",
     "laravel-mix-polyfill": "^2.0.0",
     "laravel-mix-purgecss": "^5.0.0",
     "lodash": "^4.17.20",
     "sass": "^1.26.10",
     "sass-loader": "^8.0.2",
-    "tailwindcss": "^1.7.0",
+    "tailwindcss": "^1.7.3",
     "tailwindcss-blend-mode": "^1.0.0",
-    "vue": "^2.6.10",
+    "vue": "^2.6.12",
     "vue-router": "^3.4.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
     "animate.css": "^4.1.0",
     "vue-simple-alert": "^1.1.1",
-    "vuedraggable": "^2.24.0"
+    "vuedraggable": "^2.24.1"
   }
 }
