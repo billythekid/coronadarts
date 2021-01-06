@@ -21,7 +21,7 @@
   "homepage": "https://bitbucket.org/cowboyecosse/coronadarts#readme",
   "devDependencies": {
     "@tailwindcss/custom-forms": "^0.2.1",
-    "axios": "^0.18",
+    "axios": "^0.21",
     "browser-sync": "^2.26.12",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cross-env": "^7.0.2",
