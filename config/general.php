@@ -28,6 +28,7 @@ return [
 
         'aliases' => [
             '@web' => getenv('default_site_url'),
+            '@webroot' => dirname(__DIR__) . '/web',
         ],
     ],
 
