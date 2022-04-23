@@ -1,11 +1,11 @@
 {
   "require": {
-    "craftcms/cms": "3.5.5",
-    "craftcms/redactor": "2.7.1",
-    "misterbk/mix": "^1.5",
-    "mmikkel/reasons": "2.2.1",
+    "craftcms/cms": "3.7.38",
+    "craftcms/redactor": "2.10.6",
+    "misterbk/mix": "1.5.2",
+    "mmikkel/reasons": "2.2.6",
     "putyourlightson/craft-elements-panel": "1.1.0",
-    "verbb/super-table": "2.6.2",
+    "verbb/super-table": "2.7.1",
     "vlucas/phpdotenv": "^3.4.0"
   },
   "require-dev": {
@@ -19,9 +19,7 @@
   "config": {
     "sort-packages": true,
     "optimize-autoloader": true,
-    "platform": {
-      "php": "7.0"
-    },
+
     "allow-plugins": {
       "craftcms/plugin-installer": true,
       "yiisoft/yii2-composer": true

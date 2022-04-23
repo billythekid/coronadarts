@@ -1,4 +1,4 @@
-dateModified: 1596656336
+dateModified: 1650677931
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -43,7 +43,7 @@ system:
   edition: solo
   live: true
   name: 'Coronavirus United Newton Tigers Singles League'
-  schemaVersion: 3.5.12
+  schemaVersion: 3.7.33
   timeZone: Europe/London
 users:
   allowPublicRegistration: false
