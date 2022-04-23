@@ -19,20 +19,21 @@ body:before {
   opacity: 0.1;
   z-index: -1;
 }
+
 a {
-  @apply text-current	 no-underline
+  @apply text-current   no-underline
 }
-input + .check-label {
-  &:after {
-    content: ' ✓';
-    visibility: hidden;
-  }
+
+input + .check-label:after {
+  content: ' ✓';
+  visibility: hidden;
 }
+
 input:checked + .check-label {
   background: #3182ce;
   color: white;
+}
 
-  &:after {
-    visibility: visible;
-  }
+input:checked + .check-label:after {
+  visibility: visible;
 }

@@ -9,7 +9,7 @@ module.exports = {
     './web/assets/images/*.svg'
   ],
   theme: {
-
+    defaultTheme
   },  // no options to configure
 
   corePlugins: {
