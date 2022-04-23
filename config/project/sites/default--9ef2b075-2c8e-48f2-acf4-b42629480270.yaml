@@ -1,8 +1,9 @@
 baseUrl: $DEFAULT_SITE_URL
+enabled: true
 handle: default
 hasUrls: true
 language: en-GB
 name: 'Coronavirus United Newton Tigers Singles'
 primary: true
-siteGroup: 98c3a7c2-70ec-44da-a147-b2acf4a813d4
+siteGroup: 98c3a7c2-70ec-44da-a147-b2acf4a813d4 # Coronavirus United Newton Tigers Singles League
 sortOrder: 1

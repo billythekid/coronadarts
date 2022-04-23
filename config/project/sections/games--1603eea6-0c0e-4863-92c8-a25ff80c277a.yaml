@@ -1,10 +1,10 @@
+defaultPlacement: end
 enableVersioning: false
 handle: games
 name: Games
-previewTargets: null
 propagationMethod: all
 siteSettings:
-  9ef2b075-2c8e-48f2-acf4-b42629480270:
+  9ef2b075-2c8e-48f2-acf4-b42629480270: # Coronavirus United Newton Tigers Singles
     enabledByDefault: true
     hasUrls: true
     template: games/_entry

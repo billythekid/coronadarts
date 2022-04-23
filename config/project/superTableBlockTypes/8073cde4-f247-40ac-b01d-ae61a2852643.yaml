@@ -1,52 +1,70 @@
-field: 22676616-9ffa-4539-834c-4f5730c47cf8
+field: 22676616-9ffa-4539-834c-4f5730c47cf8 # High Scores (140+)
 fieldLayouts:
   7f1630ad-7b1c-461e-a783-cbc8ca3c50d7:
     tabs:
       -
-        fields:
-          67596c10-9a3b-4e20-a52e-5817c6bbd329:
-            required: '1'
-            sortOrder: '2'
-          9873217d-3925-4849-a106-c6ac0138f3b5:
-            required: '1'
-            sortOrder: '1'
+        elements:
+          -
+            fieldUid: 9873217d-3925-4849-a106-c6ac0138f3b5 # Player
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 67596c10-9a3b-4e20-a52e-5817c6bbd329 # Score
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
         name: Content
-        sortOrder: '1'
+        sortOrder: 1
 fields:
-  67596c10-9a3b-4e20-a52e-5817c6bbd329:
+  67596c10-9a3b-4e20-a52e-5817c6bbd329: # Score
+    columnSuffix: null
     contentColumnType: smallint(3)
     fieldGroup: null
     handle: score
     instructions: ''
     name: Score
-    searchable: '0'
+    searchable: false
     settings:
       decimals: 0
       defaultValue: null
-      max: '180'
-      min: '140'
-      prefix: ''
+      max: 180
+      min: 140
+      prefix: null
+      previewCurrency: null
+      previewFormat: decimal
       size: null
-      suffix: ''
+      suffix: null
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number
-  9873217d-3925-4849-a106-c6ac0138f3b5:
+  9873217d-3925-4849-a106-c6ac0138f3b5: # Player
+    columnSuffix: null
     contentColumnType: string
     fieldGroup: null
     handle: player
     instructions: ''
     name: Player
-    searchable: '0'
+    searchable: false
     settings:
+      allowSelfRelations: false
       limit: '1'
       localizeRelations: false
       selectionLabel: 'Choose player'
+      showSiteMenu: true
       source: null
       sources:
-        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4' # Players
       targetSiteId: null
-      validateRelatedElements: ''
+      validateRelatedElements: false
       viewMode: null
     translationKeyFormat: null
     translationMethod: site

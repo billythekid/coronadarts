@@ -1,17 +1,20 @@
+columnSuffix: null
 contentColumnType: integer(10)
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: player2LegsWon
 instructions: ''
 name: 'Player 2 Legs Won'
 searchable: false
 settings:
   decimals: 0
-  defaultValue: '0'
+  defaultValue: 0
   max: null
-  min: '0'
-  prefix: ''
+  min: 0
+  prefix: null
+  previewCurrency: null
+  previewFormat: decimal
   size: null
-  suffix: ''
+  suffix: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Number

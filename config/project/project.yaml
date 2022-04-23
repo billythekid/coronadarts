@@ -1,4 +1,4 @@
-dateModified: 1650677931
+dateModified: 1650679654
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -7,10 +7,37 @@ email:
   transportSettings:
     command: ''
   transportType: craft\mail\transportadapters\Sendmail
-graphql:
-  publicToken:
-    enabled: false
-    expiryDate: null
+meta:
+  __names__:
+    1c91957f-362f-41f4-8645-e9766e9c8dce: Round # Round
+    3e98bd9b-16c1-4297-8be8-f06faf29e166: 'Player 1' # Player 1
+    5aa6b3a0-9cda-48d1-a96d-136848c948a4: Players # Players
+    5c94933e-5413-4c0f-8782-cee0e955cf08: Games # Games
+    6fcf820f-5057-4f40-996a-bf82db739663: 'Special information' # Special information
+    9ef2b075-2c8e-48f2-acf4-b42629480270: 'Coronavirus United Newton Tigers Singles' # Coronavirus United Newton Tigers Singles
+    18c9a554-f439-419b-848b-ac271be53b2e: Games # Games
+    022f1b02-5045-493c-8ea3-47f05eecf73f: 'High Checkouts (100+)' # High Checkouts (100+)
+    48ac97fc-80b3-4ad2-a9a4-30e09934a0ac: 'Player 1' # Player 1
+    76adb1f2-9c15-4a0a-a5fc-bd9a32470c26: Player # Player
+    98c3a7c2-70ec-44da-a147-b2acf4a813d4: 'Coronavirus United Newton Tigers Singles League' # Coronavirus United Newton Tigers Singles League
+    608f1f15-eead-4798-9900-48ee61e4e4f2: 'Round Robin Rounds' # Round Robin Rounds
+    0900cd97-c6b2-4a38-b2a0-0704a2955d60: 'Player 1 Legs Won' # Player 1 Legs Won
+    975cd655-130d-47b4-8992-6b5db41955e8: 'Public Schema' # Public Schema
+    1603eea6-0c0e-4863-92c8-a25ff80c277a: Games # Games
+    22337b3e-aad9-4fa1-9db9-7bf2b4eb7156: 'Blind Draw for each round?' # Blind Draw for each round?
+    67596c10-9a3b-4e20-a52e-5817c6bbd329: Score # Score
+    741963c9-a9f3-46a4-b3cf-b5325fefb762: Common # Common
+    01708089-e9c5-4433-ae94-ac087bad598c: 'Player 2 Legs Won' # Player 2 Legs Won
+    9873217d-3925-4849-a106-c6ac0138f3b5: Player # Player
+    22676616-9ffa-4539-834c-4f5730c47cf8: 'High Scores (140+)' # High Scores (140+)
+    33781942-7f20-46f9-a605-44b191466dab: Players # Players
+    a44bb3c5-38ba-495a-90d8-ccbf246f319d: 'Player 2' # Player 2
+    af3615af-c06f-4804-b179-040281bb1151: Players # Players
+    bdd67a8b-0d17-49a2-97bc-f86f7e543c13: 'Blind Draw Rounds' # Blind Draw Rounds
+    bee18029-c323-4668-8fc5-25beeb03a0e8: 'Player 2' # Player 2
+    dd191238-04e4-486e-9029-d27780b2ce11: 'Competition Type' # Competition Type
+    f7e93046-8f41-412f-abd5-89ca673abce7: Checkout # Checkout
+    fe94bfac-3367-4b74-8c0a-b198f5093b79: Competition # Competition
 plugins:
   conditional-fields:
     edition: standard

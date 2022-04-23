@@ -1,16 +1,23 @@
-field: bdd67a8b-0d17-49a2-97bc-f86f7e543c13
+field: bdd67a8b-0d17-49a2-97bc-f86f7e543c13 # Blind Draw Rounds
 fieldLayouts:
   b451ebe9-0a4b-46cd-af9b-06412dfedae3:
     tabs:
       -
-        fields:
-          5c94933e-5413-4c0f-8782-cee0e955cf08:
+        elements:
+          -
+            fieldUid: 5c94933e-5413-4c0f-8782-cee0e955cf08 # Games
+            instructions: null
+            label: null
             required: false
-            sortOrder: 1
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
         name: Content
         sortOrder: 1
 fields:
-  5c94933e-5413-4c0f-8782-cee0e955cf08:
+  5c94933e-5413-4c0f-8782-cee0e955cf08: # Games
+    columnSuffix: null
     contentColumnType: string
     fieldGroup: null
     handle: games
@@ -22,6 +29,8 @@ fields:
       fieldLayout: table
       maxRows: ''
       minRows: ''
+      placeholderKey: null
+      propagationKeyFormat: null
       propagationMethod: all
       selectionLabel: 'Add a game'
       staticField: ''

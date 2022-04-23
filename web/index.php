@@ -2,6 +2,8 @@
 /**
  * Craft web bootstrap file
  */
+error_reporting(0);
+ini_set("display_errors", 0);
 
 // Set path constants
 define('CRAFT_BASE_PATH', dirname(__DIR__));

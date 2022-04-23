@@ -1,11 +1,14 @@
+columnSuffix: null
 contentColumnType: boolean
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: blindDrawForEachRound
 instructions: 'To automatically generate the whole tournament draw leave this turned off. If games are drawn between rounds, turn this on.'
 name: 'Blind Draw for each round?'
 searchable: true
 settings:
-  default: ''
+  default: false
+  offLabel: null
+  onLabel: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Lightswitch

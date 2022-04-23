@@ -4,38 +4,89 @@ fieldLayouts:
       -
         elements:
           -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
             instructions: null
             label: Title
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
             type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
           -
-            fieldUid: af3615af-c06f-4804-b179-040281bb1151
+            fieldUid: af3615af-c06f-4804-b179-040281bb1151 # Players
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
           -
-            fieldUid: 6fcf820f-5057-4f40-996a-bf82db739663
+            fieldUid: 6fcf820f-5057-4f40-996a-bf82db739663 # Special information
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
           -
-            fieldUid: dd191238-04e4-486e-9029-d27780b2ce11
+            fieldUid: dd191238-04e4-486e-9029-d27780b2ce11 # Competition Type
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
           -
-            fieldUid: 22337b3e-aad9-4fa1-9db9-7bf2b4eb7156
+            fieldUid: 22337b3e-aad9-4fa1-9db9-7bf2b4eb7156 # Blind Draw for each round?
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
           -
-            fieldUid: bdd67a8b-0d17-49a2-97bc-f86f7e543c13
+            fieldUid: bdd67a8b-0d17-49a2-97bc-f86f7e543c13 # Blind Draw Rounds
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
           -
-            fieldUid: 608f1f15-eead-4798-9900-48ee61e4e4f2
+            fieldUid: 608f1f15-eead-4798-9900-48ee61e4e4f2 # Round Robin Rounds
+            instructions: null
+            label: null
             required: false
+            tip: null
             type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
         name: Settings
         sortOrder: 1
 handle: competition
 hasTitleField: true
 name: Competition
-section: 1603eea6-0c0e-4863-92c8-a25ff80c277a
+section: 1603eea6-0c0e-4863-92c8-a25ff80c277a # Games
 sortOrder: 2
-titleFormat: ''
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: ''

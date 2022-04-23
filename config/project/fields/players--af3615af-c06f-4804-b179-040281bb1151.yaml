@@ -1,18 +1,21 @@
+columnSuffix: null
 contentColumnType: string
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: players
 instructions: ''
 name: Players
 searchable: true
 settings:
+  allowSelfRelations: false
   limit: ''
   localizeRelations: false
   selectionLabel: 'Add players'
+  showSiteMenu: true
   source: null
   sources:
-    - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+    - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4' # Players
   targetSiteId: null
-  validateRelatedElements: ''
+  validateRelatedElements: false
   viewMode: null
 translationKeyFormat: null
 translationMethod: site

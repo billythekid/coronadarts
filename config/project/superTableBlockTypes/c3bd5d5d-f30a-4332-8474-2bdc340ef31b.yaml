@@ -1,54 +1,71 @@
-field: 022f1b02-5045-493c-8ea3-47f05eecf73f
+field: 022f1b02-5045-493c-8ea3-47f05eecf73f # High Checkouts (100+)
 fieldLayouts:
   06b7ef1d-75e3-4b81-9a7f-879c7d2bd3ac:
     tabs:
       -
-        fields:
-          76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
-            required: '1'
-            sortOrder: '1'
-          f7e93046-8f41-412f-abd5-89ca673abce7:
-            required: '1'
-            sortOrder: '2'
+        elements:
+          -
+            fieldUid: 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26 # Player
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: f7e93046-8f41-412f-abd5-89ca673abce7 # Checkout
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
         name: Content
-        sortOrder: '1'
+        sortOrder: 1
 fields:
-  76adb1f2-9c15-4a0a-a5fc-bd9a32470c26:
+  76adb1f2-9c15-4a0a-a5fc-bd9a32470c26: # Player
+    columnSuffix: null
     contentColumnType: string
     fieldGroup: null
     handle: player
     instructions: ''
     name: Player
-    searchable: '0'
+    searchable: false
     settings:
       allowSelfRelations: false
       limit: '1'
       localizeRelations: false
       selectionLabel: 'Choose player'
+      showSiteMenu: true
       source: null
       sources:
-        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4'
+        - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4' # Players
       targetSiteId: null
-      validateRelatedElements: ''
+      validateRelatedElements: false
       viewMode: null
     translationKeyFormat: null
     translationMethod: site
     type: craft\fields\Entries
-  f7e93046-8f41-412f-abd5-89ca673abce7:
+  f7e93046-8f41-412f-abd5-89ca673abce7: # Checkout
+    columnSuffix: null
     contentColumnType: smallint(3)
     fieldGroup: null
     handle: checkout
     instructions: ''
     name: Checkout
-    searchable: '0'
+    searchable: false
     settings:
       decimals: 0
-      defaultValue: '0'
-      max: '170'
-      min: '100'
-      prefix: ''
+      defaultValue: 0
+      max: 170
+      min: 100
+      prefix: null
+      previewCurrency: null
+      previewFormat: decimal
       size: null
-      suffix: ''
+      suffix: null
     translationKeyFormat: null
     translationMethod: none
     type: craft\fields\Number

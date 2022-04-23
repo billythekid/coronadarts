@@ -1,15 +1,18 @@
+columnSuffix: null
 contentColumnType: integer(10)
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: roundRobinRounds
 instructions: 'How many rounds? (How many times should each player meet?) Every 2nd round will be reversed (home/away games)'
 name: 'Round Robin Rounds'
 searchable: true
 settings:
   decimals: 0
-  defaultValue: '2'
+  defaultValue: 2
   max: null
-  min: '1'
-  prefix: ''
+  min: 1
+  prefix: null
+  previewCurrency: null
+  previewFormat: decimal
   size: null
   suffix: rounds
 translationKeyFormat: null

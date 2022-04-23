@@ -1,5 +1,6 @@
+columnSuffix: null
 contentColumnType: string
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762
+fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: highScores
 instructions: ''
 name: 'High Scores (140+)'
@@ -8,14 +9,14 @@ settings:
   columns:
     __assoc__:
       -
-        - 9873217d-3925-4849-a106-c6ac0138f3b5
+        - 9873217d-3925-4849-a106-c6ac0138f3b5 # Player
         -
           __assoc__:
             -
               - width
               - ''
       -
-        - 67596c10-9a3b-4e20-a52e-5817c6bbd329
+        - 67596c10-9a3b-4e20-a52e-5817c6bbd329 # Score
         -
           __assoc__:
             -
@@ -25,6 +26,8 @@ settings:
   fieldLayout: row
   maxRows: ''
   minRows: ''
+  placeholderKey: null
+  propagationKeyFormat: null
   propagationMethod: all
   selectionLabel: 'Add high score'
   staticField: ''
