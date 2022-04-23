@@ -19,7 +19,7 @@
     </div>
     <table class="table-auto rounded-lg my-5 mx-auto shadow-xl">
       <thead>
-      <tr class="bg-gray-100 border">
+      <tr class="bg-slate-50 border">
         <th class="">Rounds</th>
         <th v-for="(player, playerIndex) in players" class="border px-2">
           <input v-model="player.name" type="text" class="w-24 text-center font-bold">
@@ -44,15 +44,15 @@
             <div class="flex justify-between px-2">
               <span class="w-20 text-center" v-if="showCumulativeTotals(player)">{{ getPlayerCumulativeTotal(player,round) }}</span>
               <button type="button" @click="halfIt(player,round)" class="px-2 bg-red-600 text-white text-2xl rounded-full" v-if="game === 'Halfit'">½</button>
-              <img alt="Scotty!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
-              <img alt="Martyn!" class="rounded rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png" @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game' && !showTotals(player)">
+              <img alt="Scotty!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png" @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
+              <img alt="Martyn!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png" @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game' && !showTotals(player)">
               <input type="number" class="w-20 text-right" v-show="showScore(player,round)" v-model.number="player.roundTotals[roundIndex].score" :step="['Shanghai'].indexOf(game) > -1 ? round : 1" :max="['Shanghai'].indexOf(game) > -1 ? round * 9 : ['Scotty\'s Game', 'Martyn\'s Game'].indexOf(game) > -1 ? 9 : null">
             </div>
             <p class="text-xs text-center px-5"><span>{{ player.name }}<br>Round: {{ round }}</span></p>
           </td>
         </tr>
       </draggable>
-      <tr class="bg-gray-100 text-3xl">
+      <tr class="bg-slate-50 text-3xl">
         <th class="px-4 py-2">Scores</th>
         <th v-for="(player, playerIndex) in players" :key="playerIndex">
           <span v-if="showTotals(player)">{{ player.name }}: {{ getPlayerTotal(player) }}</span>
@@ -61,7 +61,7 @@
     </table>
 
     <div v-if="game === 'Martyn\'s Game'">
-      <button type="checkbox" class="bg-gray-100 rounded-lg border-2 px-2 py-1 shadow-md" :class="{'border-green-800 text-green-800':showMartynsMinuses,'border-red-800 text-red-800': !showMartynsMinuses}" @click="showMartynsMinuses = !showMartynsMinuses">
+      <button type="checkbox" class="bg-slate-50 rounded-lg border-2 px-2 py-1 shadow-md" :class="{'border-green-800 text-green-800':showMartynsMinuses,'border-red-800 text-red-800': !showMartynsMinuses}" @click="showMartynsMinuses = !showMartynsMinuses">
         <span v-if="!showMartynsMinuses">Show</span><span v-else>Hide</span> "Martyn's face" scores
       </button>
     </div>

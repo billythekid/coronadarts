@@ -4,7 +4,7 @@
 {% for competition in competitions %}
   {% set gamesThatHaveBeenPlayed = competition.children %}
 
-<div class="my-5 {{ loop.index is even ? 'bg-gray-100' : 'bg-white' }} shadow rounded-lg">
+<div class="my-5 {{ loop.index is even ? 'bg-gray-50' : 'bg-white' }} shadow rounded-lg">
   <h2 class="text-center text-3xl py-5 px-2"><a href="{{ competition.url }}" class="underline">{{ competition.title }}</a> Games</h2>
 
   {% if competition.competitionType == "roundRobin" %}
@@ -20,7 +20,7 @@
 
         <div>
           <h3 class="text-2xl">Round {{ loop.index }}</h3>
-          <ul class="mb-5 sm:grid grid-cols-2 gap-4">
+          <ul class="mb-5 sm:grid grid-cols-2 gap-4 list-none">
             {% for game in rounds %}
               <li>
                 {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
@@ -69,7 +69,7 @@
         {% if competition.blindDrawForEachRound and not loop.last %}<br>
           <small class="block -mt-2 mb-6">(Blind draw)</small>{% endif %}
       </h3>
-      <ul class="{% if not loop.last %}mb-5 border-b {% endif %}pb-5 md:flex justify-around">
+      <ul class="{% if not loop.last %}mb-5 border-b {% endif %}pb-5 md:flex justify-around list-none">
         {% for game in round %}
           <li class="text-center">
             {%- if game not in gamesThatHaveBeenPlayed|map(game => game.title) -%}
@@ -88,7 +88,7 @@
         {% endfor %}
       </ul>
     {% endfor %}
-    <div class="bg-yellow-400 rounded-b-lg">
+    <div class="bg-yellow-200 rounded-b-lg">
       <h3 class="text-3xl text-center pt-5">{{ competition.title }} Winner</h3>
       {% set game = roundsToBePlayed|last|last %}
       <p class="text-2xl text-center pb-5">

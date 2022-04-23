@@ -1,14 +1,10 @@
-//@use 'node_modules/animate.css/animate.min.css';
-
-/* purgecss start ignore */
 @tailwind base;
 @tailwind components;
-/* purgecss end ignore */
-
 @tailwind utilities;
 
 body {
   position: relative;
+  @apply font-sans font-normal;
 }
 
 body:before {
@@ -22,6 +18,9 @@ body:before {
   background-size: 50%;
   opacity: 0.1;
   z-index: -1;
+}
+a {
+  @apply text-current	 no-underline
 }
 input + .check-label {
   &:after {

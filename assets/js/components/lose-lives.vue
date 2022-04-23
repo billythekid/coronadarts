@@ -17,11 +17,11 @@
     </div>
 
     <table class="table-auto rounded-lg my-5 mx-auto shadow-xl bg-white">
-      <tr class="bg-gray-100 border">
+      <tr class="bg-slate-50 border">
         <th v-if="hasRounds">Rounds</th>
-        <th v-for="(player, playerIndex) in players" class="border px-2" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}">
-          <input v-model="player.name" type="text" class="w-24 text-center font-bold" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}">
-          <button type="button" @click="removePlayer(playerIndex)" tabindex="-1">︎✗</button>
+        <th v-for="(player, playerIndex) in players" class="border px-2" :class="{'text-slate-400 bg-slate-300': (decrementingLives && player.lives === 0)}">
+          <input v-model="player.name" type="text" class="w-24 text-center font-bold" :class="{'text-slate-400 bg-slate-300': (decrementingLives && player.lives === 0)}">
+          <button @click="removePlayer(playerIndex)" tabindex="-1">︎✗</button>
         </th>
       </tr>
 
@@ -35,15 +35,15 @@
           </th>
           <td v-for="(player, playerIndex) in players" class="border px-2 bg-white">
             <div class="p-2" v-if="! player.hitsOn50to60.includes(round) && ! player.missesOn50to60.includes(round)">
-              <button @click="hit50to60(player, round)" class="text-gray-500 border-gray-500 border-8 bg-white-500 rounded rounded-full w-12 h-12">✓</button>
-              <button @click="miss50to60(player, round)" class="text-gray-500 border-gray-500 border-8 bg-white-500 rounded rounded-full w-12 h-12">︎✗</button>
+              <button @click="hit50to60(player, round)" class="text-slate-500 border-slate-500 border-8 bg-white-500 rounded-full w-12 h-12">✓</button>
+              <button @click="miss50to60(player, round)" class="text-slate-500 border-slate-500 border-8 bg-white-500 rounded-full w-12 h-12">︎✗</button>
             </div>
             <div v-else-if="player.hitsOn50to60.includes(round)" class="flex justify-around p-2">
-              <p class="text-green-500 border-green-500 border-8 bg-white-500 rounded rounded-full w-12 h-12">✓</p>
+              <p class="text-green-500 border-green-500 border-8 bg-white-500 rounded-full w-12 h-12">✓</p>
               <button @click="removeHitOn50to60(player,round)" class="text-3xl">⎌</button>
             </div>
             <div v-else class="flex justify-around p-2">
-              <p class="text-red-500 border-red-500 border-8 bg-white-500 rounded rounded-full w-12 h-12 table-cell align-middle">︎✗</p>
+              <p class="text-red-500 border-red-500 border-8 bg-white-500 rounded-full w-12 h-12 table-cell align-middle">︎✗</p>
               <button @click="removeMissOn50to60(player,round)" class="text-3xl">⎌</button>
             </div>
           </td>
@@ -53,21 +53,21 @@
       <tr v-if="game=='25s and Bulls'">
         <td v-for="(player, playerIndex) in players" class="border px-2 bg-white">
           <div class="flex justify-between p-5">
-            <button @click="hit25(player)" class="border-green-500 border-8 bg-white-500 text-green-500 rounded rounded-full w-12 h-12">25</button>
+            <button @click="hit25(player)" class="border-green-500 border-8 bg-white-500 text-green-500 rounded-full w-12 h-12">25</button>
             <div>&nbsp;</div>
-            <button @click="hitBull(player)" class="border-black border-2 bg-red-500 text-white rounded rounded-full w-16 h-16">BULL</button>
+            <button @click="hitBull(player)" class="border-black border-2 bg-red-500 text-white rounded-full w-16 h-16">BULL</button>
           </div>
           <p class="text-2xl">{{ player.lives }}</p>
         </td>
       </tr>
 
       <tr v-if="game=='27s'">
-        <td v-for="(player, playerIndex) in players" class="px-2 bg-white" :class="{'text-gray-400 bg-gray-300': (decrementingLives && player.lives === 0)}">
+        <td v-for="(player, playerIndex) in players" class="px-2 bg-white" :class="{'text-slate-400 bg-slate-300': (decrementingLives && player.lives === 0)}">
           <div class="flex justify-center p-5" v-if="player.lives > 0">
-            <button @click="missed27s(player)" class="border-black border-2 bg-red-500 text-white rounded rounded-full w-16 h-16">︎✗</button>
+            <button @click="missed27s(player)" class="border-black border-2 bg-red-500 text-white  rounded-full w-16 h-16">︎✗</button>
           </div>
           <div class="flex justify-center p-5" v-else>
-            <button class="border-black border-2 bg-gray-500 text-white rounded rounded-full w-16 h-16">︎✗</button>
+            <button class="border-black border-2 bg-slate-500 text-white rounded-full w-16 h-16">︎✗</button>
           </div>
           <p class="text-2xl">{{ player.lives }}</p>
         </td>
@@ -80,7 +80,7 @@
           </div>
           Scores:
         </th>
-        <th v-for="player in players" :class="{'text-gray-600 bg-gray-300': decrementingLives && player.lives === 0}">{{ player.name }}: {{ player.lives }}</th>
+        <th v-for="player in players" :class="{'text-slate-600 bg-slate-300': decrementingLives && player.lives === 0}">{{ player.name }}: {{ player.lives }}</th>
       </tr>
 
     </table>

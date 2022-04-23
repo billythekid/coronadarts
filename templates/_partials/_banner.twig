@@ -1,12 +1,12 @@
 {% if craft.app.request.segments is not empty %}<a href="/">{% endif %}
-  <div class="bg-blue-800 bg-no-repeat bg-contain bg-scroll max-w-6xl mx-auto h-64 sm:h-56 relative mb-5 sm:mt-5 sm:rounded-lg shadow-2xl" style="background-image:url(/bg.png)">
+  <div class="bg-sky-800 bg-no-repeat bg-contain bg-scroll max-w-6xl mx-auto h-64 sm:h-56 relative mb-5 sm:mt-5 sm:rounded-lg shadow-2xl" style="background-image:url(/bg.png)">
 
     <h1 class="text-3xl sm:text-4xl text-white w-40 sm:w-auto sm:text-left pl-20 sm:pl-64 sm:pt-10 z-10">
       {% for word in siteName|split(' ') %}
-        <span class="font-bold">{{ word[:1] }}</span><span class="">{{ word[1:] }} </span>
+        <span class="font-bold">{{ word[:1] }}</span><span class="font-normal">{{ word[1:] }} </span>
       {% endfor %}
     </h1>
-    <h2 class="text-left text-white pl-20 sm:pl-64">Darts Competitions</h2>
+    <h2 class="text-lg font-normal text-left text-white pl-20 sm:pl-64">Darts Competitions</h2>
   </div>
   {% if craft.app.request.segments is not empty %}</a>{% endif %}
 

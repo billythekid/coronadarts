@@ -6,22 +6,22 @@
 
     {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').all() %}
     <h1 class="text-5xl text-center">Competitions</h1>
-    <ul class="md:flex flex-wrap justify-center text-center border-t-2 py-5">
+    <ul class="md:flex flex-wrap justify-center text-center border-t-2 py-5 list-none	">
       {% for competition in theCompetitions %}
         <li>{{ competition.link|attr({'class':'underline mx-5'}) }}</li>
       {% endfor %}
     </ul>
 
     <h1 class="text-5xl text-center mt-10">Games Played</h1>
-    <ul class="text-center">
+    <ul class="text-center list-none">
       {% for playedDate, games in craft.entries.section('games').level(2).orderBy('postDate DESC').all()|group('postDate|date') %}
         <li class="border-t-2 py-5">
           <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
-          <ul class="md:flex justify-center">
+          <ul class="md:flex justify-center list-none">
             {% for league, games in games|group('parent.title') %}
               <li class="m-3">
                 <span class="text-2xl"><a class="underline" href="{{ games[0].parent.url }}">{{ league }}</a> Games</span>
-                <ul>
+                <ul class="list-none">
                   {% for game in games %}
                     <li>
                       <a class="underline" href="{{ game.url }}">{{ game.title|replace(" vs ", " #{game.player1LegsWon} vs #{game.player2LegsWon} ") }}</a>

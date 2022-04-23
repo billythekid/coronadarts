@@ -1,24 +1,25 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
 
-  purge: {
-    content: [
-      './templates/**/*.twig',
-      './templates/**/*.svg',
-      './assets/js/**/*.vue',
-      './web/assets/images/*.svg'
-    ],
-  },
-  theme: {},  // no options to configure
+  content: [
+    './templates/**/*.twig',
+    './templates/**/*.svg',
+    './assets/js/**/*.vue',
+    './web/assets/images/*.svg'
+  ],
+  theme: {
 
-  variants: { // all the following default to ['responsive']
-    mixBlendMode: ['responsive'],
-    backgroundBlendMode: ['responsive'],
-    isolation: ['responsive'],
-    backgroundColor: ['odd', 'even']
+  },  // no options to configure
+
+  corePlugins: {
+    //preflight: false,
   },
 
   plugins: [
-    require('tailwindcss-blend-mode')(), // no options to configure
-    require('@tailwindcss/custom-forms'),
+    require('@tailwindcss/forms')({
+      strategy: 'class', // only generate classes
+    }),
   ],
+
 }

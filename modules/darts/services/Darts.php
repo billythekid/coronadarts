@@ -278,12 +278,13 @@ class Darts extends Component
       $totalGamesPlayed = count($homeGames) + count($awayGames);
       $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
 
+
       $playerStats[] = [
           'playerUrl'        => $player->getUrl(),
           'playerName'       => $player->title,
           'totalGamesPlayed' => $totalGamesPlayed,
           'totalGamesWon'    => $totalGamesWon,
-          'percentage'       => round($totalGamesWon / $totalGamesPlayed * 100),
+          'percentage'       => $totalGamesPlayed > 0 ? round($totalGamesWon / $totalGamesPlayed * 100) : 0,
       ];
     }
 
