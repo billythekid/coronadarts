@@ -21,15 +21,13 @@ files.keys().forEach(key => Vue.component(key.split('/').pop().split('.')[0], fi
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/scorers', components:[CompetitionsDropdown, CumulativeScores, LoseLives, PlayerDropdown] }
+        {path: '/scorers', components: [CompetitionsDropdown, CumulativeScores, LoseLives, PlayerDropdown]}
     ],
 });
 
 window.app = createApp({
-    config: {
-        compilerOptions: {
-            isCustomElement: (tag) => ['lose-lives', 'cumulative-scores'].includes(tag.toLowerCase()),
-        }
+    compilerOptions: {
+        isCustomElement: (tag) => ['lose-lives', 'cumulative-scores'].includes(tag.toLowerCase()),
     },
     delimiters: ['${', '}'],
     el: '#app',

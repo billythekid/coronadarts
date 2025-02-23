@@ -7,7 +7,7 @@
     <div class="leading-loose sm:leading-normal">
       <p>Here's a randomly generated {{ game | title }} scoring system.</p>
       {% if game == 'Halfit' %}
-        <p>Refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ _.join( halfitData, ', ') }</p>
+        <p>Refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ halfitData.join(", ") }</p>
       {% endif %}
       <p>Drag rounds into a different order.</p>
 

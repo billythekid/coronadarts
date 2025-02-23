@@ -205,7 +205,7 @@ export default {
     getPlayerCumulativeTotal(player, round) {
       let playerTotal = 0;
       let found = false;
-      let $_this = this;
+      let _this = this;
       this.rounds.forEach(function (roundName) {
             if (roundName === round) {
               found = true;
@@ -214,7 +214,7 @@ export default {
             if (thisRound.length > 0) {
               let thisRoundScore = thisRound[0].score;
               if (!found) {
-                if ($_this.game === "Martyn's Game" && $_this.showMartynsMinuses === false && thisRoundScore < 0) {
+                if (thisObj.game === "Martyn's Game" && thisObj.showMartynsMinuses === false && thisRoundScore < 0) {
                   playerTotal += 0; //don't show the minus score yet
                 }
                 else {
@@ -228,14 +228,14 @@ export default {
       return playerTotal;
     },
     rescore() {
-      let $_this = this;
-      $_this.players.forEach(function (player) {
-        $_this.rounds.forEach(function (roundName) {
+      let thisObj = this;
+      thisObj.players.forEach(function (player) {
+        thisObj.rounds.forEach(function (roundName) {
           let thisRound = player.roundTotals.filter(total => total.round === roundName);
           if (thisRound.length > 0) {
             let thisRoundScore = thisRound[0].score;
             if (thisRoundScore < 0) {
-              $_this.halfIt(player, roundName);
+              thisObj.halfIt(player, roundName);
             }
           }
         });

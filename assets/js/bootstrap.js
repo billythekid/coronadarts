@@ -1,6 +1,6 @@
 window.axios = require('axios');
 
-window._ = require('lodash');
+window.lodash = require('lodash');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

@@ -10,13 +10,7 @@ mix.setPublicPath(path.normalize('web'))
         require("tailwindcss"),
     ])
     .js(['assets/js/app.js'], 'web/assets/js')
-    .vue({
-        options: {
-            compilerOptions: {
-                isCustomElement: (tag) => ['lose-lives', 'cumulative-scores'].includes(tag.toLowerCase()),
-            },
-        },
-    })
+    .vue()
     .extract()
     .browserSync({
         proxy: proxyURL,
