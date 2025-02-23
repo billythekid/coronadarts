@@ -1,11 +1,12 @@
 require('./bootstrap');
 
-import Vue from 'vue'
+import {createApp} from 'vue';
+let Vue = new createApp();
 
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import VueSimpleAlert from "vue-simple-alert";
+import VueSimpleAlert from "vue3-simple-alert";
 Vue.use(VueSimpleAlert);
 
 const files = require.context('./', true, /\.vue$/i)
