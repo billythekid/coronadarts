@@ -1,57 +1,71 @@
+import LoseLives from "./components/lose-lives.vue";
+
 require('./bootstrap');
 
 import {createApp} from 'vue';
-let Vue = new createApp();
 
-import VueRouter from 'vue-router';
-Vue.use(VueRouter);
+let Vue = createApp({});
+
+import {createRouter, createWebHistory} from 'vue-router'
 
 import VueSimpleAlert from "vue3-simple-alert";
+import CompetitionsDropdown from "./components/competitions-dropdown.vue";
+import CumulativeScores from "./components/cumulative-scores.vue";
+import PlayerDropdown from "./components/player-dropdown.vue";
+
 Vue.use(VueSimpleAlert);
 
 const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+files.keys().forEach(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-const router = new VueRouter({
-  mode: 'history',
-  base: '/',
-  fallback: true,
-  routes: [],
+const router = createRouter({
+    history: createWebHistory(),
+    routes: [
+        { path: '/scorers', components:[CompetitionsDropdown, CumulativeScores, LoseLives, PlayerDropdown] }
+    ],
 });
 
-window.app = new Vue({
-  router,
-  delimiters: ['${', '}'],
-  el: '#app',
-  data: {
-    currentCompetition: null,
-    players: [],
-    competitions: [],
-    halfitData: []
-  },
-  mounted() {
-    this.competitions = typeof competitions !== 'undefined' ? competitions : [];
-  },
-  watch: {},
-  methods: {
-    competitionChange(competition) {
-      this.currentCompetition = null;
-      if (competition) {
-        this.currentCompetition = competition;
-      }
+window.app = createApp({
+    config: {
+        compilerOptions: {
+            isCustomElement: (tag) => ['lose-lives', 'cumulative-scores'].includes(tag.toLowerCase()),
+        }
     },
-    player1Change(player) {
-      this.playerChange(player, 0);
+    delimiters: ['${', '}'],
+    el: '#app',
+    data() {
+        return {
+            currentCompetition: null,
+            players: [],
+            competitions: [],
+            halfitData: []
+        }
     },
-    player2Change(player) {
-      this.playerChange(player, 1)
+    mounted() {
+        this.competitions = typeof competitions !== 'undefined' ? competitions : [];
     },
-    playerChange(player, n) {
-      this.players[n] = player;
+    watch: {},
+    methods: {
+        competitionChange(competition) {
+            this.currentCompetition = null;
+            if (competition) {
+                this.currentCompetition = competition;
+            }
+        },
+        player1Change(player) {
+            this.playerChange(player, 0);
+        },
+        player2Change(player) {
+            this.playerChange(player, 1)
+        },
+        playerChange(player, n) {
+            this.players[n] = player;
+        },
+        halfitMounted(data) {
+            this.halfitData = data;
+        }
     },
-    halfitMounted(data) {
-      this.halfitData = data;
-    }
-  },
 
 });
+app.use(router);
+app.mount('#app');
