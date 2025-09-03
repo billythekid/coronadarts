@@ -1,4 +1,33 @@
-dateModified: 1756907532
+dateModified: 1756908670
+elementSources:
+  craft\elements\Entry:
+    -
+      key: '*'
+      tableAttributes:
+        - section
+        - postDate
+        - expiryDate
+        - link
+      type: native
+    -
+      key: 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4' # Players
+      tableAttributes:
+        - postDate
+        - expiryDate
+        - link
+      type: native
+    -
+      key: 'section:1603eea6-0c0e-4863-92c8-a25ff80c277a' # Games
+      tableAttributes:
+        - 'field:3e98bd9b-16c1-4297-8be8-f06faf29e166' # Player 1
+        - 'field:bee18029-c323-4668-8fc5-25beeb03a0e8' # Player 2
+        - postDate
+        - expiryDate
+        - link
+        - 'field:0900cd97-c6b2-4a38-b2a0-0704a2955d60' # Player 1 Legs Won
+        - 'field:01708089-e9c5-4433-ae94-ac087bad598c' # Player 2 Legs Won
+        - slug
+      type: native
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -66,15 +95,16 @@ plugins:
   super-table:
     edition: standard
     enabled: true
-    schemaVersion: 2.2.1
+    schemaVersion: 3.0.0
 system:
   edition: solo
   live: true
   name: 'Coronavirus United Newton Tigers Singles League'
-  schemaVersion: 3.8.0.1
+  schemaVersion: 4.15.0.0
   timeZone: Europe/London
 users:
   allowPublicRegistration: false
+  deactivateByDefault: false
   defaultGroup: null
   photoSubpath: ''
   photoVolumeUid: null
