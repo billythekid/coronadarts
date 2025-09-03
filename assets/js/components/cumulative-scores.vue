@@ -33,7 +33,6 @@
       </tr>
       </thead>
       <tbody>
-      <draggable tag="tr" v-model="rounds" @change="rescore">
         <tr v-for="(round, roundIndex) in rounds" class="bg-white"
             :class="{'bg-red-200 text-red-700':((roundIndex % 2 !== 0 && evenKillers) ||(roundIndex % 2 === 0 && oddKillers) )}"
             :key="roundIndex">
@@ -47,7 +46,7 @@
           </td>
 
           <td v-for="(player, playerIndex) in players" class="border" :key="playerIndex"
-              :class="{'bg-red-200 text-red-700': highlightNegatives && player.roundTotals[roundIndex].score < 0}">
+              :class="{'bg-red-200 text-red-700': highlightNegatives && player.roundTotals[roundIndex] && player.roundTotals[roundIndex].score < 0}">
             <div class="flex justify-between px-2">
               <span class="w-20 text-center"
                     v-if="showCumulativeTotals(player)">{{ getPlayerCumulativeTotal(player, round) }}</span>
@@ -56,8 +55,26 @@
               </button>
               <img alt="Scotty!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/scotty.png"
                    @click="subtractRoundScore(player,round)" v-if="game === 'Scotty\'s Game'">
-              <img alt="Martyn!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png"
-                   @click="subtractRandomPoints(player,round)" v-if="game === 'Martyn\'s Game' && !showTotals(player)">
+
+              <!-- Martyn's Game Logic -->
+              <template v-if="game === 'Martyn\'s Game'">
+                <!-- Show Martyn face button when face scores are hidden and score is 0 or positive -->
+                <img alt="Martyn!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png"
+                     @click="subtractRandomPoints(player,round)"
+                     v-if="!showMartynsMinuses && player.roundTotals[roundIndex].score >= 0 && !showTotals(player)">
+
+                <!-- Show Martyn face button when face scores are visible and score is 0 or positive -->
+                <img alt="Martyn!" class="rounded-full w-8 h-8 cursor-pointer" src="/assets/images/martyn.png"
+                     @click="subtractRandomPoints(player,round)"
+                     v-if="showMartynsMinuses && player.roundTotals[roundIndex].score >= 0 && !showTotals(player)">
+
+                <!-- Show undo button in place of input when face scores are hidden and score is negative -->
+                <button type="button" @click="undoMartynsScore(player,round)"
+                        class="w-20 bg-orange-600 text-white text-2xl rounded text-center"
+                        v-if="!showMartynsMinuses && player.roundTotals[roundIndex].score < 0"
+                        title="Undo Martyn's face">⎌</button>
+              </template>
+
               <input type="number" class="w-20 text-right" v-show="showScore(player,round)"
                      v-model.number="player.roundTotals[roundIndex].score"
                      :step="['Shanghai'].indexOf(game) > -1 ? round : 1"
@@ -66,18 +83,11 @@
             <p class="text-xs text-center px-5"><span>{{ player.name }}<br>Round: {{ round }}</span></p>
           </td>
         </tr>
-      </draggable>
-      <tr class="bg-slate-50 text-3xl">
-        <th class="px-4 py-2">Scores</th>
-        <th v-for="(player, playerIndex) in players" :key="playerIndex">
-          <span v-if="showTotals(player)">{{ player.name }}: {{ getPlayerTotal(player) }}</span>
-        </th>
-      </tr>
       </tbody>
     </table>
 
     <div v-if="game === 'Martyn\'s Game'">
-      <button type="checkbox" class="bg-slate-50 rounded-lg border-2 px-2 py-1 shadow-md"
+      <button type="button" class="bg-slate-50 rounded-lg border-2 px-2 py-1 shadow-md"
               :class="{'border-green-800 text-green-800':showMartynsMinuses,'border-red-800 text-red-800': !showMartynsMinuses}"
               @click="showMartynsMinuses = !showMartynsMinuses">
         <span v-if="!showMartynsMinuses">Show</span><span v-else>Hide</span> "Martyn's face" scores
@@ -88,15 +98,12 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+import _ from 'lodash';
 
 export default {
   props: {
-    startPlayers: Array,
-    game: String || null
-  },
-  components: {
-    draggable
+    startPlayers: [Array, String],
+    game: String
   },
   data() {
     return {
@@ -188,6 +195,10 @@ export default {
       let score = _.random(1, max, false) * -1;
       this.setPlayerRoundScore(player, round, score);
     },
+    undoMartynsScore(player, round) {
+      // Reset the score back to 0 (unplayed)
+      this.setPlayerRoundScore(player, round, 0);
+    },
     setPlayerRoundScore(player, round, score) {
       let playerRound = _.find(player.roundTotals, {round: round});
       playerRound.score = score;
@@ -214,7 +225,7 @@ export default {
             if (thisRound.length > 0) {
               let thisRoundScore = thisRound[0].score;
               if (!found) {
-                if (thisObj.game === "Martyn's Game" && thisObj.showMartynsMinuses === false && thisRoundScore < 0) {
+                if (_this.game === "Martyn's Game" && _this.showMartynsMinuses === false && thisRoundScore < 0) {
                   playerTotal += 0; //don't show the minus score yet
                 }
                 else {
@@ -255,7 +266,8 @@ export default {
         if (!this.showMartynsMinuses && playerRound.score < 0) {
           return false;
         }
-        return ((playerRound.score > -1) || this.showTotals(player));
+        // Always show input fields for all rounds, just like Scotty's Game
+        return true;
       }
       return true;
     },
@@ -285,30 +297,78 @@ export default {
   }
   ,
   mounted() {
+    console.log('=== CUMULATIVE SCORES COMPONENT MOUNTED ===');
+    console.log('Component mounted with game:', this.game);
+    console.log('Start players raw:', this.startPlayers);
+    console.log('Start players type:', typeof this.startPlayers);
+    console.log('Start players length:', this.startPlayers ? this.startPlayers.length : 'undefined');
 
-    if (this.game === "Shanghai") {
-      _.range(1, 10).forEach(round => this.rounds.push(round));
-      this.allowKillers = true;
-      this.allowAddRounds = true;
+    // Check if lodash is available
+    console.log('Lodash available:', typeof _);
+
+    try {
+      if (this.game === "Shanghai") {
+        console.log('Setting up Shanghai game...');
+        _.range(1, 10).forEach(round => this.rounds.push(round));
+        this.allowKillers = true;
+        this.allowAddRounds = true;
+      }
+      else if (this.game === "Halfit") {
+        console.log('Setting up Halfit game...');
+        const roundsToAdd = _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 3), this.finalRounds);
+        console.log('Rounds to add:', roundsToAdd);
+        roundsToAdd.forEach(round => this.rounds.push(round));
+        this.allowAddRounds = true;
+        this.allowEditRoundNames = true;
+      }
+      else if (["Scotty's Game", "Martyn's Game"].indexOf(this.game) > -1) {
+        console.log('Setting up', this.game);
+        _.range(1, 21).forEach(round => this.rounds.push(round));
+        this.highlightNegatives = true;
+        this.hideTotalsUntilEveryoneIsFinished = true;
+      }
+    } catch (error) {
+      console.error('Error setting up rounds:', error);
     }
-    else if (this.game === "Halfit") {
-      _.concat(this.startRounds, _.take(_.shuffle(this.randomRounds), 3), this.finalRounds).forEach(round => this.rounds.push(round));
-      this.allowAddRounds = true;
-      this.allowEditRoundNames = true;
 
+    console.log('Rounds created:', this.rounds);
+
+    try {
+      if (this.startPlayers && this.startPlayers.length > 0) {
+        console.log('Processing', this.startPlayers.length, 'players...');
+
+        // Handle both string JSON and already parsed array
+        let playersData = this.startPlayers;
+        if (typeof this.startPlayers === 'string') {
+          playersData = JSON.parse(this.startPlayers);
+        }
+
+        playersData.forEach((starter, index) => {
+          console.log(`Player ${index}:`, starter);
+          // Handle Craft CMS entry objects - they have a 'title' property directly
+          const playerName = starter.title || starter.name || `Player ${index + 1}`;
+          console.log(`Player ${index} name:`, playerName);
+          this.addPlayer(playerName);
+        });
+      } else {
+        console.log('No start players provided or startPlayers is empty');
+      }
+    } catch (error) {
+      console.error('Error processing players:', error);
+      console.error('Error details:', error.message);
+      console.error('Start players data:', this.startPlayers);
     }
-    else if (["Scotty's Game", "Martyn's Game"].indexOf(this.game) > -1) {
-      _.range(1, 21).forEach(round => this.rounds.push(round));
-      this.highlightNegatives = true;
-      this.hideTotalsUntilEveryoneIsFinished = true;
+
+    console.log('Players after initialization:', this.players);
+
+    try {
+      this.$emit('mounted', _.concat(this.startRounds, this.randomRounds, this.finalRounds));
+      console.log('Mounted event emitted successfully');
+    } catch (error) {
+      console.error('Error emitting mounted event:', error);
     }
 
-
-    if (this.startPlayers.length > 0) {
-      this.startPlayers.forEach(starter => this.addPlayer(starter.title))
-    }
-
-    this.$emit('mounted', _.concat(this.startRounds, this.randomRounds, this.finalRounds));
+    console.log('=== COMPONENT INITIALIZATION COMPLETE ===');
   }
 }
 </script>

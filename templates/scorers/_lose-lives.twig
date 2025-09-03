@@ -2,9 +2,9 @@
 {% set game = craft.app.request.getParam('game') is not empty ? craft.app.request.getParam('game') : '25s and Bulls' %}
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative mb-20 px-2">
-    <h1 class="text-5xl text-center mb-4">{{ game | ucfirst }} Scoreboard</h1>
+    <h1 class="text-5xl text-center mb-4">{{ game|capitalize }} Scoreboard</h1>
     <div class="leading-loose sm:leading-normal">
-      <p>Here's a randomly generated {{ game | ucfirst }} scoring system.</p>
+      <p>Here's a randomly generated {{ game|capitalize }} scoring system.</p>
       <p>You can add, edit and remove player names and rounds.</p>
       {% if game in ["50 to 60"] %}
         <p>You can drag rounds into a different order.</p>
@@ -13,7 +13,9 @@
     </div>
   </div>
 
-  <lose-lives :start-players="{{ shuffle(players) | json_encode }}" game="{{ game }}"></lose-lives>
+  <lose-lives
+    start-players='{{ shuffle(players)|json_encode|raw }}'
+    game="{{ game }}">
+  </lose-lives>
 
 {% endblock %}
-

@@ -3,9 +3,9 @@
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative mb-20 px-2">
 
-    <h1 class="text-5xl text-center mb-4">{{ game|title }} Scoreboard</h1>
+    <h1 class="text-5xl text-center mb-4">{{ game }} Scoreboard</h1>
     <div class="leading-loose sm:leading-normal">
-      <p>Here's a randomly generated {{ game | title }} scoring system.</p>
+      <p>Here's a randomly generated {{ game }} scoring system.</p>
       {% if game == 'Halfit' %}
         <p>Refresh the page for a full reset or to re-randomise the rounds from the pre-defined list; ${ halfitData.join(", ") }</p>
       {% endif %}
@@ -15,8 +15,7 @@
       {% if game == "Halfit" %}
         <p>Throw 3 darts to hit each challenge. Each round scores the number of points hit.</p>
         <p>If you do not hit any points click the
-          <button type="button" class="px-2 bg-red-600 text-white text-2xl rounded-full">½</button>
-          button. Your current score will be halved and play continues.
+            <button type="button" class="px-2 bg-red-600 text-white text-2xl rounded-full">½</button> button. Your current score will be halved and play continues.
         </p>
       {% elseif game in ["Scotty's Game","Martyn's Game", "Shanghai"] %}
         <p>Throw three darts at each number. Count the number of hits on each number.</p>
@@ -44,6 +43,38 @@
     </div>
   </div>
 
-  <cumulative-scores :start-players="{{ shuffle(players) | json_encode }}" @mounted="halfitMounted" game="{{ game }}"></cumulative-scores>
+  <!-- Debug: Show what data we're passing to the component -->
+  {% if craft.app.config.general.devMode %}
+    <div class="bg-yellow-100 p-4 mb-4">
+      <h3>Debug Info:</h3>
+      <p>Game: {{ game }}</p>
+      <p>Players count: {{ players|length }}</p>
+      <p>Players data: {{ players|json_encode }}</p>
+    </div>
+  {% endif %}
 
+  <cumulative-scores
+    start-players='{{ players|json_encode|raw }}'
+    game="{{ game }}">
+  </cumulative-scores>
+
+  <script>
+    console.log('=== TEMPLATE DEBUGGING ===');
+    console.log('Vue app exists:', typeof window.app);
+    console.log('Vue available:', typeof Vue);
+    console.log('Players data from template:', {{ players|json_encode|raw }});
+    console.log('Game from template:', '{{ game }}');
+
+    // Check if the component is registered
+    if (window.app && window.app.$options && window.app.$options.components) {
+      console.log('Registered components:', Object.keys(window.app.$options.components));
+    }
+
+    // Wait a moment then check if the component rendered
+    setTimeout(() => {
+      const container = document.getElementById('app');
+      console.log('App container:', container);
+      console.log('App container HTML:', container ? container.innerHTML : 'not found');
+    }, 1000);
+  </script>
 {% endblock %}

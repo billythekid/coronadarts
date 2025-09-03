@@ -8,6 +8,7 @@ const webpack = require('webpack');
 mix.setPublicPath(path.normalize('web'))
     .postCss('assets/css/app.css', 'web/assets/css', [
         require("tailwindcss"),
+        require("autoprefixer"),
     ])
     .js(['assets/js/app.js'], 'web/assets/js')
     .vue()
@@ -21,15 +22,19 @@ mix.setPublicPath(path.normalize('web'))
             "web/**/*.(js|css)",
             "tailwind.config.js"
         ]
-    }).webpackConfig({
-    plugins: [
-        new webpack.DefinePlugin({
-            // Vue CLI is in maintenance mode, and probably won't merge my PR to fix this in their tooling
-            // https://github.com/vuejs/vue-cli/pull/7443
-            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
-        })
-    ],
-});
+    })
+    .webpackConfig({
+        plugins: [
+            new webpack.DefinePlugin({
+                // Vue CLI is in maintenance mode, and probably won't merge my PR to fix this in their tooling
+                // https://github.com/vuejs/vue-cli/pull/7443
+                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
+            })
+        ],
+    })
+    .options({
+        processCssUrls: false
+    });
 
 if (mix.inProduction()) {
     mix.version();

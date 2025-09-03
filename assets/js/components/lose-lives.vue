@@ -29,15 +29,14 @@
       </tr>
       </thead>
       <tbody>
-      <draggable tag="tr" v-model="rounds">
-        <tr v-if="rounds.length > 0" v-for="(round, roundIndex) in rounds" class="bg-white">
+        <tr v-for="(round, roundIndex) in rounds" v-if="rounds.length > 0" class="bg-white" :key="roundIndex">
           <th class="border">
             <div class="flex justify-around text-2xl">
               <button @click="removeRound(round)">︎✗</button>
               <input type="text" v-model.number="rounds[roundIndex]" class="w-10">
             </div>
           </th>
-          <td v-for="(player, playerIndex) in players" class="border px-2 bg-white">
+          <td v-for="(player, playerIndex) in players" class="border px-2 bg-white" :key="playerIndex">
             <div class="p-2" v-if="! player.hitsOn50to60.includes(round) && ! player.missesOn50to60.includes(round)">
               <button @click="hit50to60(player, round)"
                       class="text-slate-500 border-slate-500 border-8 bg-white-500 rounded-full w-12 h-12">✓
@@ -57,64 +56,63 @@
             </div>
           </td>
         </tr>
-      </draggable>
 
-      <tr v-if="game=='25s and Bulls'">
-        <td v-for="(player, playerIndex) in players" class="border px-2 bg-white">
-          <div class="flex justify-between p-5">
-            <button @click="hit25(player)"
-                    class="border-green-500 border-8 bg-white-500 text-green-500 rounded-full w-12 h-12">25
-            </button>
-            <div>&nbsp;</div>
-            <button @click="hitBull(player)" class="border-black border-2 bg-red-500 text-white rounded-full w-16 h-16">
-              BULL
-            </button>
-          </div>
-          <p class="text-2xl">{{ player.lives }}</p>
-        </td>
-      </tr>
+        <tr v-if="game=='25s and Bulls'">
+          <th v-if="hasRounds" class="border"></th>
+          <td v-for="(player, playerIndex) in players" class="border px-2 bg-white" :key="playerIndex">
+            <div class="flex justify-between p-5">
+              <button @click="hit25(player)"
+                      class="border-green-500 border-8 bg-white-500 text-green-500 rounded-full w-12 h-12">25
+              </button>
+              <div>&nbsp;</div>
+              <button @click="hitBull(player)" class="border-black border-2 bg-red-500 text-white rounded-full w-16 h-16">
+                BULL
+              </button>
+            </div>
+            <p class="text-2xl">{{ player.lives }}</p>
+          </td>
+        </tr>
 
-      <tr v-if="game=='27s'">
-        <td v-for="(player, playerIndex) in players" class="px-2 bg-white"
-            :class="{'text-slate-400 bg-slate-300': (decrementingLives && player.lives === 0)}">
-          <div class="flex justify-center p-5" v-if="player.lives > 0">
-            <button @click="missed27s(player)"
-                    class="border-black border-2 bg-red-500 text-white  rounded-full w-16 h-16">︎✗
-            </button>
-          </div>
-          <div class="flex justify-center p-5" v-else>
-            <button class="border-black border-2 bg-slate-500 text-white rounded-full w-16 h-16">︎✗</button>
-          </div>
-          <p class="text-2xl">{{ player.lives }}</p>
-        </td>
-      </tr>
+        <tr v-if="game=='27s'">
+          <th v-if="hasRounds" class="border"></th>
+          <td v-for="(player, playerIndex) in players" class="px-2 bg-white" :key="playerIndex"
+              :class="{'text-slate-400 bg-slate-300': (decrementingLives && player.lives === 0)}">
+            <div class="flex justify-center p-5" v-if="player.lives > 0">
+              <button @click="missed27s(player)"
+                      class="border-black border-2 bg-red-500 text-white  rounded-full w-16 h-16">︎✗
+              </button>
+            </div>
+            <div class="flex justify-center p-5" v-else>
+              <button class="border-black border-2 bg-slate-500 text-white rounded-full w-16 h-16">︎✗</button>
+            </div>
+            <p class="text-2xl">{{ player.lives }}</p>
+          </td>
+        </tr>
 
-      <tr v-if="showGameTotals">
-        <th v-if="game !== '27s' && game !== '25s and Bulls'">
-          <div v-if="hasRounds" class="inline-block">
-            <button type="button" class="form-input" @click="addRound">Add a round</button>
-          </div>
-          Scores:
-        </th>
-        <th v-for="player in players" :class="{'text-slate-600 bg-slate-300': decrementingLives && player.lives === 0}">
-          {{ player.name }}: {{ player.lives }}
-        </th>
-      </tr>
+        <tr v-if="showGameTotals">
+          <th v-if="game !== '27s' && game !== '25s and Bulls'">
+            <div v-if="hasRounds" class="inline-block">
+              <button type="button" class="form-input" @click="addRound">Add a round</button>
+            </div>
+            Scores:
+          </th>
+          <th v-for="player in players" :class="{'text-slate-600 bg-slate-300': decrementingLives && player.lives === 0}">
+            {{ player.name }}: {{ player.lives }}
+          </th>
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+import _ from 'lodash';
+import Swal from 'sweetalert2';
 
 export default {
   props: {
     startPlayers: Array,
     game: String || null
-  },
-  components: {
-    draggable
   },
   data() {
     return {
@@ -162,10 +160,10 @@ export default {
     },
     playerIsBust: function (player, howMany) {
       if (this.canBust && player.lives + howMany > this.startLives) {
-        this.$fire({
+        Swal.fire({
           title: "BUST!",
           text: player.name + " is bust! Haha!",
-          type: "error",
+          icon: "error",
           timer: 2000,
           showConfirmButton: false,
         });
@@ -175,10 +173,10 @@ export default {
     },
     check25BullWin(player) {
       if (player.lives >= this.startLives) {
-        this.$fire({
+        Swal.fire({
           title: "WINNER!",
           text: player.name + " is the winner!",
-          type: "success"
+          icon: "success"
         });
       }
     },
@@ -227,41 +225,41 @@ export default {
         let winners = this.players.filter(player => player.lives === topScore);
 
         if (winners.length > 1) {
-          this.$fire({
+          Swal.fire({
             title: "DRAW!",
             html: _.join(winners.map(winner => winner.name), ', ') + " have drawn!<br>Adding another round. Game on!",
-            type: "info"
+            icon: "info"
           });
           // setup additional rounds
           this.addRound();
         }
         else {
           let winner = _.first(winners);
-          this.$fire({
+          Swal.fire({
             title: "WINNER!",
             text: winner.name + " is the winner with " + winner.lives + " points!",
-            type: "success"
+            icon: "success"
           });
         }
       }
     },
     missed27s(player) {
       player.lives--;
-      this.$fire({
+      Swal.fire({
         title: "MISS!",
         text: player.name + " missed it! Haha!",
-        type: "error",
+        icon: "error",
         timer: 2000,
         showConfirmButton: false,
-      }).then(result => this.check27sWin());
+      }).then(() => this.check27sWin());
     },
     check27sWin() {
       let playersStillIn = this.players.filter(player => player.lives > 0);
       if (playersStillIn.length === 1) {
-        this.$fire({
+        Swal.fire({
           title: "WINNER!",
           text: _.first(playersStillIn).name + " is the winner!",
-          type: "success"
+          icon: "success"
         });
       }
     },

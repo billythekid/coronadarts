@@ -1,7 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-
   content: [
     './templates/**/*.twig',
     './templates/**/*.svg',
@@ -9,17 +8,18 @@ module.exports = {
     './web/assets/images/*.svg'
   ],
   theme: {
-    defaultTheme
-  },  // no options to configure
-
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
+    }
+  },
   corePlugins: {
     //preflight: false,
   },
-
   plugins: [
     require('@tailwindcss/forms')({
       strategy: 'class', // only generate classes
     }),
   ],
-
 }
