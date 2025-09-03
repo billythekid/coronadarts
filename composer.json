@@ -4,7 +4,7 @@
     "craftcms/redactor": "^3.0.0",
     "misterbk/mix": "^1.6.0",
     "putyourlightson/craft-elements-panel": "^2.0.0",
-    "verbb/super-table": "2.7.5.1",
+    "verbb/super-table": "^3.0.0",
     "vlucas/phpdotenv": "^5.4.0"
   },
   "autoload": {
