@@ -1,0 +1,120 @@
+{% extends "_layout" %}
+{% set title = "All Remaining Games" %}
+
+{% block content %}
+  <div class="block mx-auto max-w-screen-xl relative">
+    
+    <h1 class="text-5xl text-center mb-10">All Remaining Games</h1>
+    <p class="text-center text-gray-600 mb-8">A complete list of games still to be played across all competitions</p>
+
+    {% set competitions = craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
+    {% set totalRemainingGames = 0 %}
+    {% set allRemainingGames = [] %}
+
+    {# Collect all remaining games from all competitions #}
+    {% for competition in competitions %}
+      {% set gamesThatHaveBeenPlayed = competition.children %}
+      {% set competitionRemainingGames = [] %}
+
+      {% if competition.competitionType == "roundRobin" %}
+        {% set players = competition.players|map((player)=>player.title) %}
+        {% set gamesToBePlayed = craft.league.roundRobin(players, competition.roundRobinRounds) %}
+        {% set actualGamesToBePlayed = gamesToBePlayed|filter(game=>"[BYE]" not in game) %}
+        
+        {% for game in actualGamesToBePlayed %}
+          {% if game not in gamesThatHaveBeenPlayed|map(game => game.title) %}
+            {% set competitionRemainingGames = competitionRemainingGames|merge([{
+              'game': game,
+              'competition': competition,
+              'type': 'Round Robin'
+            }]) %}
+          {% endif %}
+        {% endfor %}
+
+      {% elseif competition.competitionType == "elimination" %}
+        {% if competition.blindDrawForEachRound %}
+          {% set roundsToBePlayed = craft.league.eliminationBlindDraw(competition) %}
+        {% else %}
+          {% set roundsToBePlayed = craft.league.elimination(competition) %}
+        {% endif %}
+        
+        {% for round in roundsToBePlayed %}
+          {% for game in round %}
+            {% if game not in gamesThatHaveBeenPlayed|map(game => game.title) and "[BYE]" not in game %}
+              {% set roundName = "Round " ~ loop.parent.loop.index %}
+              {% if loop.parent.loop.last %}
+                {% set roundName = "Final" %}
+              {% elseif loop.parent.loop.index == (roundsToBePlayed|length - 1) %}
+                {% set roundName = "Semi Final" %}
+              {% elseif loop.parent.loop.index == (roundsToBePlayed|length - 2) %}
+                {% set roundName = "Quarter Final" %}
+              {% endif %}
+              
+              {% set competitionRemainingGames = competitionRemainingGames|merge([{
+                'game': game,
+                'competition': competition,
+                'type': 'Elimination',
+                'round': roundName
+              }]) %}
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+
+      {% elseif competition.competitionType == "winnerStaysOn" %}
+        {# Winner Stays On competitions don't have predetermined games to be played #}
+        {# They are ongoing based on results, so we'll skip showing future games #}
+      {% endif %}
+
+      {% set allRemainingGames = allRemainingGames|merge(competitionRemainingGames) %}
+      {% set totalRemainingGames = totalRemainingGames + competitionRemainingGames|length %}
+    {% endfor %}
+
+    {% if totalRemainingGames > 0 %}
+      <div class="text-center mb-8">
+        <span class="bg-blue-100 text-blue-800 text-lg font-medium px-4 py-2 rounded-full">
+          {{ totalRemainingGames }} game{{ totalRemainingGames != 1 ? 's' }} remaining
+        </span>
+      </div>
+
+      <div class="space-y-6">
+        {% for competitionGames in allRemainingGames|group('competition.title') %}
+          {% set competition = competitionGames[0].competition %}
+          <div class="bg-white shadow rounded-lg p-6 border-l-4 border-blue-500">
+            <h2 class="text-2xl font-bold mb-4">
+              <a href="{{ competition.url }}" class="text-blue-600 hover:text-blue-800 underline">
+                {{ competition.title }}
+              </a>
+              <span class="text-sm font-normal text-gray-500 ml-2">({{ competitionGames[0].type }})</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {% for gameInfo in competitionGames %}
+                <div class="bg-gray-50 p-4 rounded border">
+                  {% if gameInfo.round is defined %}
+                    <div class="text-xs text-gray-600 mb-2 font-semibold">{{ gameInfo.round }}</div>
+                  {% endif %}
+                  <div class="text-lg font-medium text-center">
+                    {{ gameInfo.game }}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="text-center py-12">
+        <div class="text-6xl mb-4">🎯</div>
+        <h2 class="text-2xl font-bold text-gray-700 mb-2">All caught up!</h2>
+        <p class="text-gray-600">There are no remaining games to be played across any competitions.</p>
+        <div class="mt-6">
+          <a href="/games" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
+            View All Games
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock %}
