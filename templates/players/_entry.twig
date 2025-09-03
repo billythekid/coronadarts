@@ -283,11 +283,11 @@
         {% if tonEighties is not empty %}
           <p>
             {{ entry.title }} has only gone and hit {{ tonEighties|length == 1 ? 'a' : tonEighties|length }} 180{{ tonEighties|length != 1 ? 's;' }} against
-            {% spaceless %}
+            {% apply spaceless %}
               {% for one80 in tonEighties %}
                 <span>{{ not loop.first ? ', ' }}{{ loop.last ? " and " }}<a class="underline" href="{{ one80.game.url }}">{{ one80.game.title|replace(entry.title,'')|replace(' vs ', '') }}</a></span>{{ loop.last ? '!' }}
               {% endfor %}
-            {% endspaceless %}
+            {% endapply %}
           </p>
         {% endif %}
       </div>

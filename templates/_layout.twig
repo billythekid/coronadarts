@@ -1,5 +1,5 @@
 <!doctype html>
-{% spaceless %}
+{% apply spaceless %}
 {% do view.registerJsFile(mix("/js/manifest.js")) %}
 {% do view.registerJsFile(mix("/js/vendor.js")) %}
 {% do view.registerJsFile(mix("/js/app.js")) %}
@@ -60,4 +60,4 @@
 
   </body>
 </html>
-{% endspaceless %}
+{% endapply %}
