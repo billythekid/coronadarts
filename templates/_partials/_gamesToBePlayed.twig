@@ -1,5 +1,5 @@
 {% if competitions is not defined %}
-  {% set competitions = craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
+  {% set competitions = craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).collect() %}
 {% endif %}
 {% for competition in competitions %}
   {% set gamesThatHaveBeenPlayed = competition.children %}

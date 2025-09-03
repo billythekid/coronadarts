@@ -3,11 +3,11 @@
 
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative">
-    
+
     <h1 class="text-5xl text-center mb-10">All Remaining Games</h1>
     <p class="text-center text-gray-600 mb-8">A complete list of games still to be played across all competitions</p>
 
-    {% set competitions = craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).all() %}
+    {% set competitions = craft.entries.section('games').level(1).orderBy('postDate DESC').with(['children.player1','children.player2','players','blindDrawRounds.round:games.player1','blindDrawRounds.round:games.player2']).collect() %}
     {% set totalRemainingGames = 0 %}
     {% set allRemainingGames = [] %}
 
@@ -20,7 +20,7 @@
         {% set players = competition.players|map((player)=>player.title) %}
         {% set gamesToBePlayed = craft.league.roundRobin(players, competition.roundRobinRounds) %}
         {% set actualGamesToBePlayed = gamesToBePlayed|filter(game=>"[BYE]" not in game) %}
-        
+
         {% for game in actualGamesToBePlayed %}
           {% if game not in gamesThatHaveBeenPlayed|map(game => game.title) %}
             {% set competitionRemainingGames = competitionRemainingGames|merge([{
@@ -37,7 +37,7 @@
         {% else %}
           {% set roundsToBePlayed = craft.league.elimination(competition) %}
         {% endif %}
-        
+
         {% for round in roundsToBePlayed %}
           {% for game in round %}
             {% if game not in gamesThatHaveBeenPlayed|map(game => game.title) and "[BYE]" not in game %}
@@ -49,7 +49,7 @@
               {% elseif loop.parent.loop.index == (roundsToBePlayed|length - 2) %}
                 {% set roundName = "Quarter Final" %}
               {% endif %}
-              
+
               {# Only show games that are actual player vs player, not placeholder games #}
               {% if "Winner of" not in game %}
                 {% set competitionRemainingGames = competitionRemainingGames|merge([{
@@ -89,7 +89,7 @@
               </a>
               <span class="text-sm font-normal text-gray-500 ml-2">({{ competitionGames[0].type }})</span>
             </h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {% for gameInfo in competitionGames %}
                 <div class="bg-gray-50 p-4 rounded border">

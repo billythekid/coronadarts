@@ -5,7 +5,7 @@
   {% set games = craft.entries.section('games').with([
     'children', 'players', 'player1', 'player2', 'highScores.player', 'highCheckouts.player',
     'children.player1','children.player2','children.highScores.player','children.highCheckouts.player'
-  ]).orderBy('postDate DESC').relatedTo(entry).all() %}
+  ]).orderBy('postDate DESC').relatedTo(entry).collect() %}
   {% set gamesPlayed = games | filter(game=>game.level == 2) %}
 
   {% set competitions = games| filter(game=>game.level == 1) %}

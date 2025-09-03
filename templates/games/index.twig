@@ -4,7 +4,7 @@
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative">
 
-    {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').all() %}
+    {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').collect() %}
     <h1 class="text-5xl text-center">Competitions</h1>
     <ul class="md:flex flex-wrap justify-center text-center border-t-2 py-5 list-none	">
       {% for competition in theCompetitions %}
@@ -14,7 +14,7 @@
 
     <h1 class="text-5xl text-center mt-10">Games Played</h1>
     <ul class="text-center list-none">
-      {% for playedDate, games in craft.entries.section('games').level(2).orderBy('postDate DESC').all()|group('postDate|date') %}
+      {% for playedDate, games in craft.entries.section('games').level(2).orderBy('postDate DESC').collect()|group('postDate|date') %}
         <li class="border-t-2 py-5">
           <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
           <ul class="md:flex justify-center list-none">

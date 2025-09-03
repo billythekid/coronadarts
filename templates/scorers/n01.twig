@@ -15,7 +15,7 @@
   </div>
 
   {% js at head %}
-  var competitions = {{ craft.entries.section('games').with(['players','children']).level(1).all()|map(comp=>{
+  var competitions = {{ craft.entries.section('games').with(['players','children']).level(1).collect()|map(comp=>{
     title:comp.title,
     id:comp.id,
     players: comp.players | map(player=>{

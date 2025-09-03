@@ -1,4 +1,4 @@
-{% set cupTournaments = craft.entries.section('games').level(1).competitionType("elimination").with(['children.player1','children.player2','players']).orderBy('postDate DESC').all() %}
+{% set cupTournaments = craft.entries.section('games').level(1).competitionType("elimination").with(['children.player1','children.player2','players']).orderBy('postDate DESC').collect() %}
 <div class="px-5">
   <h1 class="text-center text-3xl">Elimination Competition Winners</h1>
   {% for competition in cupTournaments %}

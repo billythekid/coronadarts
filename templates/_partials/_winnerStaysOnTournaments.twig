@@ -1,4 +1,4 @@
-{% set winnerStaysOnTournaments = craft.entries.section('games').level(1).competitionType("winnerStaysOn").with(['children.player1','children.player2','players']).orderBy('postDate DESC').all() %}
+{% set winnerStaysOnTournaments = craft.entries.section('games').level(1).competitionType("winnerStaysOn").with(['children.player1','children.player2','players']).orderBy('postDate DESC').collect() %}
 
 <div class="px-5">
   <h1 class="text-center text-3xl">Winner Stays On Competition Winners</h1>
