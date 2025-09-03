@@ -12,8 +12,23 @@
       <input type="number" class="form-input" v-model="startLives" @change="startLivesChanged">
     </div>
 
-    <div v-if="bustableGame" class="inline-block">
-      <input type="checkbox" v-model="canBust" class="form-checkbox"> Too many busts?
+    <div v-if="bustableGame" class="block">
+      <input type="checkbox" v-model="canBust" class="form-checkbox"> Too many busts?
+    </div>
+
+    <!-- Single option for allowing players to finish rounds - works for both 25s and Bulls and 50 to 60 -->
+    <div v-if="game === '25s and Bulls' || game === '50 to 60'" class="block ml-4">
+      <label>
+        <input type="checkbox" v-model="allowFinishRound" class="form-checkbox">
+        Allow remaining players to finish the round
+      </label>
+    </div>
+
+    <!-- Game Finished button for 25s and Bulls - only show when finish round is enabled -->
+    <div v-if="game === '25s and Bulls' && allowFinishRound" class="inline-block ml-4">
+      <button type="button" class="form-input bg-green-500 text-white" @click="finishGame">
+        Game Finished
+      </button>
     </div>
 
     <table class="table-auto rounded-lg my-5 mx-auto shadow-xl bg-white">
@@ -128,6 +143,7 @@ export default {
       canBust: true,
       oddKillers: false,
       evenKillers: false,
+      allowFinishRound: false, // Data property for allowing players to finish the round before declaring winner
     }
   },
   methods: {
@@ -172,7 +188,8 @@ export default {
       return false;
     },
     check25BullWin(player) {
-      if (player.lives >= this.startLives) {
+      // Only automatically declare winner if finish round is not enabled
+      if (player.lives >= this.startLives && !this.allowFinishRound) {
         Swal.fire({
           title: "WINNER!",
           text: player.name + " is the winner!",
@@ -218,59 +235,75 @@ export default {
         }
       });
 
-      if (playersPassed.length === this.players.length) {
-        // find winner(s)
-        let allPlayers = _.clone(this.players).sort((a, b) => b.lives - a.lives);
-        let topScore = _.first(allPlayers).lives;
-        let winners = this.players.filter(player => player.lives === topScore);
-
-        if (winners.length > 1) {
-          Swal.fire({
-            title: "DRAW!",
-            html: _.join(winners.map(winner => winner.name), ', ') + " have drawn!<br>Adding another round. Game on!",
-            icon: "info"
-          });
-          // setup additional rounds
-          this.addRound();
+      // If allowFinishRound is enabled, only check for winners when all players have finished all rounds
+      if (this.allowFinishRound) {
+        if (playersPassed.length === this.players.length) {
+          this.declareWinner();
         }
-        else {
-          let winner = _.first(winners);
-          Swal.fire({
-            title: "WINNER!",
-            text: winner.name + " is the winner with " + winner.lives + " points!",
-            icon: "success"
+      } else {
+        // Original logic - check for early winner after each completed round
+        if (playersPassed.length > 0) {
+          // Check if any player has completed all rounds
+          let completedPlayers = playersPassed.filter(player => {
+            let roundsPassed = _.concat(player.hitsOn50to60, player.missesOn50to60).sort();
+            return _.difference(roundsToPass, roundsPassed).length === 0;
           });
+
+          if (completedPlayers.length > 0) {
+            // Someone has finished all rounds, declare winner immediately
+            this.declareWinner();
+          }
         }
       }
     },
-    missed27s(player) {
-      player.lives--;
-      Swal.fire({
-        title: "MISS!",
-        text: player.name + " missed it! Haha!",
-        icon: "error",
-        timer: 2000,
-        showConfirmButton: false,
-      }).then(() => this.check27sWin());
-    },
-    check27sWin() {
-      let playersStillIn = this.players.filter(player => player.lives > 0);
-      if (playersStillIn.length === 1) {
+
+    declareWinner() {
+      // find winner(s)
+      let allPlayers = _.clone(this.players).sort((a, b) => b.lives - a.lives);
+      let topScore = _.first(allPlayers).lives;
+      let winners = this.players.filter(player => player.lives === topScore);
+
+      if (winners.length > 1) {
+        Swal.fire({
+          title: "DRAW!",
+          html: _.join(winners.map(winner => winner.name), ', ') + " have drawn!<br>Adding another round. Game on!",
+          icon: "info"
+        });
+        // setup additional rounds
+        this.addRound();
+      }
+      else {
+        let winner = _.first(winners);
         Swal.fire({
           title: "WINNER!",
-          text: _.first(playersStillIn).name + " is the winner!",
+          text: winner.name + " is the winner with " + winner.lives + " points!",
           icon: "success"
         });
       }
     },
-    toggleKillers(which) {
-      if (which === 'odd') {
-        this.oddKillers = !this.oddKillers;
+
+    finishGame() {
+      // Logic for finishing 25s and Bulls games manually
+      let allPlayers = _.clone(this.players).sort((a, b) => b.lives - a.lives);
+      let topScore = _.first(allPlayers).lives;
+      let winners = this.players.filter(player => player.lives === topScore);
+
+      if (winners.length > 1) {
+        Swal.fire({
+          title: "DRAW!",
+          html: _.join(winners.map(winner => winner.name), ', ') + " have drawn with " + topScore + " points each!",
+          icon: "info"
+        });
       }
       else {
-        this.evenKillers = !this.evenKillers;
+        let winner = _.first(winners);
+        Swal.fire({
+          title: "WINNER!",
+          text: winner.name + " is the winner with " + winner.lives + " points!",
+          icon: "success"
+        });
       }
-    }
+    },
   },
   mounted() {
     if (this.game === "25s and Bulls") {
