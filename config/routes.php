@@ -19,5 +19,5 @@
  */
 
 return [
-
+    'remaining-games' => ['template' => 'remaining-games'],
 ];

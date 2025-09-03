@@ -1,4 +1,4 @@
-dateModified: 1702995249
+dateModified: 1756907532
 email:
   fromEmail: $MAIL_FROM
   fromName: $MAIL_SENDER
@@ -26,7 +26,7 @@ meta:
     1603eea6-0c0e-4863-92c8-a25ff80c277a: Games # Games
     22337b3e-aad9-4fa1-9db9-7bf2b4eb7156: 'Blind Draw for each round?' # Blind Draw for each round?
     67596c10-9a3b-4e20-a52e-5817c6bbd329: Score # Score
-    243938d9-5897-457b-bc30-66169453b111: 'Public Schema'
+    243938d9-5897-457b-bc30-66169453b111: 'Public Schema' # Public Schema
     741963c9-a9f3-46a4-b3cf-b5325fefb762: Common # Common
     01708089-e9c5-4433-ae94-ac087bad598c: 'Player 2 Legs Won' # Player 2 Legs Won
     9873217d-3925-4849-a106-c6ac0138f3b5: Player # Player

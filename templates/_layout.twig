@@ -34,6 +34,9 @@
           <a class="bg-gray-50 rounded-lg ring-2 px-2 py-1 {% if 'games' in craft.app.request.segments %}text-sky-600 ring-blue-600{% else %}shadow-md ring-blue-800 text-sky-800{% endif %}" href="/games">Games</a>
         </li>
         <li class="inline-block mb-5 mx-1">
+          <a class="bg-gray-50 rounded-lg ring-2 px-2 py-1 {% if 'remaining-games' in craft.app.request.segments %}text-sky-600 ring-blue-600{% else %}shadow-md ring-blue-800 text-sky-800{% endif %}" href="/remaining-games">Remaining Games</a>
+        </li>
+        <li class="inline-block mb-5 mx-1">
           <a class="bg-gray-50 rounded-lg ring-2 px-2 py-1 {% if 'players' in craft.app.request.segments %}text-sky-600 ring-blue-600{% else %}shadow-md ring-blue-800 text-sky-800{% endif %}" href="/players">Players</a>
         </li>
         <li class="inline-block mb-5 mx-1">
