@@ -10,7 +10,7 @@ use craft\web\Controller;
 
 class DartsController extends Controller
 {
-  protected $allowAnonymous = true;
+  protected array|bool|int $allowAnonymous = true;
 
   public function actionScorers()
   {
