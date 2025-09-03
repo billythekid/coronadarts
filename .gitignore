@@ -9,3 +9,6 @@
 /web/error_log
 /web/cache/blitz/
 /mix-manifest.json
+node_modules/
+web/assets/css/
+web/assets/js/
