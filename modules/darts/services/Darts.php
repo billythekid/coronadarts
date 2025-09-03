@@ -1,13 +1,11 @@
 <?php
 
-
 namespace modules\darts\services;
-
 
 use Craft;
 use craft\base\Component;
 use craft\elements\Entry;
-use craft\helpers\ArrayHelper;
+use Illuminate\Support\Collection;
 
 class Darts extends Component
 {
@@ -42,81 +40,80 @@ class Darts extends Component
   {
     $games = Entry::find()->section('games')->level(2)->with(['player1', 'player2'])->relatedTo($player->id)->all();
 
-    $opponents = array_map(function ($game) use ($player) {
+    $opponents = (new Collection($games))->map(function ($game) use ($player) {
       return (($game->player1[0]->id === $player->id) ? ("<a class='underline' href='{$game->player2[0]->getUrl()}'>" . $game->player2[0]->title) : ("<a class='underline' href='{$game->player1[0]->getUrl()}'>" . $game->player1[0]->title)) . "</a>";
-    }, $games);
+    });
 
-    $opponentsByGames = array_count_values($opponents);
-    arsort($opponentsByGames);
+    // Use Collection's countBy to replace array_count_values
+    $opponentsByGames = $opponents->countBy()->sortDesc();
 
-    return $opponentsByGames;
+    return $opponentsByGames->all();
   }
 
   public function roundRobin($players, $rounds = 1)
   {
     $allPlayers = $players;
 
-    $response = [];
-    if (count($allPlayers) % 2 != 0)
+    $response = collect();
+    if ($allPlayers->count() % 2 != 0)
     {
-      // insert [BYE] into position 2 in the array. This way no rounds have BYE at the start in every round (the return legs especially)
-      array_splice($allPlayers, 2, 0, "[BYE]");
+      // insert [BYE] into position 2. This way no rounds have BYE at the start in every round (the return legs especially)
+      $allPlayers = $allPlayers->take(2)->concat(['[BYE]'])->concat($allPlayers->skip(2));
     }
-
 
     for ($thisRound = 0; $thisRound < $rounds; $thisRound++)
     {
-      $players = $allPlayers;
-      $round   = [];
-      $away    = array_splice($players, (count($players) / 2));
-      $home    = $players;
+      $currentPlayers = $allPlayers;
+      $round = collect();
+      $halfCount = intval($currentPlayers->count() / 2);
+      $away = $currentPlayers->skip($halfCount)->values();
+      $home = $currentPlayers->take($halfCount)->values();
 
-
-      for ($i = 0; $i < count($home) + count($away) - 1; $i++)
+      for ($i = 0; $i < $home->count() + $away->count() - 1; $i++)
       {
-        for ($j = 0; $j < count($home); $j++)
+        for ($j = 0; $j < $home->count(); $j++)
         {
           if ($thisRound % 2 === 0)
           {
-            $round[] = $home[$j] . ' vs ' . $away[$j];
+            $round->push($home->get($j) . ' vs ' . $away->get($j));
           } else
           {
-            $round[] = $away[$j] . ' vs ' . $home[$j];
+            $round->push($away->get($j) . ' vs ' . $home->get($j));
           }
         }
-        if (count($home) + count($away) - 1 > 2)
+        if ($home->count() + $away->count() - 1 > 2)
         {
-          $s     = array_splice($home, 1, 1);
-          $slice = array_shift($s);
-          array_unshift($away, $slice);
-          array_push($home, array_pop($away));
+          // Rotate players for next round using Collection methods
+          $rotatedPlayer = $home->slice(1, 1)->first();
+          $away = collect([$rotatedPlayer])->concat($away->slice(0, -1));
+          $home = collect([$home->first()])->concat($home->slice(2))->concat([$away->last()]);
         }
       }
-      $response[] = $round;
+      $response = $response->merge($round);
     }
 
-    return array_merge(...$response);
+    return $response->all();
   }
 
   public function elimination($competition)
   {
-    $rounds = [];
+    $rounds = collect();
 
-    $allPlayers = array_map(function ($player) {
+    $allPlayers = $competition->players->map(function ($player) {
       return $player->title;
-    }, $competition->players);
+    });
 
-    if (count($allPlayers) % 2 != 0)
+    if ($allPlayers->count() % 2 != 0)
     {
-      $allPlayers[] = "[BYE]";
+      $allPlayers = $allPlayers->push("[BYE]");
     }
 
-    $gamesThatHaveBeenPlayed = array_map(function ($game) {
+    $gamesThatHaveBeenPlayed = (new Collection($competition->children))->map(function ($game) {
       return $game->title;
-    }, $competition->children);
+    });
 
-    $totalMatchesLeftToPlay = count($allPlayers) - 1;
-    $totalRounds            = 0;
+    $totalMatchesLeftToPlay = $allPlayers->count() - 1;
+    $totalRounds = 0;
 
     while ($totalMatchesLeftToPlay > 0)
     {
@@ -130,35 +127,46 @@ class Darts extends Component
       $games = $this->getNextRoundGames($playersStillIn);
 
       // if the round has an uneven number of games, the last 2 players both get a bye
-      if (count($games) % 2 !== 0 && count($games) > 1)
+      if ($games->count() % 2 !== 0 && $games->count() > 1)
       {
-        $byeGame    = array_pop($games);
+        $byeGame = $games->pop();
         $byePlayers = explode(' vs ', $byeGame);
-        $games[]    = $byePlayers[0] . ' vs [BYE]';
-        $games[]    = $byePlayers[1] . ' vs [BYE]';
+        $games->push($byePlayers[0] . ' vs [BYE]');
+        $games->push($byePlayers[1] . ' vs [BYE]');
       }
-      $rounds[$i]     = $games;
-      $playersStillIn = [];
+
+      $rounds->put($i, $games->all());
+      $playersStillIn = collect();
+
       foreach ($games as $game)
       {
-        if (in_array($game, $gamesThatHaveBeenPlayed))
+        if ($gamesThatHaveBeenPlayed->contains($game))
         {
           // winner goes through
-          $gameThatWasPlayed = ArrayHelper::firstValue(array_filter($competition->children, function($child) use ($game) {return $child->title == $game;}));
-          $playersStillIn[]  = $gameThatWasPlayed->player1LegsWon > $gameThatWasPlayed->player2LegsWon ? $gameThatWasPlayed->player1[0]->title : $gameThatWasPlayed->player2[0]->title;
-        } elseif (strpos($game, "[BYE]") !== false)
+          $gameThatWasPlayed = (new Collection($competition->children))->first(function($child) use ($game) {
+            return $child->title == $game;
+          });
+
+          if ($gameThatWasPlayed) {
+            $winner = $gameThatWasPlayed->player1LegsWon > $gameThatWasPlayed->player2LegsWon ?
+                     $gameThatWasPlayed->player1[0]->title :
+                     $gameThatWasPlayed->player2[0]->title;
+            $playersStillIn->push($winner);
+          }
+        } elseif (str_contains($game, "[BYE]"))
         {
           // person who got a bye goes through
-          $playersStillIn[] = str_replace([' vs [BYE]', '[BYE] vs '], '', $game);
+          $player = str_replace([' vs [BYE]', '[BYE] vs '], '', $game);
+          $playersStillIn->push($player);
         } else
         {
           // placeholder goes through
-          $playersStillIn[] = "(Winner of {$game})";
+          $playersStillIn->push("(Winner of {$game})");
         }
       }
     }
 
-    return $rounds;
+    return $rounds->all();
   }
 
   public function eliminationBlindDraw($competition)
@@ -263,20 +271,20 @@ class Darts extends Component
     $games       = Entry::find()->section('games')->with(['player1', 'player2'])->level(2)->all();
     foreach ($players as $player)
     {
-      $homeGames        = array_filter($games, function ($game) use ($player) {
+      $homeGames        = (new Collection($games))->filter(function ($game) use ($player) {
         return $game->player1[0]->id === $player->id;
       });
-      $awayGames        = array_filter($games, function ($game) use ($player) {
+      $awayGames        = (new Collection($games))->filter(function ($game) use ($player) {
         return $game->player2[0]->id === $player->id;
       });
-      $homeGamesWon     = array_filter($homeGames, function ($game) {
+      $homeGamesWon     = $homeGames->filter(function ($game) {
         return $game->player1LegsWon > $game->player2LegsWon;
       });
-      $awayGamesWon     = array_filter($awayGames, function ($game) {
+      $awayGamesWon     = $awayGames->filter(function ($game) {
         return $game->player2LegsWon > $game->player1LegsWon;
       });
-      $totalGamesPlayed = count($homeGames) + count($awayGames);
-      $totalGamesWon    = count($homeGamesWon) + count($awayGamesWon);
+      $totalGamesPlayed = $homeGames->count() + $awayGames->count();
+      $totalGamesWon    = $homeGamesWon->count() + $awayGamesWon->count();
 
 
       $playerStats[] = [
@@ -312,18 +320,18 @@ class Darts extends Component
         $awayGames = $awayGames->all();
 
         $totalGamesPlayed = count($homeGames) + count($awayGames);
-        $homeLegsFor      = array_sum(array_column($homeGames, 'player1LegsWon'));
-        $homeLegsAgainst  = array_sum(array_column($homeGames, 'player2LegsWon'));
-        $awayLegsFor      = array_sum(array_column($awayGames, 'player2LegsWon'));
-        $awayLegsAgainst  = array_sum(array_column($awayGames, 'player1LegsWon'));
+        $homeLegsFor      = (new Collection($homeGames))->sum('player1LegsWon');
+        $homeLegsAgainst  = (new Collection($homeGames))->sum('player2LegsWon');
+        $awayLegsFor      = (new Collection($awayGames))->sum('player2LegsWon');
+        $awayLegsAgainst  = (new Collection($awayGames))->sum('player1LegsWon');
         $totalLegsFor     = $homeLegsFor + $awayLegsFor;
         $totalLegsAgainst = $homeLegsAgainst + $awayLegsAgainst;
-        $homeGamesWon     = count(array_filter($homeGames, function ($game) {
+        $homeGamesWon     = (new Collection($homeGames))->filter(function ($game) {
           return $game->player1LegsWon > $game->player2LegsWon;
-        }));
-        $awayGamesWon     = count(array_filter($awayGames, function ($game) {
+        })->count();
+        $awayGamesWon     = (new Collection($awayGames))->filter(function ($game) {
           return $game->player2LegsWon > $game->player1LegsWon;
-        }));
+        })->count();
         $totalGamesWon    = $homeGamesWon + $awayGamesWon;
         $leaderboard[]    = (object)[
             'playerUrl'        => $player->url,
@@ -357,24 +365,20 @@ class Darts extends Component
   }
 
   /**
-   * @param array $players
-   * @param array $gamesThatHaveBeenPlayed
-   * @return array
+   * @param Collection $players
+   * @return Collection
    */
-  private function getNextRoundGames(array $players): array
+  private function getNextRoundGames(Collection $players): Collection
   {
-    $round = [];
-    for ($i = 0; $i < count($players); $i += 2)
-    {
-      if (@$players[$i + 1])
-      {
-        $gameTitle = $players[$i] . ' vs ' . $players[$i + 1];
-      } else
-      {
-        $gameTitle = $players[$i] . ' vs [BYE]';
+    $round = collect();
+
+    $players->chunk(2)->each(function ($pair) use ($round) {
+      if ($pair->count() === 2) {
+        $round->push($pair->first() . ' vs ' . $pair->last());
+      } else {
+        $round->push($pair->first() . ' vs [BYE]');
       }
-      $round[] = $gameTitle;
-    }
+    });
 
     return $round;
   }

@@ -2,6 +2,7 @@
   "require": {
     "craftcms/cms": "^4.0.0",
     "craftcms/redactor": "^3.0.0",
+    "illuminate/support": "^9.52",
     "misterbk/mix": "^1.6.0",
     "putyourlightson/craft-elements-panel": "^2.0.0",
     "verbb/super-table": "^3.0.0",
