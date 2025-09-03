@@ -47,36 +47,55 @@ class Darts extends Component
     public function roundRobin($players, $rounds = 1)
     {
         $allPlayers = collect($players);
-
         $response = collect();
+
+        // Add BYE if odd number of players
         if ($allPlayers->count() % 2 != 0) {
-            // insert [BYE] into position 2. This way no rounds have BYE at the start in every round (the return legs especially)
-            $allPlayers = $allPlayers->take(2)->concat(['[BYE]'])->concat($allPlayers->skip(2));
+            $allPlayers = $allPlayers->push('[BYE]');
         }
 
-        for ($thisRound = 0; $thisRound < $rounds; $thisRound++) {
-            $currentPlayers = $allPlayers;
-            $round = collect();
-            $halfCount = intval($currentPlayers->count() / 2);
-            $away = $currentPlayers->skip($halfCount)->values();
-            $home = $currentPlayers->take($halfCount)->values();
+        $playerCount = $allPlayers->count();
+        $roundsNeeded = $playerCount - 1; // Each player plays every other player once per round
 
-            for ($i = 0; $i < $home->count() + $away->count() - 1; $i++) {
-                for ($j = 0; $j < $home->count(); $j++) {
-                    if ($thisRound % 2 === 0) {
-                        $round->push($home->get($j) . ' vs ' . $away->get($j));
-                    } else {
-                        $round->push($away->get($j) . ' vs ' . $home->get($j));
+        for ($round = 0; $round < $rounds; $round++) {
+            // For each complete round robin cycle
+            for ($week = 0; $week < $roundsNeeded; $week++) {
+                $weekGames = collect();
+
+                // Generate pairings for this week
+                for ($i = 0; $i < $playerCount / 2; $i++) {
+                    $home = $allPlayers->get($i);
+                    $away = $allPlayers->get($playerCount - 1 - $i);
+
+                    // Don't create games where player plays themselves or BYE vs BYE
+                    if ($home !== $away && !($home === '[BYE]' && $away === '[BYE]')) {
+                        // Alternate home/away for different rounds
+                        if ($round % 2 === 0) {
+                            $weekGames->push($home . ' vs ' . $away);
+                        } else {
+                            $weekGames->push($away . ' vs ' . $home);
+                        }
                     }
                 }
-                if ($home->count() + $away->count() - 1 > 2) {
-                    // Rotate players for next round using Collection methods
-                    $rotatedPlayer = $home->slice(1, 1)->first();
-                    $away = collect([$rotatedPlayer])->concat($away->slice(0, -1));
-                    $home = collect([$home->first()])->concat($home->slice(2))->concat([$away->last()]);
+
+                $response = $response->merge($weekGames);
+
+                // Rotate players (except the first one which stays fixed)
+                if ($week < $roundsNeeded - 1) {
+                    $fixed = $allPlayers->first();
+                    $rotating = $allPlayers->slice(1);
+
+                    // Rotate the array: move last element to second position
+                    $lastPlayer = $rotating->pop();
+                    $allPlayers = collect([$fixed, $lastPlayer])->merge($rotating);
                 }
             }
-            $response = $response->merge($round);
+
+            // Reset player order for next round
+            $allPlayers = collect($players);
+            if ($allPlayers->count() % 2 != 0) {
+                $allPlayers = $allPlayers->push('[BYE]');
+            }
         }
 
         return $response->all();
