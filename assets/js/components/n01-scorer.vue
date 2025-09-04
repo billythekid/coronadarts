@@ -207,7 +207,7 @@
           </div>
           <div class="grid gap-4" :class="getTeamGridClass()">
             <div v-for="(team, teamIndex) in teams" :key="team.id"
-                 class="team-drop-zone border-2 border-dashed border-sky-300 rounded-lg p-4 min-h-[200px] bg-sky-50"
+                 class="team-drop-zone border-2 border-dashed border-sky-300 rounded-lg p-4 min-h-[200px]"
                  :class="getTeamColorClass(teamIndex + 1)"
                  @drop="onDrop($event, teamIndex)"
                  @dragover.prevent
@@ -1391,6 +1391,12 @@ export default {
         const team = this.teams[ti];
         if (!team) return;
         if (team.players.some(p => p.id === player.id)) return;
+
+        // If this is the first player and team has default name, rename it
+        if (team.players.length === 0 && team.name === `Team ${ti + 1}`) {
+          team.name = `Team ${player.name}`;
+        }
+
         team.players.push({ id: player.id, name: player.name });
       } catch (_) {}
     },
