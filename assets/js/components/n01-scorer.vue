@@ -269,17 +269,17 @@
     </div>
 
     <!-- Game Interface - Full Screen Overlay When Playing -->
-    <div v-if="gameStarted" class="game-interface h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden flex flex-col">
+    <div v-if="gameStarted" class="game-interface h-screen bg-sky-50 text-sky-800 overflow-hidden flex flex-col">
       <!-- Current Leg / Match Info -->
-      <div class="flex items-center justify-center py-4 gap-6 text-blue-100 font-medium border-b border-blue-800/30" v-if="!gameOver">
+      <div class="flex items-center justify-center py-4 gap-6 text-sky-700 font-medium border-b border-sky-200" v-if="!gameOver">
         <div class="text-lg">Leg {{ currentLeg }}</div>
         <div v-if="legsToWin" class="text-sm opacity-80">First to {{ legsToWin }} legs</div>
         <div class="flex gap-4 text-sm" v-if="showLegScores">
           <template v-if="!gameSettings.enableTeams">
-            <span v-for="p in players" :key="p.id" class="bg-blue-800/30 px-2 py-1 rounded">{{ p.name }}: {{ legWins[p.id] || 0 }}</span>
+            <span v-for="p in players" :key="p.id" class="bg-sky-200 text-sky-800 px-2 py-1 rounded">{{ p.name }}: {{ legWins[p.id] || 0 }}</span>
           </template>
           <template v-else>
-            <span v-for="t in activeTeams" :key="t.id" class="bg-blue-800/30 px-2 py-1 rounded">{{ t.name }}: {{ legWins[t.id] || 0 }}</span>
+            <span v-for="t in activeTeams" :key="t.id" class="bg-sky-200 text-sky-800 px-2 py-1 rounded">{{ t.name }}: {{ legWins[t.id] || 0 }}</span>
           </template>
         </div>
       </div>
@@ -297,16 +297,16 @@
                    'next': isNextPlayer(player),
                    'distant': isDistantPlayer(player)
                  }">
-              <div class="player-content bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center shadow-xl">
-                <h2 class="player-name text-xl font-bold text-white mb-2">{{ player.name }}</h2>
-                <div class="remaining-score text-4xl font-bold text-blue-300 mb-2">{{ player.currentScore }}</div>
-                <p v-if="gameSettings.enableTeams && player.teamName" class="team-name text-sm text-blue-200 mb-2">
+              <div class="player-content bg-gray-50 border border-sky-300 rounded-xl p-6 text-center shadow-xl ring-2 ring-blue-800">
+                <h2 class="player-name text-xl font-bold text-sky-800 mb-2">{{ player.name }}</h2>
+                <div class="remaining-score text-4xl font-bold text-blue-600 mb-2">{{ player.currentScore }}</div>
+                <p v-if="gameSettings.enableTeams && player.teamName" class="team-name text-sm text-sky-600 mb-2">
                   {{ player.teamName }}
                 </p>
                 <div v-if="isCurrentPlayer(player)" class="current-indicator">
-                  <span class="indicator-text bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium animate-pulse">Current Player</span>
+                  <span class="indicator-text bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium animate-pulse">Current Player</span>
                 </div>
-                <div v-else class="player-stats text-xs text-blue-200 space-y-1">
+                <div v-else class="player-stats text-xs text-sky-600 space-y-1">
                   <div class="darts-thrown">{{ player.dartsThrown }} darts</div>
                   <div class="average">{{ getPlayerAverage(player) }} avg</div>
                 </div>
@@ -319,14 +319,14 @@
       <!-- Scoring Input - SECOND PRIORITY -->
       <div class="scoring-section flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full px-4">
         <div class="mode-toggle mb-6 text-center">
-          <label class="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2">
-            <input type="checkbox" v-model="perThrowMode" class="rounded border-blue-300 text-blue-600 focus:ring-blue-500 bg-white/20">
-            <span class="text-blue-100 font-medium">Per Throw Mode</span>
+          <label class="inline-flex items-center space-x-3 bg-gray-50 border border-sky-300 rounded-lg px-4 py-2 ring-2 ring-blue-800">
+            <input type="checkbox" v-model="perThrowMode" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
+            <span class="text-sky-800 font-medium">Per Throw Mode</span>
           </label>
         </div>
 
         <!-- Simple Score Input -->
-        <div v-if="!perThrowMode" class="simple-scoring bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+        <div v-if="!perThrowMode" class="simple-scoring bg-gray-50 border border-sky-300 rounded-xl p-6 ring-2 ring-blue-800">
           <div class="score-input-row flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
             <input
                 ref="scoreInputField"
@@ -334,7 +334,7 @@
                 v-model.number="scoreInput"
                 :min="0"
                 :max="maxScore"
-                class="score-input w-full sm:w-48 h-16 text-center text-2xl font-bold bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                class="score-input w-full sm:w-48 h-16 text-center text-2xl font-bold bg-white border border-sky-300 rounded-lg text-sky-800 placeholder-sky-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 @input="validateScore"
                 @keyup.enter="submitScore"
                 @focus="onScoreInputFocus"
@@ -344,7 +344,7 @@
               <button
                   @click="submitScore"
                   :disabled="!isValidScore"
-                  class="submit-btn bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors min-w-[100px]"
+                  class="submit-btn bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors min-w-[100px]"
               >
                 Submit
               </button>
@@ -360,11 +360,11 @@
         </div>
 
         <!-- Per Throw Input -->
-        <div v-if="perThrowMode" class="per-throw-scoring bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+        <div v-if="perThrowMode" class="per-throw-scoring bg-gray-50 border border-sky-300 rounded-xl p-6 ring-2 ring-blue-800">
           <div class="darts-display flex justify-center gap-4 mb-6">
-            <div v-for="(dart, index) in currentThrows" :key="index" class="dart-slot bg-white/20 border border-white/30 rounded-lg p-4 min-w-[80px] text-center">
-              <span class="dart-label block text-xs text-blue-200 mb-1">Dart {{ index + 1 }}</span>
-              <div class="dart-value text-lg font-bold text-white">
+            <div v-for="(dart, index) in currentThrows" :key="index" class="dart-slot bg-white border border-sky-300 rounded-lg p-4 min-w-[80px] text-center">
+              <span class="dart-label block text-xs text-sky-600 mb-1">Dart {{ index + 1 }}</span>
+              <div class="dart-value text-lg font-bold text-sky-800">
                 {{ dart ? formatDartDisplay(dart) : '-' }}
               </div>
             </div>
@@ -377,7 +377,7 @@
                 v-for="num in sortedNumbers"
                 :key="num"
                 @click="showMultiplierPopover(num)"
-                class="number-btn bg-blue-700 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                class="number-btn bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
               >
                 {{ num }}
               </button>
@@ -394,18 +394,18 @@
             <button
                 @click="submitThrows"
                 :disabled="currentThrows.every(t => t === null)"
-                class="submit-btn bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                class="submit-btn bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors"
             >
               Submit Throws
             </button>
-            <button @click="clearThrows" class="clear-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Clear</button>
+            <button @click="clearThrows" class="clear-btn bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Clear</button>
             <button @click="submitBust" class="bust-btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Bust</button>
           </div>
         </div>
       </div>
 
       <!-- Game Controls - Quick Access -->
-      <div class="quick-controls flex justify-center gap-4 p-4 border-t border-white/20">
+      <div class="quick-controls flex justify-center gap-4 p-4 border-t border-sky-200">
         <button @click="undoLastScore" :disabled="gameHistory.length === 0" class="undo-btn bg-orange-600 hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors">
           Undo
         </button>
@@ -416,34 +416,34 @@
       </div>
 
       <!-- Collapsible Stats Section -->
-      <div v-if="showStats" class="stats-section bg-black/20 backdrop-blur-sm border-t border-white/20 p-4 max-h-80 overflow-y-auto">
+      <div v-if="showStats" class="stats-section bg-gray-50 border-t border-sky-200 p-4 max-h-80 overflow-y-auto">
         <!-- Team-based Scoreboard -->
         <div v-if="gameSettings.enableTeams" class="team-scoreboard space-y-4">
-          <div v-for="team in activeTeams" :key="team.id" class="team-card bg-white/10 border border-white/20 rounded-lg p-4">
+          <div v-for="team in activeTeams" :key="team.id" class="team-card bg-white border border-sky-300 rounded-lg p-4">
             <div class="team-header flex justify-between items-center mb-3">
-              <h3 class="text-lg font-bold text-white">{{ team.name }}</h3>
+              <h3 class="text-lg font-bold text-sky-800">{{ team.name }}</h3>
               <div class="team-score text-right">
-                <div class="score text-2xl font-bold text-blue-300">{{ team.currentScore }}</div>
-                <div class="details text-xs text-blue-200">{{ team.dartsThrown }} darts | {{ getTeamAverage(team) }} avg</div>
+                <div class="score text-2xl font-bold text-blue-600">{{ team.currentScore }}</div>
+                <div class="details text-xs text-sky-600">{{ team.dartsThrown }} darts | {{ getTeamAverage(team) }} avg</div>
               </div>
             </div>
             <div class="team-players space-y-2">
               <div v-for="player in getTeamPlayers(team)" :key="player.id"
                    class="player-row flex justify-between items-center p-2 rounded"
                    :class="{
-                     'bg-green-500/20 border border-green-400': isCurrentPlayer(player),
-                     'bg-blue-500/20 border border-blue-400': isUpNextPlayer(player),
-                     'bg-white/5': !isCurrentPlayer(player) && !isUpNextPlayer(player)
+                     'bg-blue-100 border border-blue-300': isCurrentPlayer(player),
+                     'bg-sky-100 border border-sky-300': isUpNextPlayer(player),
+                     'bg-gray-50': !isCurrentPlayer(player) && !isUpNextPlayer(player)
                    }">
-                <span class="name font-medium text-white">{{ player.name }}</span>
+                <span class="name font-medium text-sky-800">{{ player.name }}</span>
                 <div class="flex items-center gap-4 text-sm">
-                  <span class="darts text-blue-200">{{ player.dartsThrown }}</span>
-                  <span class="avg text-blue-200">{{ getPlayerAverage(player) }}</span>
+                  <span class="darts text-sky-600">{{ player.dartsThrown }}</span>
+                  <span class="avg text-sky-600">{{ getPlayerAverage(player) }}</span>
                   <span class="status min-w-[60px] text-right">
-                    <span v-if="player.isOut" class="out text-gray-400">Out</span>
-                    <span v-else-if="isCurrentPlayer(player)" class="playing text-green-400 font-medium">Playing</span>
-                    <span v-else-if="isUpNextPlayer(player)" class="next text-blue-400">Next</span>
-                    <span v-else class="waiting text-gray-400">Waiting</span>
+                    <span v-if="player.isOut" class="out text-gray-500">Out</span>
+                    <span v-else-if="isCurrentPlayer(player)" class="playing text-blue-600 font-medium">Playing</span>
+                    <span v-else-if="isUpNextPlayer(player)" class="next text-sky-700">Next</span>
+                    <span v-else class="waiting text-gray-500">Waiting</span>
                   </span>
                 </div>
               </div>
@@ -452,32 +452,32 @@
         </div>
 
         <!-- Individual Scoreboard -->
-        <div v-else class="individual-scoreboard bg-white/10 border border-white/20 rounded-lg overflow-hidden">
+        <div v-else class="individual-scoreboard bg-white border border-sky-300 rounded-lg overflow-hidden">
           <!-- Header row -->
-          <div class="scoreboard-header grid grid-cols-4 gap-4 p-3 bg-white/20 border-b border-white/20">
-            <div class="header-cell font-bold text-white">Player</div>
-            <div class="header-cell font-bold text-white text-center">Score</div>
-            <div class="header-cell font-bold text-white text-center">Darts</div>
-            <div class="header-cell font-bold text-white text-center">Average</div>
+          <div class="scoreboard-header grid grid-cols-4 gap-4 p-3 bg-sky-100 border-b border-sky-200">
+            <div class="header-cell font-bold text-sky-800">Player</div>
+            <div class="header-cell font-bold text-sky-800 text-center">Score</div>
+            <div class="header-cell font-bold text-sky-800 text-center">Darts</div>
+            <div class="header-cell font-bold text-sky-800 text-center">Average</div>
           </div>
 
           <!-- Player rows -->
           <div v-for="player in players" :key="player.id"
-               class="player-row grid grid-cols-4 gap-4 p-3 border-b border-white/10 last:border-b-0"
+               class="player-row grid grid-cols-4 gap-4 p-3 border-b border-sky-100 last:border-b-0"
                :class="{
-                 'bg-green-500/20': isCurrentPlayer(player),
-                 'bg-gray-500/20': player.isOut
+                 'bg-blue-100': isCurrentPlayer(player),
+                 'bg-gray-100': player.isOut
                }">
-            <div class="player-cell name-cell font-medium text-white">{{ player.name }}</div>
-            <div class="player-cell score-cell text-center font-bold text-white"
+            <div class="player-cell name-cell font-medium text-sky-800">{{ player.name }}</div>
+            <div class="player-cell score-cell text-center font-bold text-sky-800"
                  :class="[
-                   { 'text-green-400': isValidFinish(player) },
-                   { 'text-orange-400': isBogeyFinish(player) }
+                   { 'text-green-600': isValidFinish(player) },
+                   { 'text-orange-600': isBogeyFinish(player) }
                  ]">
               {{ player.currentScore }}
             </div>
-            <div class="player-cell darts-cell text-center text-blue-200">{{ player.dartsThrown }}</div>
-            <div class="player-cell average-cell text-center text-blue-200">{{ getPlayerAverage(player) }}</div>
+            <div class="player-cell darts-cell text-center text-sky-600">{{ player.dartsThrown }}</div>
+            <div class="player-cell average-cell text-center text-sky-600">{{ getPlayerAverage(player) }}</div>
           </div>
         </div>
       </div>
@@ -485,11 +485,11 @@
 
     <!-- Game Over Modal -->
     <div v-if="gameOver" class="game-over-modal fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div class="modal-content bg-white rounded-xl p-8 max-w-md w-full text-center shadow-2xl">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Game Over!</h2>
-        <h3 class="text-2xl font-semibold text-green-600 mb-4">{{ winner.name }} Wins!</h3>
-        <p class="text-gray-600 mb-2">Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
-        <p v-if="winner.dartsThrown > 0" class="text-gray-600 mb-6">Average: {{ getPlayerAverage(winner) }}</p>
+      <div class="modal-content bg-gray-50 border border-sky-300 rounded-xl p-8 max-w-md w-full text-center shadow-2xl ring-2 ring-blue-800">
+        <h2 class="text-3xl font-bold text-sky-800 mb-2">Game Over!</h2>
+        <h3 class="text-2xl font-semibold text-blue-600 mb-4">{{ winner.name }} Wins!</h3>
+        <p class="text-sky-600 mb-2">Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
+        <p v-if="winner.dartsThrown > 0" class="text-sky-600 mb-6">Average: {{ getPlayerAverage(winner) }}</p>
         <div class="modal-buttons flex gap-4 justify-center">
           <button @click="newGame" class="new-game-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">New Game</button>
           <button @click="gameOver = false" class="close-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Close</button>
