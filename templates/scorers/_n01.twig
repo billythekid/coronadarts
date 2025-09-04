@@ -1,0 +1,38 @@
+{% extends "_layout" %}
+
+{% block content %}
+  <div class="block mx-auto max-w-screen-xl relative mb-20 px-2">
+    <h1 class="text-5xl text-center mb-4">{{ game }} Scoreboard</h1>
+
+    <div class="leading-loose sm:leading-normal">
+      <p class="text-2xl my-5">The Rules</p>
+      <p>n01 darts game - Start with your target score (501, 301, etc.) and count down to exactly zero.</p>
+      <p>Each player can have a different starting score (handicap system).</p>
+      <p>Choose your board type (Standard max 180, or Quadro max 240), in/out rules, and play!</p>
+      <p class="my-2">Good Luck!</p>
+    </div>
+
+    <!-- Debug: Show what data we're passing to the component -->
+    {% if craft.app.config.general.devMode %}
+      <div class="bg-yellow-100 p-4 mb-4">
+        <h3>Debug Info:</h3>
+        <p>Game: {{ game }}</p>
+        <p>Players count: {{ players|length }}</p>
+        <p>Players data: {{ players|json_encode }}</p>
+      </div>
+    {% endif %}
+
+    <n01-scorer
+      start-players='{{ players|json_encode|raw }}'
+      game="{{ game }}">
+    </n01-scorer>
+
+    <script>
+      console.log('=== N01 TEMPLATE DEBUGGING ===');
+      console.log('Vue app exists:', typeof window.app);
+      console.log('Vue available:', typeof Vue);
+      console.log('Players data from template:', {{ players|json_encode|raw }});
+      console.log('Game from template:', '{{ game }}');
+    </script>
+  </div>
+{% endblock %}

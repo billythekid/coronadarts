@@ -16,6 +16,7 @@ class DartsController extends Controller
   {
     $cumulativeGames = ['Halfit', 'Shanghai', "Scotty's Game", "Martyn's Game"];
     $loseLivesGames  = ['25s and Bulls', '27s', '50 to 60'];
+    $n01Games = ['n01'];
 
     $game = Craft::$app->getRequest()->getBodyParam('game');
     $players = Craft::$app->getRequest()->getBodyParam('players');
@@ -26,7 +27,6 @@ class DartsController extends Controller
       $players = Entry::find()->section('players')->id($players)->all();
     }
 
-
     if(in_array($game, $cumulativeGames))
     {
       // /scorers/cumulative-scores
@@ -34,9 +34,15 @@ class DartsController extends Controller
     } elseif(in_array($game, $loseLivesGames))
     {
       // /scorers/lose-lives
-     return $this->renderTemplate("/scorers/_lose-lives.twig", compact('game', 'players'));
-
+      return $this->renderTemplate("/scorers/_lose-lives.twig", compact('game', 'players'));
+    } elseif(in_array($game, $n01Games))
+    {
+      // /scorers/n01
+      return $this->renderTemplate("/scorers/_n01.twig", compact('game', 'players'));
     }
+
+    // Default return if no game matches
+    return $this->renderTemplate("/scorers/index.twig");
   }
 
 }

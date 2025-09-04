@@ -2,6 +2,7 @@ import LoseLives from "./components/lose-lives.vue";
 import CompetitionsDropdown from "./components/competitions-dropdown.vue";
 import CumulativeScores from "./components/cumulative-scores.vue";
 import PlayerDropdown from "./components/player-dropdown.vue";
+import N01Scorer from "./components/n01-scorer.vue";
 
 require('./bootstrap');
 
@@ -18,6 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if we have a lose-lives element to mount
     const loseLivesElement = document.querySelector('lose-lives');
     console.log('Looking for lose-lives element...', loseLivesElement);
+
+    // Check if we have an n01-scorer element to mount
+    const n01ScorerElement = document.querySelector('n01-scorer');
+    console.log('Looking for n01-scorer element...', n01ScorerElement);
 
     if (cumulativeScoresElement) {
         console.log('Found cumulative-scores element, creating dedicated app...');
@@ -95,9 +100,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    if (n01ScorerElement) {
+        console.log('Found n01-scorer element, creating dedicated app...');
+
+        // Get the props from the element attributes
+        const startPlayers = n01ScorerElement.getAttribute('start-players');
+        const game = n01ScorerElement.getAttribute('game');
+
+        let parsedPlayers = [];
+        try {
+            if (startPlayers) {
+                parsedPlayers = JSON.parse(startPlayers);
+            }
+        } catch (error) {
+            console.error('Error parsing players JSON:', error);
+        }
+
+        // Create a dedicated app just for this component
+        const n01App = createApp(N01Scorer, {
+            startPlayers: parsedPlayers || [],
+            game: game
+        });
+
+        // Add global error handler
+        n01App.config.errorHandler = (err, instance, info) => {
+            console.error('Vue error in n01-scorer:', err);
+            console.error('Instance:', instance);
+            console.error('Info:', info);
+        };
+
+        // Mount the app to replace the custom element
+        try {
+            const vueInstance = n01App.mount(n01ScorerElement);
+            console.log('N01 scorer app mounted successfully:', vueInstance);
+            window.n01App = vueInstance;
+        } catch (error) {
+            console.error('Failed to mount n01 scorer app:', error);
+        }
+    }
+
     // Create the main Vue app for other components only if no dedicated components found
     const appElement = document.getElementById('app');
-    if (appElement && !cumulativeScoresElement && !loseLivesElement) {
+    if (appElement && !cumulativeScoresElement && !loseLivesElement && !n01ScorerElement) {
         const app = createApp({
             delimiters: ['${', '}'],
             data() {

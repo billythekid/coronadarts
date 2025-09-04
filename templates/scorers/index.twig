@@ -1,15 +1,11 @@
 {% extends "_layout" %}
-{% set games = ['Halfit', 'Shanghai', '25s and Bulls', '27s','50 to 60', "Scotty's Game", "Martyn's Game"] %}
+{% set games = ['n01', 'Halfit', 'Shanghai', '25s and Bulls', '27s','50 to 60', "Scotty's Game", "Martyn's Game"] %}
 
 {% block content %}
   <div class="block mx-auto max-w-screen-xl relative px-2">
     <h1 class="text-5xl text-center">Scorers</h1>
 
     <div class="text-center">
-      {% if currentUser %}
-        <p><a class="underline" href="/scorers/n01">n01</a></p>
-      {% endif %}
-
       <div class="container mx-auto">
         <form method="post">
           {{ csrfInput() }}
@@ -33,4 +29,3 @@
     </div>
   </div>
 {% endblock %}
-
