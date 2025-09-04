@@ -39,7 +39,8 @@
                             {% if leaderboard|length > 0 %}
                                 {% set winner = leaderboard|first %}
                                 <div class="text-center text-sm font-semibold bg-yellow-200 rounded p-2 mt-2">
-                                    Winner: <a href="{{ winner.playerUrl }}" class="underline">{{ winner.playerName }}</a>
+                                    Winner: <a href="{{ winner.playerUrl }}"
+                                               class="underline">{{ winner.playerName }}</a>
                                 </div>
                             {% endif %}
                         {% else %}
@@ -62,13 +63,15 @@
 
                         {% if remainingGames <= 0 %}
                             {% set finalGame = roundsToBePlayed|last|last %}
-                            {% if finalGame in gamesThatHaveBeenPlayed|map(game => game.title) %}
+                            {% set playedGameTitles = gamesThatHaveBeenPlayed|map(game => game.title) %}
+                            {% if finalGame in playedGameTitles %}
+                                {% set playedGame = null %}
                                 {% for game in gamesThatHaveBeenPlayed %}
                                     {% if game.title == finalGame %}
                                         {% set playedGame = game %}
                                     {% endif %}
                                 {% endfor %}
-                                {% if playedGame is defined %}
+                                {% if playedGame and playedGame.player1LegsWon is defined and playedGame.player2LegsWon is defined %}
                                     {% set winner = playedGame.player1LegsWon > playedGame.player2LegsWon ? playedGame.player1[0] : playedGame.player2[0] %}
                                     <div class="text-center text-sm font-semibold bg-yellow-200 rounded p-2 mt-2">
                                         Winner: <a href="{{ winner.url }}" class="underline">{{ winner.title }}</a>
