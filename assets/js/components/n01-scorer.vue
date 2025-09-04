@@ -1,27 +1,27 @@
 <template>
-  <div class="n01-scorer">
+  <div class="n01-scorer" :class="{ 'fullscreen-overlay': gameStarted }">
     <!-- Game Setup Section -->
-    <div v-if="!gameStarted" class="bg-gray-100 p-6 rounded-lg mb-6">
-      <h2 class="text-3xl mb-4">Game Setup</h2>
+    <div v-if="!gameStarted" class="bg-gray-50 p-6 rounded-lg mb-6 ring-2 ring-blue-800">
+      <h2 class="text-2xl mb-4 text-sky-800">Game Setup</h2>
 
       <!-- Player Management -->
       <div class="mb-6">
-        <h3 class="text-2xl mb-3">Players</h3>
+        <h3 class="text-xl mb-3 text-sky-800">Players</h3>
 
         <!-- Show selected players from scorers page if any -->
         <div v-if="startPlayers.length > 0" class="mb-4">
-          <h4 class="text-lg font-medium mb-2">Selected Players:</h4>
+          <h4 class="text-lg font-medium mb-2 text-sky-700">Selected Players:</h4>
           <div class="flex flex-wrap gap-2 mb-3">
             <span v-for="player in startPlayers" :key="player.id"
-                  class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+                  class="bg-sky-100 text-sky-800 px-3 py-1 rounded-full ring-1 ring-sky-300">
               {{ player.title }}
             </span>
           </div>
         </div>
 
         <!-- Add custom players section -->
-        <div class="bg-white p-4 rounded border">
-          <h4 class="text-lg font-medium mb-3">Add Visiting Players</h4>
+        <div class="bg-white p-4 rounded border ring-1 ring-sky-200">
+          <h4 class="text-lg font-medium mb-3 text-sky-700">Add Visiting Players</h4>
 
           <!-- Input for new player -->
           <div class="flex items-center space-x-3 mb-3">
@@ -30,12 +30,12 @@
               v-model="newPlayerName"
               placeholder="Enter player name"
               @keyup.enter="addCustomPlayer"
-              class="flex-1 p-2 border rounded"
+              class="flex-1 p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
             >
             <button
               @click="addCustomPlayer"
               :disabled="!newPlayerName.trim()"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors disabled:opacity-50"
+              class="bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700 transition-colors disabled:opacity-50"
             >
               Add Player
             </button>
@@ -43,14 +43,14 @@
 
           <!-- List of custom players -->
           <div v-if="customPlayers.length > 0" class="space-y-2">
-            <h5 class="font-medium text-gray-700">Visiting Players:</h5>
+            <h5 class="font-medium text-sky-700">Visiting Players:</h5>
             <div class="flex flex-wrap gap-2">
               <div v-for="(player, index) in customPlayers" :key="'custom-' + index"
-                   class="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                   class="flex items-center bg-sky-100 text-sky-800 px-3 py-1 rounded-full ring-1 ring-sky-300">
                 <span>{{ player.name }}</span>
                 <button
                   @click="removeCustomPlayer(index)"
-                  class="ml-2 text-red-600 hover:text-red-800 font-bold"
+                  class="ml-2 text-sky-600 hover:text-sky-800 font-bold"
                   title="Remove player"
                 >
                   ×
@@ -60,7 +60,7 @@
           </div>
 
           <!-- Total player count -->
-          <div v-if="totalPlayers > 0" class="mt-3 text-sm text-gray-600">
+          <div v-if="totalPlayers > 0" class="mt-3 text-sm text-sky-600">
             Total players: {{ totalPlayers }}
           </div>
         </div>
@@ -69,27 +69,62 @@
       <!-- Game Options -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div>
-          <label class="block text-sm font-medium mb-2">Default Target Score</label>
-          <input
+          <label class="block text-sm font-medium mb-2 text-sky-700">Default Target Score</label>
+          <div class="space-y-3">
+            <!-- Preset target score buttons -->
+            <div class="grid grid-cols-3 gap-2">
+              <button
+                v-for="score in [101, 201, 301, 501, 701, 1001]"
+                :key="score"
+                @click="selectTargetScore(score)"
+                :class="[
+                  'px-3 py-2 text-sm font-medium rounded border transition-colors',
+                  gameSettings.defaultTarget === score && gameSettings.targetScoreType === 'preset'
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-gray-50 text-sky-800 border-sky-300 hover:bg-sky-50 ring-1 ring-sky-200'
+                ]"
+              >
+                {{ score }}
+              </button>
+            </div>
+
+            <!-- Other button -->
+            <button
+              @click="selectTargetScore('other')"
+              :class="[
+                'w-full px-3 py-2 text-sm font-medium rounded border transition-colors',
+                gameSettings.targetScoreType === 'other'
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-gray-50 text-sky-800 border-sky-300 hover:bg-sky-50 ring-1 ring-sky-200'
+              ]"
+            >
+              Other
+            </button>
+
+            <!-- Custom input (shown only when "Other" is selected) -->
+            <input
+              v-if="gameSettings.targetScoreType === 'other'"
               type="number"
-              v-model.number="gameSettings.defaultTarget"
+              v-model.number="gameSettings.customTarget"
               min="1"
               max="9999"
-              class="w-full p-2 border rounded"
-          >
+              placeholder="Enter custom score"
+              class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
+            >
+          </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-2">Board Type</label>
-          <select v-model="gameSettings.boardType" class="w-full p-2 border rounded">
+          <label class="block text-sm font-medium mb-2 text-sky-700">Board Type</label>
+          <select v-model="gameSettings.boardType" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
             <option value="standard">Standard (max 180)</option>
             <option value="quadro">Quadro (max 240)</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-2">In Type</label>
-          <select v-model="gameSettings.inType" class="w-full p-2 border rounded">
+          <label class="block text-sm font-medium mb-2 text-sky-700">In Type</label>
+          <select v-model="gameSettings.inType" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
             <option value="single">Single In</option>
             <option value="double">Double In</option>
             <option value="treble">Treble In</option>
@@ -97,8 +132,8 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-2">Out Type</label>
-          <select v-model="gameSettings.outType" class="w-full p-2 border rounded">
+          <label class="block text-sm font-medium mb-2 text-sky-700">Out Type</label>
+          <select v-model="gameSettings.outType" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
             <option value="double">Double Out</option>
             <option value="single">Single Out</option>
             <option value="royal">Royal Out</option>
@@ -106,19 +141,68 @@
         </div>
       </div>
 
+      <!-- Sets and Legs Configuration -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Sets Configuration -->
+        <div class="bg-white p-4 rounded border ring-1 ring-sky-200">
+          <h4 class="text-lg font-medium mb-3 text-sky-700">Sets</h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium mb-1 text-sky-700">Format</label>
+              <select v-model="gameSettings.setsFormat" @change="updateSetsNumber" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
+                <option value="bestOf">Best of</option>
+                <option value="firstTo">First to</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-sky-700">{{ gameSettings.setsFormat === 'bestOf' ? 'Best of' : 'First to' }}</label>
+              <select v-model.number="gameSettings.setsNumber" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
+                <option v-for="num in getValidSetsNumbers()" :key="num" :value="num">{{ num }}</option>
+              </select>
+            </div>
+            <div class="text-sm text-sky-600">
+              {{ getSetsDescription() }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Legs Configuration -->
+        <div class="bg-white p-4 rounded border ring-1 ring-sky-200">
+          <h4 class="text-lg font-medium mb-3 text-sky-700">Legs</h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium mb-1 text-sky-700">Format</label>
+              <select v-model="gameSettings.legsFormat" @change="updateLegsNumber" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
+                <option value="bestOf">Best of</option>
+                <option value="firstTo">First to</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-sky-700">{{ gameSettings.legsFormat === 'bestOf' ? 'Best of' : 'First to' }}</label>
+              <select v-model.number="gameSettings.legsNumber" class="w-full p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
+                <option v-for="num in getValidLegsNumbers()" :key="num" :value="num">{{ num }}</option>
+              </select>
+            </div>
+            <div class="text-sm text-sky-600">
+              {{ getLegsDescription() }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Team Setup for 3+ players -->
       <div v-if="totalPlayers >= 3" class="mb-6">
         <label class="flex items-center space-x-2 mb-4">
-          <input type="checkbox" v-model="gameSettings.enableTeams" @change="onTeamModeToggle">
-          <span class="text-lg font-medium">Enable Team Play</span>
+          <input type="checkbox" v-model="gameSettings.enableTeams" @change="onTeamModeToggle" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
+          <span class="text-lg font-medium text-sky-800">Enable Team Play</span>
         </label>
 
         <!-- Team Configuration -->
         <div v-if="gameSettings.enableTeams" class="space-y-4">
           <!-- Number of Teams -->
           <div class="flex items-center space-x-4">
-            <label class="text-lg font-medium">Number of Teams:</label>
-            <select v-model.number="gameSettings.numberOfTeams" @change="onTeamCountChange" class="p-2 border rounded">
+            <label class="text-lg font-medium text-sky-800">Number of Teams:</label>
+            <select v-model.number="gameSettings.numberOfTeams" @change="onTeamCountChange" class="p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
               <option value="2">2 Teams</option>
               <option value="3">3 Teams</option>
               <option value="4">4 Teams</option>
@@ -128,7 +212,7 @@
           <!-- Team Assignment Area -->
           <div class="grid gap-4" :class="getTeamGridClass()">
             <div v-for="(team, teamIndex) in teams" :key="teamIndex"
-                 class="team-drop-zone border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[200px]"
+                 class="team-drop-zone border-2 border-dashed border-sky-300 rounded-lg p-4 min-h-[200px] bg-sky-50"
                  :class="getTeamColorClass(teamIndex + 1)"
                  @drop="onDrop($event, teamIndex)"
                  @dragover.prevent
@@ -138,33 +222,33 @@
                 <input
                   v-model="team.name"
                   :placeholder="`Team ${teamIndex + 1}`"
-                  class="w-full p-2 border rounded font-medium text-center"
+                  class="w-full p-2 border rounded font-medium text-center ring-1 ring-sky-200 focus:ring-blue-600"
                 >
               </div>
 
               <!-- Team Score (if team has players) -->
               <div v-if="team.players.length > 0" class="mb-2 text-center">
-                <div class="text-sm text-gray-600">Team Score</div>
-                <div class="text-lg font-bold">{{ getTeamScore(teamIndex) }}</div>
+                <div class="text-sm text-sky-600">Team Score</div>
+                <div class="text-lg font-bold text-sky-800">{{ getTeamScore(teamIndex) }}</div>
               </div>
 
               <!-- Team Players -->
               <div class="space-y-2">
-                <h5 class="font-medium text-sm text-gray-600 text-center">
+                <h5 class="font-medium text-sm text-sky-600 text-center">
                   Players ({{ team.players.length }})
                 </h5>
                 <div v-for="(player, playerIndex) in team.players"
                      :key="player.id || `${player.name}-${playerIndex}`"
-                     class="bg-white p-2 rounded shadow-sm border flex items-center justify-between">
-                  <span class="font-medium">{{ player.name }}</span>
+                     class="bg-white p-2 rounded shadow-sm border ring-1 ring-sky-200 flex items-center justify-between">
+                  <span class="font-medium text-sky-800">{{ player.name }}</span>
                   <div class="flex items-center space-x-2">
-                    <span class="text-xs text-gray-500">#{{ playerIndex + 1 }}</span>
+                    <span class="text-xs text-sky-500">#{{ playerIndex + 1 }}</span>
                     <button @click="removePlayerFromTeam(teamIndex, playerIndex)"
-                            class="text-red-600 hover:text-red-800 text-sm">×</button>
+                            class="text-sky-600 hover:text-sky-800 text-sm">×</button>
                   </div>
                 </div>
                 <p v-if="team.players.length === 0"
-                   class="text-gray-400 text-sm text-center italic">
+                   class="text-sky-400 text-sm text-center italic">
                   Drag players here
                 </p>
               </div>
@@ -173,11 +257,11 @@
 
           <!-- Available Players -->
           <div class="mt-6">
-            <h4 class="text-lg font-medium mb-3">Available Players</h4>
-            <div class="flex flex-wrap gap-2 p-4 border-2 border-dashed border-gray-200 rounded-lg min-h-[80px] bg-gray-50">
+            <h4 class="text-lg font-medium mb-3 text-sky-700">Available Players</h4>
+            <div class="flex flex-wrap gap-2 p-4 border-2 border-dashed border-sky-200 rounded-lg min-h-[80px] bg-sky-50">
               <!-- Selected Players from scorers page -->
               <div v-for="player in unassignedStartPlayers" :key="player.id"
-                   class="player-card bg-blue-100 text-blue-800 px-3 py-2 rounded-full cursor-move flex items-center"
+                   class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300"
                    draggable="true"
                    @dragstart="onDragStart($event, { ...player, name: player.title, type: 'selected' })">
                 <span>{{ player.title }}</span>
@@ -185,14 +269,14 @@
 
               <!-- Custom/visiting players -->
               <div v-for="(player, index) in unassignedCustomPlayers" :key="'custom-' + index"
-                   class="player-card bg-green-100 text-green-800 px-3 py-2 rounded-full cursor-move flex items-center"
+                   class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300"
                    draggable="true"
                    @dragstart="onDragStart($event, { ...player, type: 'custom', originalIndex: index })">
                 <span>{{ player.name }}</span>
               </div>
 
               <p v-if="unassignedStartPlayers.length === 0 && unassignedCustomPlayers.length === 0"
-                 class="text-gray-400 text-sm italic w-full text-center">
+                 class="text-sky-400 text-sm italic w-full text-center">
                 All players assigned to teams
               </p>
             </div>
@@ -202,30 +286,30 @@
 
       <!-- Handicap Settings -->
       <div v-if="totalPlayers > 0 && !gameSettings.enableTeams" class="mb-6">
-        <h3 class="text-xl mb-3">Player Target Scores (Handicap System)</h3>
+        <h3 class="text-xl mb-3 text-sky-800">Player Target Scores (Handicap System)</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Selected players from scorers page -->
           <div v-for="player in startPlayers" :key="player.id"
-               class="flex items-center justify-between bg-white p-3 rounded">
-            <label class="text-lg font-medium">{{ player.title }}:</label>
+               class="flex items-center justify-between bg-white p-3 rounded ring-1 ring-sky-200">
+            <label class="text-lg font-medium text-sky-800">{{ player.title }}:</label>
             <input
                 type="number"
                 v-model.number="playerTargets[player.id]"
                 min="1"
                 max="9999"
-                class="w-24 p-2 border rounded"
+                class="w-24 p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
             >
           </div>
           <!-- Custom/visiting players -->
           <div v-for="(player, index) in customPlayers" :key="'custom-target-' + index"
-               class="flex items-center justify-between bg-green-50 p-3 rounded border-green-200">
-            <label class="text-lg font-medium">{{ player.name }}:</label>
+               class="flex items-center justify-between bg-sky-50 p-3 rounded border-sky-200 ring-1 ring-sky-200">
+            <label class="text-lg font-medium text-sky-800">{{ player.name }}:</label>
             <input
                 type="number"
                 v-model.number="player.target"
                 min="1"
                 max="9999"
-                class="w-24 p-2 border rounded"
+                class="w-24 p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
             >
           </div>
         </div>
@@ -234,251 +318,212 @@
       <button
           @click="startGame"
           :disabled="totalPlayers === 0"
-          class="bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+          class="bg-sky-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-sky-700 transition-colors disabled:opacity-50"
       >
         Start Game
       </button>
     </div>
 
-    <!-- Game Interface -->
-    <div v-if="gameStarted">
-      <!-- Current Player Display -->
-      <div class="bg-blue-100 p-4 rounded-lg mb-6 text-center">
-        <h2 class="text-6xl font-bold">{{ currentPlayer.name }} - {{ currentPlayer.currentScore }} remaining</h2>
-        <p v-if="gameSettings.enableTeams && currentPlayer.teamName" class="text-lg">
-          Playing for {{ currentPlayer.teamName }}
-        </p>
-      </div>
+    <!-- Game Interface - Full Screen Overlay When Playing -->
+    <div v-if="gameStarted" class="game-interface">
 
-      <!-- Scoreboard -->
-      <div class="overflow-x-auto mb-6">
-        <!-- Team-based Scoreboard -->
-        <div v-if="gameSettings.enableTeams" class="space-y-6">
-          <div v-for="team in activeTeams" :key="team.id" class="bg-white rounded-lg shadow">
-            <!-- Team Header -->
-            <div class="bg-gray-50 p-4 rounded-t-lg border-b">
-              <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold">{{ team.name }}</h3>
-                <div class="text-right">
-                  <div class="text-sm text-gray-600">Team Score</div>
-                  <div class="text-2xl font-bold" :class="{ 'text-green-600': team.currentScore <= 40 }">
-                    {{ team.currentScore }}
-                  </div>
-                  <div class="text-sm text-gray-500">
-                    {{ team.dartsThrown }} darts | Avg: {{ getTeamAverage(team) }}
-                  </div>
+      <!-- Current Player Display - TOP PRIORITY -->
+      <div class="current-player-display">
+        <!-- Player Carousel -->
+        <div class="player-carousel">
+          <div class="carousel-container" :style="carouselTransform">
+            <div v-for="player in players" :key="player.id"
+                 class="player-slide"
+                 :class="{
+                   'current': isCurrentPlayer(player),
+                   'prev': isPreviousPlayer(player),
+                   'next': isNextPlayer(player),
+                   'distant': isDistantPlayer(player)
+                 }">
+              <div class="player-content">
+                <h2 class="player-name">{{ player.name }}</h2>
+                <div class="remaining-score">{{ player.currentScore }}</div>
+                <p v-if="gameSettings.enableTeams && player.teamName" class="team-name">
+                  {{ player.teamName }}
+                </p>
+                <div v-if="isCurrentPlayer(player)" class="current-indicator">
+                  <span class="indicator-text">Current Player</span>
+                </div>
+                <div v-else class="player-stats">
+                  <span class="darts-thrown">{{ player.dartsThrown }} darts</span>
+                  <span class="average">{{ getPlayerAverage(player) }} avg</span>
                 </div>
               </div>
             </div>
-
-            <!-- Team Players -->
-            <div class="p-0">
-              <table class="w-full">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th class="p-3 text-left">Player</th>
-                    <th class="p-3 text-center">Darts</th>
-                    <th class="p-3 text-center">Average</th>
-                    <th class="p-3 text-center">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="player in getTeamPlayers(team)" :key="player.id"
-                      :class="{
-                        'bg-blue-50': isCurrentPlayer(player),
-                        'opacity-50': player.isOut
-                      }">
-                    <td class="p-3 font-medium">
-                      {{ player.name }}
-                    </td>
-                    <td class="p-3 text-center">{{ player.dartsThrown }}</td>
-                    <td class="p-3 text-center">{{ getPlayerAverage(player) }}</td>
-                    <td class="p-3 text-center">
-                      <span v-if="player.isOut" class="text-red-600 font-medium">Out</span>
-                      <span v-else-if="isCurrentPlayer(player)" class="text-green-600 font-medium">Playing</span>
-                      <span v-else-if="isUpNextPlayer(player)" class="text-orange-600 font-medium">Up Next</span>
-                      <span v-else class="text-gray-500">Waiting</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
-
-        <!-- Individual Scoreboard -->
-        <table v-else class="w-full bg-white rounded-lg shadow">
-          <thead class="bg-gray-50">
-          <tr>
-            <th class="p-3 text-left">Player</th>
-            <th class="p-3 text-center">Target</th>
-            <th class="p-3 text-center">Current Score</th>
-            <th class="p-3 text-center">Darts</th>
-            <th class="p-3 text-center">Average</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="player in players" :key="player.id" :class="{ 'opacity-50': player.isOut }">
-            <td class="p-3 font-medium" :class="{ 'text-2xl': isCurrentPlayer(player) }">{{ player.name }}</td>
-            <td class="p-3 text-center" :class="{ 'text-2xl': isCurrentPlayer(player) }">{{ player.target }}</td>
-            <td class="p-3 text-center" :class="[
-              { 'text-green-600': isValidFinish(player) },
-              { 'text-red-600': isBogeyFinish(player) },
-              { 'text-2xl': isCurrentPlayer(player) }
-            ]">
-              {{ player.currentScore }}
-            </td>
-            <td class="p-3 text-center" :class="{ 'text-2xl': isCurrentPlayer(player) }">{{ player.dartsThrown }}</td>
-            <td class="p-3 text-center" :class="{ 'text-2xl': isCurrentPlayer(player) }">{{ getPlayerAverage(player) }}</td>
-          </tr>
-          </tbody>
-        </table>
       </div>
 
-      <!-- Scoring Input -->
-      <div class="bg-gray-100 p-6 rounded-lg mb-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-bold">Score Input</h3>
+      <!-- Scoring Input - SECOND PRIORITY -->
+      <div class="scoring-section">
+        <div class="mode-toggle">
           <label class="flex items-center space-x-2">
-            <input type="checkbox" v-model="perThrowMode">
-            <span>Per Throw Mode</span>
+            <input type="checkbox" v-model="perThrowMode" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
+            <span class="text-sky-800">Per Throw Mode</span>
           </label>
         </div>
 
         <!-- Simple Score Input -->
-        <div v-if="!perThrowMode" class="space-y-4">
-          <div class="flex items-center space-x-4">
-            <label class="text-lg font-medium">Score:</label>
+        <div v-if="!perThrowMode" class="simple-scoring">
+          <div class="score-input-row">
             <input
                 ref="scoreInputField"
                 type="number"
                 v-model.number="scoreInput"
                 :min="0"
                 :max="maxScore"
-                class="p-2 border rounded text-lg w-24"
+                class="score-input"
                 @input="validateScore"
                 @keyup.enter="submitScore"
                 @focus="onScoreInputFocus"
+                placeholder="Enter score"
             >
             <button
                 @click="submitScore"
                 :disabled="!isValidScore"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
+                class="submit-btn"
             >
               Submit
             </button>
             <button
                 @click="submitBust"
-                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+                class="bust-btn"
             >
               Bust
             </button>
           </div>
-          <p class="text-sm" :class="scoreValidationClass">{{ scoreValidationMessage }}</p>
+          <p class="validation-message" :class="scoreValidationClass">{{ scoreValidationMessage }}</p>
         </div>
 
         <!-- Per Throw Input -->
-        <div v-if="perThrowMode">
-          <div class="grid grid-cols-3 gap-4 mb-4">
-            <div v-for="(dart, index) in currentThrows" :key="index" class="text-center">
-              <h4 class="font-medium mb-2">Dart {{ index + 1 }}</h4>
-              <div class="p-4 border rounded bg-white min-h-[60px] flex items-center justify-center text-lg font-bold">
+        <div v-if="perThrowMode" class="per-throw-scoring">
+          <div class="darts-display">
+            <div v-for="(dart, index) in currentThrows" :key="index" class="dart-slot">
+              <span class="dart-label">{{ index + 1 }}</span>
+              <div class="dart-value">
                 {{ dart ? formatDartDisplay(dart) : '-' }}
               </div>
             </div>
           </div>
 
-          <!-- Dartboard Input -->
-          <div class="dartboard-input mb-4">
-            <div class="grid grid-cols-5 gap-3 mb-4">
-              <!-- Numbers 20 down to 1 (descending order) -->
-              <div v-for="num in descendingNumbers" :key="num" class="number-group bg-white p-3 rounded border">
-                <div class="text-center font-bold mb-2 text-lg">{{ num }}</div>
-                <div class="grid grid-cols-2 gap-1">
-                  <button @click="selectDart(num, 'single')" class="dart-btn single">S</button>
-                  <button @click="selectDart(num * 2, 'double')" class="dart-btn double">D</button>
-                  <button @click="selectDart(num * 3, 'treble')" class="dart-btn treble">T</button>
-                  <button
-                      v-if="gameSettings.boardType === 'quadro'"
-                      @click="selectDart(num * 4, 'quad')"
-                      class="dart-btn quad"
-                  >Q</button>
-                </div>
-              </div>
+          <!-- Mobile-Friendly Dartboard Input -->
+          <div class="dartboard-input">
+            <div class="numbers-grid">
+              <button
+                v-for="num in sortedNumbers"
+                :key="num"
+                @click="showMultiplierPopover(num)"
+                class="number-btn"
+              >
+                {{ num }}
+              </button>
             </div>
 
-            <!-- Special segments -->
-            <div class="flex justify-center space-x-4 mb-4">
-              <button @click="selectDart(25, 'single')" class="dart-btn special-large">Bull 25</button>
-              <button @click="selectDart(50, 'double')" class="dart-btn special-large">Bullseye 50</button>
-              <button @click="selectDart(0, 'miss')" class="dart-btn miss-large">Miss</button>
+            <div class="special-buttons">
+              <button @click="addDartScore(25, 'single')" class="special-btn">25</button>
+              <button @click="addDartScore(50, 'bull')" class="special-btn">Bull</button>
+              <button @click="addDartScore(0, 'miss')" class="special-btn">Miss</button>
             </div>
           </div>
 
-          <div class="flex justify-center space-x-4">
+          <div class="throw-controls">
             <button
                 @click="submitThrows"
                 :disabled="currentThrows.every(t => t === null)"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
+                class="submit-btn"
             >
               Submit Throws
             </button>
-            <button
-                @click="clearThrows"
-                class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
-            >
-              Clear
-            </button>
-            <button
-                @click="submitBust"
-                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-            >
-              Bust
-            </button>
+            <button @click="clearThrows" class="clear-btn">Clear</button>
+            <button @click="submitBust" class="bust-btn">Bust</button>
           </div>
         </div>
       </div>
 
-      <!-- Game Controls -->
-      <div class="flex justify-center space-x-4 mb-6">
-        <button
-            @click="undoLastScore"
-            :disabled="gameHistory.length === 0"
-            class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors disabled:opacity-50"
-        >
-          Undo Last Score
+      <!-- Game Controls - Quick Access -->
+      <div class="quick-controls">
+        <button @click="undoLastScore" :disabled="gameHistory.length === 0" class="undo-btn">
+          Undo
         </button>
-        <button
-            @click="resetGame"
-            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-        >
-          Reset Game
+        <button @click="toggleStatsView" class="stats-btn">
+          {{ showStats ? 'Hide Stats' : 'Show Stats' }}
         </button>
+        <button @click="resetGame" class="reset-btn">Reset</button>
+      </div>
+
+      <!-- Collapsible Stats Section -->
+      <div v-if="showStats" class="stats-section">
+        <!-- Team-based Scoreboard -->
+        <div v-if="gameSettings.enableTeams" class="team-scoreboard">
+          <div v-for="team in activeTeams" :key="team.id" class="team-card">
+            <div class="team-header">
+              <h3 class="text-sky-800">{{ team.name }}</h3>
+              <div class="team-score">
+                <span class="score text-sky-800">{{ team.currentScore }}</span>
+                <span class="details text-sky-600">{{ team.dartsThrown }} darts | {{ getTeamAverage(team) }} avg</span>
+              </div>
+            </div>
+            <div class="team-players">
+              <div v-for="player in getTeamPlayers(team)" :key="player.id"
+                   class="player-row" :class="{ 'current': isCurrentPlayer(player), 'next': isUpNextPlayer(player) }">
+                <span class="name text-sky-800">{{ player.name }}</span>
+                <span class="darts text-sky-600">{{ player.dartsThrown }}</span>
+                <span class="avg text-sky-600">{{ getPlayerAverage(player) }}</span>
+                <span class="status">
+                  <span v-if="player.isOut" class="out text-sky-500">Out</span>
+                  <span v-else-if="isCurrentPlayer(player)" class="playing text-blue-600">Playing</span>
+                  <span v-else-if="isUpNextPlayer(player)" class="next text-sky-700">Next</span>
+                  <span v-else class="waiting text-sky-500">Waiting</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Individual Scoreboard -->
+        <div v-else class="individual-scoreboard">
+          <!-- Header row -->
+          <div class="scoreboard-header">
+            <div class="header-cell">Player</div>
+            <div class="header-cell">Score</div>
+            <div class="header-cell">Darts</div>
+            <div class="header-cell">Average</div>
+          </div>
+
+          <!-- Player rows -->
+          <div v-for="player in players" :key="player.id"
+               class="player-row"
+               :class="{ 'current-player-row': isCurrentPlayer(player), 'out-player-row': player.isOut }">
+            <div class="player-cell name-cell text-sky-800">{{ player.name }}</div>
+            <div class="player-cell score-cell text-sky-800"
+                 :class="[
+                   { 'finish-score': isValidFinish(player) },
+                   { 'bogey-score': isBogeyFinish(player) }
+                 ]">
+              {{ player.currentScore }}
+            </div>
+            <div class="player-cell darts-cell text-sky-600">{{ player.dartsThrown }}</div>
+            <div class="player-cell average-cell text-sky-600">{{ getPlayerAverage(player) }}</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Game Over Modal -->
-    <div v-if="gameOver" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white p-8 rounded-lg max-w-md w-full mx-4">
-        <h2 class="text-3xl font-bold text-center mb-4">Game Over!</h2>
-        <div class="text-center text-xl mb-6">
-          <h3 class="text-2xl font-bold">{{ winner.name }} Wins!</h3>
-          <p>Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
-          <p v-if="winner.dartsThrown > 0">Average: {{ getPlayerAverage(winner) }}</p>
-        </div>
-        <div class="flex justify-center space-x-4">
-          <button
-              @click="newGame"
-              class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition-colors"
-          >
-            New Game
-          </button>
-          <button
-              @click="gameOver = false"
-              class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition-colors"
-          >
-            Close
-          </button>
+    <div v-if="gameOver" class="game-over-modal">
+      <div class="modal-content">
+        <h2 class="text-sky-800">Game Over!</h2>
+        <h3 class="text-sky-700">{{ winner.name }} Wins!</h3>
+        <p class="text-sky-600">Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
+        <p v-if="winner.dartsThrown > 0" class="text-sky-600">Average: {{ getPlayerAverage(winner) }}</p>
+        <div class="modal-buttons">
+          <button @click="newGame" class="new-game-btn">New Game</button>
+          <button @click="gameOver = false" class="close-btn">Close</button>
         </div>
       </div>
     </div>
@@ -486,6 +531,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 export default {
   name: 'N01Scorer',
   props: {
@@ -510,13 +557,22 @@ export default {
       currentThrowIndex: 0,
       gameHistory: [],
 
+      // Carousel animation state
+      isTransitioning: false,
+
       gameSettings: {
         defaultTarget: 501,
         boardType: 'standard',
         inType: 'single',
         outType: 'double',
         enableTeams: false,
-        numberOfTeams: 2
+        numberOfTeams: 2,
+        setsFormat: 'bestOf',
+        setsNumber: 1,
+        legsFormat: 'bestOf',
+        legsNumber: 3,
+        targetScoreType: 'preset',
+        customTarget: 0
       },
 
       playerTargets: {},
@@ -528,7 +584,14 @@ export default {
       // Score validation
       isValidScore: false,
       scoreValidationMessage: '',
-      scoreValidationClass: 'text-gray-600'
+      scoreValidationClass: 'text-gray-600',
+
+      // New state variables for mobile-friendly dartboard
+      selectedNumber: null,
+      sortedNumbers: [],
+
+      // For collapsible stats section
+      showStats: false
     }
   },
 
@@ -536,6 +599,7 @@ export default {
     maxScore() {
       return this.gameSettings.boardType === 'quadro' ? 240 : 180;
     },
+
 
     currentPlayer() {
       return this.players[this.currentPlayerIndex] || {};
@@ -569,14 +633,26 @@ export default {
       );
     },
 
-    descendingNumbers() {
-      // Generate an array of numbers from 20 to 1
-      return Array.from({ length: 20 }, (_, i) => 20 - i);
-    },
 
     activeTeams() {
       // Only include teams that have players assigned
       return this.teams.filter(team => team.players.length > 0);
+    },
+
+    carouselTransform() {
+      if (this.players.length === 0) return { transform: 'translateX(0px)' };
+
+      const cardWidth = 266; // 250px + 16px margin
+      const containerCenter = window.innerWidth / 2;
+
+      // Always center the current player
+      // Offset = center position - (current player position * card width)
+      const baseOffset = containerCenter - (cardWidth / 2) - (this.currentPlayerIndex * cardWidth);
+
+      return {
+        transform: `translateX(${baseOffset}px)`,
+        transition: this.isTransitioning ? 'transform 0.6s ease-in-out' : 'transform 0.3s ease-out'
+      };
     }
   },
 
@@ -589,6 +665,9 @@ export default {
 
     // Initialize teams
     this.initializeTeams();
+
+    // Initialize sorted numbers for mobile-friendly dartboard
+    this.sortedNumbers = Array.from({ length: 20 }, (_, i) => i + 1);
   },
 
   watch: {
@@ -596,6 +675,21 @@ export default {
       // Focus the input field when switching to simple mode
       if (!newValue) {
         this.focusScoreInput();
+      }
+    },
+
+    // Watch for changes to default target score and update all players/teams
+    'gameSettings.defaultTarget'(newValue, oldValue) {
+      if (newValue !== oldValue && newValue > 0) {
+        this.updateAllTargetScores(newValue);
+      }
+    },
+
+    // Watch for changes to custom target input
+    'gameSettings.customTarget'(newValue, oldValue) {
+      if (this.gameSettings.targetScoreType === 'other' && newValue !== oldValue && newValue > 0) {
+        this.gameSettings.defaultTarget = newValue;
+        this.updateAllTargetScores(newValue);
       }
     }
   },
@@ -684,6 +778,7 @@ export default {
             target: team.target,
             currentScore: team.currentScore,
             dartsThrown: 0,
+            totalScoreThrown: 0, // Initialize individual scoring tracker
             scores: [],
             hasStarted: false,
             isOut: false,
@@ -792,8 +887,21 @@ export default {
         return true;
       }
 
-      if (newScore === 0 && !this.isValidOutScore(scoreThrown)) {
-        return true;
+      // For finishing throws (newScore === 0), we need to handle per-throw mode differently from simple input
+      if (newScore === 0) {
+        // In per-throw mode, we can validate the actual finishing dart
+        if (this.perThrowMode) {
+          // Check if the last dart thrown is a valid finishing dart
+          const lastDart = this.currentThrows.filter(t => t !== null).pop();
+          if (lastDart && !this.isValidFinishingDart(lastDart)) {
+            return true;
+          }
+        } else {
+          // In simple score input mode, check if the score can be achieved with a valid finishing dart
+          if (!this.isValidOutScore(scoreThrown)) {
+            return true;
+          }
+        }
       }
 
       // Double out: can't finish on 1
@@ -802,6 +910,22 @@ export default {
       }
 
       return false;
+    },
+
+    // New method to check if a specific dart is a valid finishing dart
+    isValidFinishingDart(dart) {
+      if (this.gameSettings.outType === 'single') return true;
+
+      if (this.gameSettings.outType === 'double') {
+        return dart.type === 'double' || dart.value === 50;
+      }
+
+      if (this.gameSettings.outType === 'royal') {
+        return dart.type === 'treble' || dart.type === 'double' ||
+               (this.gameSettings.boardType === 'quadro' && dart.type === 'quad');
+      }
+
+      return true;
     },
 
     isValidInScore(score) {
@@ -846,20 +970,6 @@ export default {
         if (score === i * 4) return true;
       }
       return false;
-    },
-
-    isOutPossible(player) {
-      const remaining = player.currentScore;
-
-      if (remaining <= 0 || remaining > 170) return false;
-
-      // Check out rules
-      if (this.gameSettings.outType === 'double') {
-        if (remaining % 2 !== 0 && remaining !== 25 && remaining !== 50) return false;
-        if (remaining > 40 && remaining !== 50) return false;
-      }
-
-      return true;
     },
 
     isValidFinish(player) {
@@ -1017,6 +1127,13 @@ export default {
 
     getPlayerAverage(player) {
       if (player.dartsThrown === 0) return '0.0';
+
+      // In team mode, use individual player's actual scoring
+      if (this.gameSettings.enableTeams && player.totalScoreThrown !== undefined) {
+        return (player.totalScoreThrown / player.dartsThrown * 3).toFixed(1);
+      }
+
+      // In individual mode, use the traditional calculation
       return ((player.target - player.currentScore) / player.dartsThrown * 3).toFixed(1);
     },
 
@@ -1063,6 +1180,7 @@ export default {
     formatDartDisplay(dart) {
       if (dart.type === 'miss') return 'Miss';
       if (dart.type === 'single') return dart.value.toString();
+      if (dart.type === 'bull') return '50'; // Handle bullseye specially
 
       const baseValue = dart.value / (dart.type === 'double' ? 2 : dart.type === 'treble' ? 3 : dart.type === 'quad' ? 4 : 1);
       return `${dart.type.charAt(0).toUpperCase()}${baseValue}`;
@@ -1071,6 +1189,103 @@ export default {
     clearThrows() {
       this.currentThrows = [null, null, null];
       this.currentThrowIndex = 0;
+      this.selectedNumber = null; // Reset selected number when clearing throws
+    },
+
+    // New method for mobile-friendly dart input
+    addDartScore(value, type) {
+      if (this.currentThrowIndex >= 3) return;
+
+      // Add the dart to current throws
+      this.currentThrows[this.currentThrowIndex] = { value, type };
+      this.currentThrowIndex++;
+
+      // Reset selected number for next dart
+      this.selectedNumber = null;
+    },
+
+    // New method to show SweetAlert popover for multiplier selection
+    async showMultiplierPopover(num) {
+      if (this.currentThrowIndex >= 3) return;
+
+      // Build HTML for custom buttons
+      let buttonsHtml = '<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">';
+
+      if (num >= 1 && num <= 20) {
+        // Regular numbers 1-20 with all multipliers
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="single-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Single ${num} (${num})</button>`;
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="double-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Double ${num} (${num * 2})</button>`;
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="treble-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Treble ${num} (${num * 3})</button>`;
+
+        if (this.gameSettings.boardType === 'quadro') {
+          buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="quad-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Quad ${num} (${num * 4})</button>`;
+        }
+      }
+
+      buttonsHtml += '</div>';
+
+      let multiplierChoice = null;
+
+      try {
+        await Swal.fire({
+          title: `Select multiplier for ${num}`,
+          html: buttonsHtml,
+          showConfirmButton: false,
+          showCancelButton: true,
+          cancelButtonText: 'Cancel',
+          showCloseButton: true,
+          allowOutsideClick: false,
+          customClass: {
+            popup: 'swal2-popup-mobile-friendly',
+            title: 'swal2-title-mobile',
+            htmlContainer: 'swal2-html-mobile',
+            cancelButton: 'swal2-cancel-mobile'
+          },
+          didOpen: () => {
+            // Add click handlers to custom buttons
+            const buttons = Swal.getPopup().querySelectorAll('button[data-value]');
+            buttons.forEach(button => {
+              button.addEventListener('click', () => {
+                multiplierChoice = button.getAttribute('data-value');
+                Swal.close();
+              });
+            });
+          }
+        });
+
+        // Process the selection if one was made
+        if (multiplierChoice) {
+          // Parse the selected multiplier and add the dart score
+          const [type, numberStr] = multiplierChoice.split('-');
+          const baseNumber = parseInt(numberStr);
+          let dartValue, dartType;
+
+          switch (type) {
+            case 'single':
+              dartValue = baseNumber;
+              dartType = 'single';
+              break;
+            case 'double':
+              dartValue = baseNumber * 2;
+              dartType = 'double';
+              break;
+            case 'treble':
+              dartValue = baseNumber * 3;
+              dartType = 'treble';
+              break;
+            case 'quad':
+              dartValue = baseNumber * 4;
+              dartType = 'quad';
+              break;
+          }
+
+          this.addDartScore(dartValue, dartType);
+        }
+        // If cancelled or no selection, do nothing (number is deselected automatically)
+      } catch (error) {
+        // User cancelled or closed the modal, do nothing
+        console.log('Multiplier selection cancelled');
+      }
     },
 
     submitScore() {
@@ -1116,7 +1331,9 @@ export default {
         isBust: isBust,
         dartsUsed: dartsUsed,
         hadStarted: player.hasStarted,
-        teamPreviousScore: this.gameSettings.enableTeams && player.teamObject ? player.teamObject.currentScore : null
+        teamPreviousScore: this.gameSettings.enableTeams && player.teamObject ? player.teamObject.currentScore : null,
+        playerPreviousScoreThrown: player.totalScoreThrown || 0,
+        playerPreviousDartsThrown: player.dartsThrown
       });
 
       if (!isBust) {
@@ -1126,6 +1343,9 @@ export default {
           isBust = true;
         }
         else {
+          // Trigger score animation before updating the actual score
+          // this.triggerScoreAnimation(player.currentScore, newScore, player.id, isBust);
+
           // Update scores based on game mode
           if (this.gameSettings.enableTeams && player.teamObject) {
             // Team mode: update team score and sync all team members
@@ -1166,16 +1386,27 @@ export default {
             }
           }
         }
+      } else {
+        // Trigger bust animation
+        // this.triggerScoreAnimation(player.currentScore, player.currentScore, player.id, true);
       }
 
-      // Update individual player stats
+      // Update individual player stats (both team and individual mode)
       player.dartsThrown += dartsUsed;
       player.scores.push(isBust ? `Bust (${score})` : score);
+
+      // Track individual scoring for accurate averages
+      if (!isBust && score > 0) {
+        if (!player.totalScoreThrown) player.totalScoreThrown = 0;
+        player.totalScoreThrown += score;
+      }
 
       this.nextPlayer();
     },
 
-    teamFinished(team) {
+
+    // Add the missing methods that were referenced but not implemented
+    async teamFinished(team) {
       // Mark all players on the winning team as finished
       this.players.forEach(player => {
         if (player.team === team.id) {
@@ -1187,13 +1418,50 @@ export default {
 
       // Set the current player as the winner representative
       this.winner = this.currentPlayer;
-      this.gameOver = true;
+
+      // Show SweetAlert for win confirmation
+      await this.showWinConfirmation(this.currentPlayer);
     },
 
-    playerFinished(player) {
+    async playerFinished(player) {
       player.isOut = true;
       this.winner = player;
-      this.gameOver = true;
+
+      // Show SweetAlert for win confirmation
+      await this.showWinConfirmation(player);
+    },
+
+    async showWinConfirmation(winningPlayer) {
+      try {
+        const result = await Swal.fire({
+          title: 'Game Finished!',
+          html: `
+            <div class="text-center">
+              <h3 class="text-2xl font-bold text-green-600 mb-2">${winningPlayer.name} Wins!</h3>
+              <p class="text-lg mb-2">Finished in ${winningPlayer.dartsThrown} darts</p>
+              <p class="text-md mb-4">Average: ${this.getPlayerAverage(winningPlayer)}</p>
+              ${winningPlayer.teamName ? `<p class="text-md text-gray-600">Team: ${winningPlayer.teamName}</p>` : ''}
+            </div>
+          `,
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: 'Accept Win',
+          cancelButtonText: 'Undo Last Score',
+          confirmButtonColor: '#059669',
+          cancelButtonColor: '#dc2626',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
+
+        if (result.isConfirmed) {
+          this.gameOver = true;
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.undoLastScore();
+        }
+      } catch (error) {
+        console.error('Error showing win confirmation:', error);
+        this.gameOver = true;
+      }
     },
 
     nextPlayer() {
@@ -1202,7 +1470,7 @@ export default {
         const currentPlayer = this.players[this.currentPlayerIndex];
         const currentTeam = currentPlayer.teamObject;
 
-        // Increment the CURRENT team's player index first (for next time this team plays)
+        // Increment the CURRENT team's player index first
         currentTeam.currentPlayerIndex = (currentTeam.currentPlayerIndex + 1) % currentTeam.players.length;
 
         // Move to next team
@@ -1219,18 +1487,34 @@ export default {
         const nextPlayerInArray = this.players.find(p => p.id === nextTeamPlayer.id);
         this.currentPlayerIndex = this.players.indexOf(nextPlayerInArray);
       } else {
-        // Individual play: just cycle through players
-        do {
-          this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-        } while (this.players[this.currentPlayerIndex].isOut);
+        // Individual play: smooth transition
+        this.performSmoothTransition();
       }
 
       // Focus the input field for the next player
+      if (this.gameSettings.enableTeams) {
+        this.focusScoreInput();
+      }
+    },
+
+    async performSmoothTransition() {
+      // Start transition
+      this.isTransitioning = true;
+
+      // Move to next player
+      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+
+      // Wait for transition to complete
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      // End transition
+      this.isTransitioning = false;
+
+      // Focus input
       this.focusScoreInput();
     },
 
     focusScoreInput() {
-      // Use nextTick to ensure DOM is updated before focusing
       this.$nextTick(() => {
         if (!this.perThrowMode && this.$refs.scoreInputField) {
           this.$refs.scoreInputField.focus();
@@ -1239,7 +1523,6 @@ export default {
     },
 
     onScoreInputFocus() {
-      // Set the input value to 0 when it gets focus
       this.scoreInput = 0;
       this.validateScore();
     },
@@ -1252,10 +1535,30 @@ export default {
 
       // Restore player state
       player.currentScore = lastMove.previousScore;
-      player.dartsThrown -= lastMove.dartsUsed;
+      player.dartsThrown = lastMove.playerPreviousDartsThrown;
       player.hasStarted = lastMove.hadStarted;
       player.isOut = false;
       player.scores.pop();
+
+      // Restore individual scoring data for team mode
+      if (this.gameSettings.enableTeams && lastMove.playerPreviousScoreThrown !== undefined) {
+        player.totalScoreThrown = lastMove.playerPreviousScoreThrown;
+      }
+
+      // Handle team-specific undo
+      if (this.gameSettings.enableTeams && player.teamObject && lastMove.teamPreviousScore !== null) {
+        player.teamObject.currentScore = lastMove.teamPreviousScore;
+        player.teamObject.dartsThrown -= lastMove.dartsUsed;
+        player.teamObject.isOut = false;
+
+        // Update all players on this team
+        this.players.forEach(p => {
+          if (p.team === player.team) {
+            p.currentScore = lastMove.teamPreviousScore;
+            p.isOut = false;
+          }
+        });
+      }
 
       // Go back to that player
       this.currentPlayerIndex = lastMove.playerIndex;
@@ -1279,7 +1582,7 @@ export default {
       this.scoreInput = '';
       this.clearThrows();
 
-      // Reset player targets to default - Vue 3 compatible
+      // Reset player targets to default
       this.startPlayers.forEach(player => {
         this.playerTargets[player.id] = this.gameSettings.defaultTarget;
       });
@@ -1295,13 +1598,11 @@ export default {
       const name = this.newPlayerName.trim();
       if (!name) return;
 
-      // Add to custom players with default target score
       this.customPlayers.push({
         name,
         target: this.gameSettings.defaultTarget
       });
 
-      // Clear input
       this.newPlayerName = '';
     },
 
@@ -1310,7 +1611,6 @@ export default {
     },
 
     initializeTeams() {
-      // Create initial empty teams based on the number of teams setting
       this.teams = Array.from({ length: this.gameSettings.numberOfTeams }, (_, i) => ({
         id: `team${i + 1}`,
         name: `Team ${i + 1}`,
@@ -1323,175 +1623,620 @@ export default {
       }));
     },
 
-    getTeamColorClass(teamIndex) {
-      // Dynamic class for team color based on index
-      const colors = [
-        'border-red-300 bg-red-50',
-        'border-blue-300 bg-blue-50',
-        'border-green-300 bg-green-50',
-        'border-yellow-300 bg-yellow-50'
-      ];
-      return colors[teamIndex - 1] || '';
+    toggleStatsView() {
+      this.showStats = !this.showStats;
     },
 
-    getTeamGridClass() {
-      const count = this.gameSettings.numberOfTeams;
-      return count === 2 ? 'grid-cols-2' : count === 3 ? 'grid-cols-3' : 'grid-cols-4';
+    // Add other missing helper methods
+    selectTargetScore(value) {
+      if (typeof value === 'number') {
+        // Preset score selected
+        this.gameSettings.targetScoreType = 'preset';
+        this.gameSettings.defaultTarget = value;
+        this.gameSettings.customTarget = 0;
+      } else if (value === 'other') {
+        // Other option selected
+        this.gameSettings.targetScoreType = 'other';
+        if (this.gameSettings.customTarget > 0) {
+          this.gameSettings.defaultTarget = this.gameSettings.customTarget;
+        }
+      }
     },
 
+    updateAllTargetScores(newTarget) {
+      // Update player targets
+      this.startPlayers.forEach(player => {
+        this.playerTargets[player.id] = newTarget;
+      });
+
+      // Update custom players
+      this.customPlayers.forEach(player => {
+        player.target = newTarget;
+      });
+
+      // Update teams
+      this.teams.forEach(team => {
+        team.target = newTarget;
+        team.currentScore = newTarget;
+      });
+    },
+
+    // Sets/Legs helper methods
+    getValidSetsNumbers() {
+      return this.gameSettings.setsFormat === 'bestOf'
+        ? [1, 3, 5, 7, 9, 11, 13]
+        : [1, 2, 3, 4, 5, 6, 7];
+    },
+
+    getValidLegsNumbers() {
+      return this.gameSettings.legsFormat === 'bestOf'
+        ? [1, 3, 5, 7, 9, 11, 13]
+        : [1, 2, 3, 4, 5, 6, 7];
+    },
+
+    updateSetsNumber() {
+      this.gameSettings.setsNumber = this.getValidSetsNumbers()[0];
+    },
+
+    updateLegsNumber() {
+      this.gameSettings.legsNumber = this.getValidLegsNumbers()[0];
+    },
+
+    getSetsDescription() {
+      if (this.gameSettings.setsFormat === 'bestOf') {
+        const toWin = Math.ceil(this.gameSettings.setsNumber / 2);
+        return `First to win ${toWin} sets`;
+      } else {
+        return `First to win ${this.gameSettings.setsNumber} sets`;
+      }
+    },
+
+    getLegsDescription() {
+      if (this.gameSettings.legsFormat === 'bestOf') {
+        const toWin = Math.ceil(this.gameSettings.legsNumber / 2);
+        return `First to win ${toWin} legs`;
+      } else {
+        return `First to win ${this.gameSettings.legsNumber} legs`;
+      }
+    },
+
+    // Team management methods
     onTeamModeToggle() {
       if (!this.gameSettings.enableTeams) {
-        // Reset teams and unassign players
+        // Clear all team assignments when disabling teams
         this.teams.forEach(team => {
-          team.players.forEach(player => {
-            player.team = null;
-          });
           team.players = [];
         });
       }
     },
 
     onTeamCountChange() {
-      const currentCount = this.teams.length;
-      const newCount = this.gameSettings.numberOfTeams;
-
-      if (newCount > currentCount) {
-        // Add empty teams
-        for (let i = currentCount; i < newCount; i++) {
-          this.teams.push({
-            id: `team${i + 1}`,
-            name: `Team ${i + 1}`,
-            players: []
-          });
-        }
-      } else {
-        // Remove excess teams
-        this.teams.splice(newCount);
-      }
+      this.initializeTeams();
     },
 
-    isPlayerInTeam(playerId, teamIndex) {
-      return this.teams[teamIndex] && this.teams[teamIndex].players.some(p => p.id === playerId);
+    getTeamGridClass() {
+      return {
+        'grid-cols-2': this.gameSettings.numberOfTeams === 2,
+        'grid-cols-3': this.gameSettings.numberOfTeams === 3,
+        'grid-cols-2 lg:grid-cols-4': this.gameSettings.numberOfTeams === 4
+      };
+    },
+
+    getTeamColorClass(teamNumber) {
+      const colors = {
+        1: 'border-blue-300 bg-blue-50',
+        2: 'border-red-300 bg-red-50',
+        3: 'border-green-300 bg-green-50',
+        4: 'border-yellow-300 bg-yellow-50'
+      };
+      return colors[teamNumber] || 'border-gray-300 bg-gray-50';
     },
 
     getTeamScore(teamIndex) {
-      const team = this.teams[teamIndex];
-      if (!team || team.players.length === 0) return this.gameSettings.defaultTarget;
-
-      // During setup, show the default target score
-      if (!this.gameStarted) {
-        return this.gameSettings.defaultTarget;
-      }
-
-      // During the game, return the team's current score
-      return team.currentScore || this.gameSettings.defaultTarget;
+      return this.teams[teamIndex]?.currentScore || this.gameSettings.defaultTarget;
     },
 
+    // Drag and drop methods
     onDragStart(event, player) {
-      // Store the dragged player data
-      event.dataTransfer.setData('player', JSON.stringify(player));
+      event.dataTransfer.setData('application/json', JSON.stringify(player));
     },
 
     onDrop(event, teamIndex) {
-      const playerData = event.dataTransfer.getData('player');
-      const player = JSON.parse(playerData);
+      event.preventDefault();
+      const playerData = JSON.parse(event.dataTransfer.getData('application/json'));
 
-      const team = this.teams[teamIndex];
-      const isFirstPlayer = team.players.length === 0;
-      const hasDefaultName = team.name === `Team ${teamIndex + 1}`;
-
-      // Add to team players
-      team.players.push({
-        id: player.id || `custom-${player.name}`,
-        name: player.name
+      // Remove player from current team (if any)
+      this.teams.forEach(team => {
+        team.players = team.players.filter(p => p.id !== playerData.id);
       });
 
-      // Auto-name the team after the first player if it still has the default name
-      if (isFirstPlayer && hasDefaultName) {
-        team.name = `Team ${player.name}`;
-      }
+      // Add player to new team
+      const teamPlayer = {
+        id: playerData.id,
+        name: playerData.name || playerData.title,
+        type: playerData.type
+      };
+
+      this.teams[teamIndex].players.push(teamPlayer);
     },
 
     removePlayerFromTeam(teamIndex, playerIndex) {
-      const removedPlayer = this.teams[teamIndex].players[playerIndex];
-
-      // Remove player from team
       this.teams[teamIndex].players.splice(playerIndex, 1);
+    },
 
-      // Add back to appropriate source list
-      if (removedPlayer.id.startsWith('custom-')) {
-        const playerName = removedPlayer.name;
-        const existingCustomPlayer = this.customPlayers.find(p => p.name === playerName);
-        if (!existingCustomPlayer) {
-          this.customPlayers.push({
-            name: playerName,
-            target: this.gameSettings.defaultTarget
-          });
-        }
-      } else {
-        // Check if it's a start player that needs to be added back
-        const existingStartPlayer = this.startPlayers.find(p => p.id === removedPlayer.id);
-        if (!existingStartPlayer) {
-          // This shouldn't happen normally, but we can handle it gracefully
-          console.warn('Player not found in original lists:', removedPlayer);
-        }
-      }
+    // Player carousel helper methods
+    isPreviousPlayer(player) {
+      if (this.players.length <= 1) return false;
+      const prevIndex = this.currentPlayerIndex === 0
+        ? this.players.length - 1
+        : this.currentPlayerIndex - 1;
+      return this.players[prevIndex] && this.players[prevIndex].id === player.id;
+    },
+
+    isNextPlayer(player) {
+      if (this.players.length <= 1) return false;
+      const nextIndex = (this.currentPlayerIndex + 1) % this.players.length;
+      return this.players[nextIndex] && this.players[nextIndex].id === player.id;
+    },
+
+    isDistantPlayer(player) {
+      return !this.isCurrentPlayer(player) && !this.isPreviousPlayer(player) && !this.isNextPlayer(player);
     }
   }
 }
 </script>
 
 <style scoped>
-.dart-btn {
-  @apply px-3 py-2 text-sm rounded transition-colors cursor-pointer font-medium;
+/* Add basic styling for the component */
+.n01-scorer {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  color: #0c4a6e; /* text-sky-800 */
 }
 
-.dart-btn.single {
-  @apply bg-green-100 hover:bg-green-200 text-green-800;
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f0f9ff; /* bg-sky-50 */
+  z-index: 1000;
+  overflow-y: auto;
 }
 
-.dart-btn.double {
-  @apply bg-red-100 hover:bg-red-200 text-red-800;
+.game-interface {
+  padding: 1rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.dart-btn.treble {
-  @apply bg-yellow-100 hover:bg-yellow-200 text-yellow-800;
+.current-player-display {
+  flex: 0 0 auto;
+  margin-bottom: 2rem;
 }
 
-.dart-btn.quad {
-  @apply bg-purple-100 hover:bg-purple-200 text-purple-800;
+.player-carousel {
+  overflow: hidden;
+  position: relative;
+  height: 200px;
 }
 
-.dart-btn.special {
-  @apply bg-blue-100 hover:bg-blue-200 text-blue-800;
+.carousel-container {
+  display: flex;
+  transition: transform 0.3s ease-out;
 }
 
-.dart-btn.special-large {
-  @apply px-4 py-3 text-base rounded transition-colors cursor-pointer font-medium bg-blue-100 hover:bg-blue-200 text-blue-800;
+.player-slide {
+  flex: 0 0 250px;
+  margin-right: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e0f2fe; /* sky-100 */
 }
 
-.dart-btn.miss {
-  @apply bg-gray-100 hover:bg-gray-200 text-gray-800;
+.player-slide.current {
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2);
+  border: 2px solid #2563eb; /* blue-600 */
+  background: #f0f9ff; /* sky-50 */
 }
 
-.dart-btn.miss-large {
-  @apply px-4 py-3 text-base rounded transition-colors cursor-pointer font-medium bg-gray-100 hover:bg-gray-200 text-gray-800;
+.player-content {
+  text-align: center;
 }
 
-/* Team management styles */
+.player-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #0c4a6e; /* text-sky-800 */
+}
+
+.remaining-score {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #0c4a6e; /* text-sky-800 */
+  margin-bottom: 0.5rem;
+}
+
+.team-name {
+  color: #075985; /* text-sky-700 */
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.current-indicator {
+  color: #2563eb; /* blue-600 */
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.player-stats {
+  color: #0369a1; /* text-sky-600 */
+  font-size: 0.875rem;
+}
+
+.scoring-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.score-input-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.score-input {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: 2px solid #bae6fd; /* sky-200 */
+  border-radius: 8px;
+  text-align: center;
+  background: white;
+  color: #0c4a6e; /* text-sky-800 */
+}
+
+.score-input:focus {
+  outline: none;
+  border-color: #2563eb; /* blue-600 */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.submit-btn, .bust-btn, .clear-btn {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn {
+  background: #0284c7; /* sky-600 */
+  color: white;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #0369a1; /* sky-700 */
+}
+
+.submit-btn:disabled {
+  background: #94a3b8; /* slate-400 */
+  cursor: not-allowed;
+}
+
+.bust-btn {
+  background: #075985; /* sky-800 */
+  color: white;
+}
+
+.bust-btn:hover {
+  background: #0c4a6e; /* sky-900 */
+}
+
+.clear-btn {
+  background: #64748b; /* slate-500 */
+  color: white;
+}
+
+.clear-btn:hover {
+  background: #475569; /* slate-600 */
+}
+
+.validation-message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.darts-display {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.dart-slot {
+  background: white;
+  border: 2px solid #bae6fd; /* sky-200 */
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  min-width: 80px;
+}
+
+.dart-label {
+  display: block;
+  font-size: 0.875rem;
+  color: #0369a1; /* text-sky-600 */
+  margin-bottom: 0.5rem;
+}
+
+.dart-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #0c4a6e; /* text-sky-800 */
+}
+
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.number-btn, .special-btn {
+  padding: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: white;
+  border: 2px solid #bae6fd; /* sky-200 */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #0c4a6e; /* text-sky-800 */
+}
+
+.number-btn:hover, .special-btn:hover {
+  background: #f0f9ff; /* sky-50 */
+  border-color: #0284c7; /* sky-600 */
+}
+
+.special-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.throw-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.quick-controls {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.undo-btn, .stats-btn, .reset-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.undo-btn {
+  background: #0891b2; /* cyan-600 */
+  color: white;
+}
+
+.undo-btn:hover:not(:disabled) {
+  background: #0e7490; /* cyan-700 */
+}
+
+.undo-btn:disabled {
+  background: #94a3b8; /* slate-400 */
+  cursor: not-allowed;
+}
+
+.stats-btn {
+  background: #2563eb; /* blue-600 */
+  color: white;
+}
+
+.stats-btn:hover {
+  background: #1d4ed8; /* blue-700 */
+}
+
+.reset-btn {
+  background: #075985; /* sky-800 */
+  color: white;
+}
+
+.reset-btn:hover {
+  background: #0c4a6e; /* sky-900 */
+}
+
+.stats-section {
+  margin-top: 1rem;
+  background: #f8fafc; /* slate-50 */
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.team-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0f2fe; /* sky-100 */
+}
+
+.team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.individual-scoreboard {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0f2fe; /* sky-100 */
+}
+
+.scoreboard-header {
+  background: #f8fafc; /* slate-50 */
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  font-weight: bold;
+  color: #0c4a6e; /* text-sky-800 */
+}
+
+.player-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.player-row.current-player-row {
+  background: #dbeafe; /* blue-100 */
+}
+
+.player-row.out-player-row {
+  opacity: 0.5;
+}
+
+.finish-score {
+  color: #059669; /* emerald-600 */
+  font-weight: 600;
+}
+
+.bogey-score {
+  color: #dc2626; /* red-600 */
+  font-weight: 600;
+}
+
+.game-over-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  border: 2px solid #bae6fd; /* sky-200 */
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.new-game-btn, .close-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.new-game-btn {
+  background: #0284c7; /* sky-600 */
+  color: white;
+}
+
+.new-game-btn:hover {
+  background: #0369a1; /* sky-700 */
+}
+
+.close-btn {
+  background: #64748b; /* slate-500 */
+  color: white;
+}
+
+.close-btn:hover {
+  background: #475569; /* slate-600 */
+}
+
+/* Team setup styles */
 .team-drop-zone {
-  @apply cursor-pointer transition-all;
+  transition: all 0.2s;
 }
 
 .team-drop-zone:hover {
-  @apply border-gray-400;
+  border-color: #2563eb; /* blue-600 */
+  background-color: rgba(37, 99, 235, 0.05);
 }
 
 .player-card {
-  @apply transition-transform;
+  transition: all 0.2s;
 }
 
 .player-card:hover {
-  @apply scale-105;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .score-input-row {
+    flex-direction: column;
+  }
+
+  .numbers-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .quick-controls {
+    flex-direction: column;
+  }
+
+  .scoreboard-header,
+  .player-row {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    font-size: 0.875rem;
+  }
 }
 </style>

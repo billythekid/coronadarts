@@ -12,16 +12,6 @@
       <p class="my-2">Good Luck!</p>
     </div>
 
-    <!-- Debug: Show what data we're passing to the component -->
-    {% if craft.app.config.general.devMode %}
-      <div class="bg-yellow-100 p-4 mb-4">
-        <h3>Debug Info:</h3>
-        <p>Game: {{ game }}</p>
-        <p>Players count: {{ players|length }}</p>
-        <p>Players data: {{ players|json_encode }}</p>
-      </div>
-    {% endif %}
-
     <n01-scorer
       start-players='{{ players|json_encode|raw }}'
       game="{{ game }}">
