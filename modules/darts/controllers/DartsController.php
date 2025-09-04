@@ -16,7 +16,7 @@ class DartsController extends Controller
   {
     $cumulativeGames = ['Halfit', 'Shanghai', "Scotty's Game", "Martyn's Game"];
     $loseLivesGames  = ['25s and Bulls', '27s', '50 to 60'];
-    $n01Games = ['n01'];
+    $n01Games = ['n01 (under devlopment)'];
 
     $game = Craft::$app->getRequest()->getBodyParam('game');
     $players = Craft::$app->getRequest()->getBodyParam('players');
