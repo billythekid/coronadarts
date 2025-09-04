@@ -2,41 +2,97 @@
 {% set title = "Games" %}
 
 {% block content %}
-  <div class="block mx-auto max-w-screen-xl relative">
+    <div class="block mx-auto max-w-screen-xl relative">
 
-    {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').collect() %}
-    <h1 class="text-5xl text-center">Competitions</h1>
-    <ul class="md:flex flex-wrap justify-center text-center border-t-2 py-5 list-none	">
-      {% for competition in theCompetitions %}
-        <li>{{ competition.link|attr({'class':'underline mx-5'}) }}</li>
-      {% endfor %}
-    </ul>
+        {% set theCompetitions = craft.entries.section('games').level(1).orderBy('postDate DESC').collect() %}
+        <h1 class="text-5xl text-center mb-8">Competitions</h1>
 
-    <h1 class="text-5xl text-center mt-10">Games Played</h1>
-    <ul class="text-center list-none">
-      {% for playedDate, games in craft.entries.section('games').level(2).orderBy('postDate DESC').collect()|group('postDate|date') %}
-        <li class="border-t-2 py-5">
-          <h2 class="pb-4">{{ playedDate|date('l jS F Y') }}</h2>
-          <ul class="md:flex justify-center list-none">
-            {% for league, games in games|group('parent.title') %}
-              <li class="m-3">
-                <span class="text-2xl"><a class="underline" href="{{ games[0].parent.url }}">{{ league }}</a> Games</span>
-                <ul class="list-none">
-                  {% for game in games %}
-                    <li>
-                      <a class="underline" href="{{ game.url }}">{{ game.title|replace(" vs ", " #{game.player1LegsWon} vs #{game.player2LegsWon} ") }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+            {% for competition in theCompetitions %}
+                <div class="bg-white shadow rounded-lg p-3 border border-gray-600 hover:shadow-lg transition-shadow">
+                    <h2 class="text-lg font-bold text-center mb-2 truncate" title="{{ competition.title }}">
+                        <a href="{{ competition.url }}" class="underline">{{ competition.title }}</a>
+                    </h2>
+                    <div class="text-center text-sm text-gray-600 mb-1">
+                        {{ competition.competitionType.label }}
+                    </div>
+                    <div class="text-center text-xs text-gray-500 mb-2">
+                        Started {{ competition.postDate|date('M j, Y') }}
+                    </div>
+                    {% if competition.players|length > 0 %}
+                        <div class="text-center text-xs text-gray-500 mb-2">
+                            {{ competition.players|length }} player{{ competition.players|length != 1 ? 's' }}
+                        </div>
+                    {% endif %}
+
+                    {# Competition status and winner information #}
+                    {% set gamesThatHaveBeenPlayed = competition.children.collect() %}
+
+                    {% if competition.competitionType == "roundRobin" %}
+                        {% set players = competition.players|map((player)=>player.title) %}
+                        {% set gamesToBePlayed = craft.league.roundRobin(players, competition.roundRobinRounds) %}
+                        {% set actualGamesToBePlayed = gamesToBePlayed|filter(game=>"[BYE]" not in game) %}
+                        {% set remainingGames = actualGamesToBePlayed|length - gamesThatHaveBeenPlayed|length %}
+
+                        {% if remainingGames <= 0 %}
+                            {% set leaderboard = craft.league.getLeaderBoard(competition) %}
+                            {% if leaderboard|length > 0 %}
+                                {% set winner = leaderboard|first %}
+                                <div class="text-center text-sm font-semibold bg-yellow-200 rounded p-2 mt-2">
+                                    Winner: <a href="{{ winner.playerUrl }}" class="underline">{{ winner.playerName }}</a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center text-sm text-orange-600 bg-orange-50 rounded p-2 mt-2">
+                                Unfinished: {{ remainingGames }} game{{ remainingGames != 1 ? 's' }} to be played
+                            </div>
+                        {% endif %}
+
+                    {% elseif competition.competitionType == "elimination" %}
+                        {% if competition.blindDrawForEachRound %}
+                            {% set roundsToBePlayed = craft.league.eliminationBlindDraw(competition) %}
+                        {% else %}
+                            {% set roundsToBePlayed = craft.league.elimination(competition) %}
+                        {% endif %}
+                        {% set actualGamesToBePlayed = [] %}
+                        {% for round in roundsToBePlayed %}
+                            {% set actualGamesToBePlayed = actualGamesToBePlayed|merge(round|filter(game=>"[BYE]" not in game)) %}
+                        {% endfor %}
+                        {% set remainingGames = actualGamesToBePlayed|length - gamesThatHaveBeenPlayed|length %}
+
+                        {% if remainingGames <= 0 %}
+                            {% set finalGame = roundsToBePlayed|last|last %}
+                            {% if finalGame in gamesThatHaveBeenPlayed|map(game => game.title) %}
+                                {% for game in gamesThatHaveBeenPlayed %}
+                                    {% if game.title == finalGame %}
+                                        {% set playedGame = game %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if playedGame is defined %}
+                                    {% set winner = playedGame.player1LegsWon > playedGame.player2LegsWon ? playedGame.player1[0] : playedGame.player2[0] %}
+                                    <div class="text-center text-sm font-semibold bg-yellow-200 rounded p-2 mt-2">
+                                        Winner: <a href="{{ winner.url }}" class="underline">{{ winner.title }}</a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center text-sm text-orange-600 bg-orange-50 rounded p-2 mt-2">
+                                Unfinished: {{ remainingGames }} game{{ remainingGames != 1 ? 's' }} to be played
+                            </div>
+                        {% endif %}
+
+                    {% elseif competition.competitionType == "winnerStaysOn" %}
+                        {% set competitionInfo = craft.league.winnerStaysOn(competition) %}
+                        {% if competitionInfo.streaks|length > 0 %}
+                            {% set longestStreak = competitionInfo.streaks|first %}
+                            <div class="text-center text-sm font-semibold bg-yellow-200 rounded p-2 mt-2">
+                                Longest streak: {{ longestStreak.player }} ({{ longestStreak.length }} wins)
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
+        </div>
 
-    <div class="px-2">
-      {% include "_partials/_gamesToBePlayed.twig" %}
     </div>
-  </div>
 {% endblock %}

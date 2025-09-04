@@ -105,7 +105,7 @@ class Darts extends Component
     {
         $rounds = collect();
 
-        $allPlayers = $competition->players->map(function ($player) {
+        $allPlayers = collect($competition->players)->map(function ($player) {
             return $player->title;
         });
 
@@ -173,10 +173,10 @@ class Darts extends Component
         foreach ($competition->blindDrawRounds as $round) {
             $roundGames = [];
             foreach ($round->games as $game) {
-                if ($game->player2->first() === null) {
-                    $roundGames[] = $game->player1->first()->title . ' vs [BYE]';
+                if ($game->player2->one() === null) {
+                    $roundGames[] = $game->player1->one()->title . ' vs [BYE]';
                 } else {
-                    $roundGames[] = $game->player1->first()->title . ' vs ' . $game->player2->first()->title;
+                    $roundGames[] = $game->player1->one()->title . ' vs ' . $game->player2->one()->title;
                 }
             }
             $rounds[] = $roundGames;

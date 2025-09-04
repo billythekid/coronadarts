@@ -40,6 +40,22 @@
       {% endfor %}
     </div>
 
+    {# Add winner section for completed round robin tournaments #}
+    {% if allGamesPlayed %}
+      <div class="bg-yellow-200 rounded-b-lg">
+        <h3 class="text-3xl text-center pt-5">{{ competition.title }} Winner</h3>
+        <p class="text-2xl text-center pb-5">
+          {% set leaderboard = craft.league.getLeaderBoard(competition) %}
+          {% if leaderboard|length > 0 %}
+            {% set winner = leaderboard|first %}
+            <a class="underline" href="{{ winner.playerUrl }}">{{ winner.playerName }}</a>
+          {% else %}
+            Winner to be determined
+          {% endif %}
+        </p>
+      </div>
+    {% endif %}
+
   {% elseif competition.competitionType == "elimination" %}
     {% if competition.blindDrawForEachRound %}
       {% set roundsToBePlayed = craft.league.eliminationBlindDraw(competition) %}
