@@ -196,10 +196,7 @@
           <input type="checkbox" v-model="gameSettings.enableTeams" @change="onTeamModeToggle" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
           <span class="text-lg font-medium text-sky-800">Enable Team Play</span>
         </label>
-
-        <!-- Team Configuration -->
         <div v-if="gameSettings.enableTeams" class="space-y-4">
-          <!-- Number of Teams -->
           <div class="flex items-center space-x-4">
             <label class="text-lg font-medium text-sky-800">Number of Teams:</label>
             <select v-model.number="gameSettings.numberOfTeams" @change="onTeamCountChange" class="p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600 bg-white">
@@ -208,127 +205,87 @@
               <option value="4">4 Teams</option>
             </select>
           </div>
-
-          <!-- Team Assignment Area -->
           <div class="grid gap-4" :class="getTeamGridClass()">
-            <div v-for="(team, teamIndex) in teams" :key="teamIndex"
+            <div v-for="(team, teamIndex) in teams" :key="team.id"
                  class="team-drop-zone border-2 border-dashed border-sky-300 rounded-lg p-4 min-h-[200px] bg-sky-50"
                  :class="getTeamColorClass(teamIndex + 1)"
                  @drop="onDrop($event, teamIndex)"
                  @dragover.prevent
                  @dragenter.prevent>
-              <!-- Team Name -->
               <div class="mb-3">
-                <input
-                  v-model="team.name"
-                  :placeholder="`Team ${teamIndex + 1}`"
-                  class="w-full p-2 border rounded font-medium text-center ring-1 ring-sky-200 focus:ring-blue-600"
-                >
+                <input v-model="team.name" :placeholder="`Team ${teamIndex + 1}`" class="w-full p-2 border rounded font-medium text-center ring-1 ring-sky-200 focus:ring-blue-600">
               </div>
-
-              <!-- Team Score (if team has players) -->
               <div v-if="team.players.length > 0" class="mb-2 text-center">
                 <div class="text-sm text-sky-600">Team Score</div>
                 <div class="text-lg font-bold text-sky-800">{{ getTeamScore(teamIndex) }}</div>
               </div>
-
-              <!-- Team Players -->
               <div class="space-y-2">
-                <h5 class="font-medium text-sm text-sky-600 text-center">
-                  Players ({{ team.players.length }})
-                </h5>
-                <div v-for="(player, playerIndex) in team.players"
-                     :key="player.id || `${player.name}-${playerIndex}`"
-                     class="bg-white p-2 rounded shadow-sm border ring-1 ring-sky-200 flex items-center justify-between">
+                <h5 class="font-medium text-sm text-sky-600 text-center">Players ({{ team.players.length }})</h5>
+                <div v-for="(player, playerIndex) in team.players" :key="player.id || `${player.name}-${playerIndex}`" class="bg-white p-2 rounded shadow-sm border ring-1 ring-sky-200 flex items-center justify-between">
                   <span class="font-medium text-sky-800">{{ player.name }}</span>
                   <div class="flex items-center space-x-2">
                     <span class="text-xs text-sky-500">#{{ playerIndex + 1 }}</span>
-                    <button @click="removePlayerFromTeam(teamIndex, playerIndex)"
-                            class="text-sky-600 hover:text-sky-800 text-sm">×</button>
+                    <button @click="removePlayerFromTeam(teamIndex, playerIndex)" class="text-sky-600 hover:text-sky-800 text-sm">×</button>
                   </div>
                 </div>
-                <p v-if="team.players.length === 0"
-                   class="text-sky-400 text-sm text-center italic">
-                  Drag players here
-                </p>
+                <p v-if="team.players.length === 0" class="text-sky-400 text-sm text-center italic">Drag players here</p>
               </div>
             </div>
           </div>
-
-          <!-- Available Players -->
           <div class="mt-6">
             <h4 class="text-lg font-medium mb-3 text-sky-700">Available Players</h4>
             <div class="flex flex-wrap gap-2 p-4 border-2 border-dashed border-sky-200 rounded-lg min-h-[80px] bg-sky-50">
-              <!-- Selected Players from scorers page -->
-              <div v-for="player in unassignedStartPlayers" :key="player.id"
-                   class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300"
-                   draggable="true"
-                   @dragstart="onDragStart($event, { ...player, name: player.title, type: 'selected' })">
+              <div v-for="player in unassignedStartPlayers" :key="player.id" class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300" draggable="true" @dragstart="onDragStart($event, { ...player, name: player.title, type: 'selected' })">
                 <span>{{ player.title }}</span>
               </div>
-
-              <!-- Custom/visiting players -->
-              <div v-for="(player, index) in unassignedCustomPlayers" :key="'custom-' + index"
-                   class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300"
-                   draggable="true"
-                   @dragstart="onDragStart($event, { ...player, type: 'custom', originalIndex: index })">
+              <div v-for="(player, index) in unassignedCustomPlayers" :key="'custom-' + index" class="player-card bg-sky-100 text-sky-800 px-3 py-2 rounded-full cursor-move flex items-center ring-1 ring-sky-300" draggable="true" @dragstart="onDragStart($event, { ...player, type: 'custom', originalIndex: index, id: `custom-${player.name}` })">
                 <span>{{ player.name }}</span>
               </div>
-
-              <p v-if="unassignedStartPlayers.length === 0 && unassignedCustomPlayers.length === 0"
-                 class="text-sky-400 text-sm italic w-full text-center">
-                All players assigned to teams
-              </p>
+              <p v-if="unassignedStartPlayers.length === 0 && unassignedCustomPlayers.length === 0" class="text-sky-400 text-sm italic w-full text-center">All players assigned to teams</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Handicap Settings -->
-      <div v-if="totalPlayers > 0 && !gameSettings.enableTeams" class="mb-6">
-        <h3 class="text-xl mb-3 text-sky-800">Player Target Scores (Handicap System)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Selected players from scorers page -->
-          <div v-for="player in startPlayers" :key="player.id"
-               class="flex items-center justify-between bg-white p-3 rounded ring-1 ring-sky-200">
-            <label class="text-lg font-medium text-sky-800">{{ player.title }}:</label>
-            <input
-                type="number"
-                v-model.number="playerTargets[player.id]"
-                min="1"
-                max="9999"
-                class="w-24 p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
-            >
-          </div>
-          <!-- Custom/visiting players -->
-          <div v-for="(player, index) in customPlayers" :key="'custom-target-' + index"
-               class="flex items-center justify-between bg-sky-50 p-3 rounded border-sky-200 ring-1 ring-sky-200">
-            <label class="text-lg font-medium text-sky-800">{{ player.name }}:</label>
-            <input
-                type="number"
-                v-model.number="player.target"
-                min="1"
-                max="9999"
-                class="w-24 p-2 border rounded ring-1 ring-sky-200 focus:ring-blue-600"
-            >
-          </div>
-        </div>
+      <!-- Mugs Away Option (only for exactly 2 participants: either 2 players or 2 teams) -->
+      <div v-if="canUseMugsAway" class="mb-6 bg-white p-4 rounded border ring-1 ring-sky-200 flex items-center justify-between">
+        <label class="flex items-center space-x-3 cursor-pointer">
+          <input type="checkbox" v-model="gameSettings.mugsAway" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
+          <span class="text-lg font-medium text-sky-800">Mugs Away (loser starts next leg)</span>
+        </label>
+        <span class="text-sm text-sky-600">Available only in 2 player / 2 team games</span>
       </div>
 
-      <button
+      <!-- Game Controls -->
+      <div class="flex justify-between items-center mb-6">
+        <button
           @click="startGame"
           :disabled="totalPlayers === 0"
           class="bg-sky-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-sky-700 transition-colors disabled:opacity-50"
-      >
-        Start Game
-      </button>
+        >
+          Start Game
+        </button>
+      </div>
     </div>
 
     <!-- Game Interface - Full Screen Overlay When Playing -->
-    <div v-if="gameStarted" class="game-interface">
+    <div v-if="gameStarted" class="game-interface h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden flex flex-col">
+      <!-- Current Leg / Match Info -->
+      <div class="flex items-center justify-center py-4 gap-6 text-blue-100 font-medium border-b border-blue-800/30" v-if="!gameOver">
+        <div class="text-lg">Leg {{ currentLeg }}</div>
+        <div v-if="legsToWin" class="text-sm opacity-80">First to {{ legsToWin }} legs</div>
+        <div class="flex gap-4 text-sm" v-if="showLegScores">
+          <template v-if="!gameSettings.enableTeams">
+            <span v-for="p in players" :key="p.id" class="bg-blue-800/30 px-2 py-1 rounded">{{ p.name }}: {{ legWins[p.id] || 0 }}</span>
+          </template>
+          <template v-else>
+            <span v-for="t in activeTeams" :key="t.id" class="bg-blue-800/30 px-2 py-1 rounded">{{ t.name }}: {{ legWins[t.id] || 0 }}</span>
+          </template>
+        </div>
+      </div>
 
       <!-- Current Player Display - TOP PRIORITY -->
-      <div class="current-player-display">
+      <div class="current-player-display flex-shrink-0">
         <!-- Player Carousel -->
         <div class="player-carousel">
           <div class="carousel-container" :style="carouselTransform">
@@ -340,18 +297,18 @@
                    'next': isNextPlayer(player),
                    'distant': isDistantPlayer(player)
                  }">
-              <div class="player-content">
-                <h2 class="player-name">{{ player.name }}</h2>
-                <div class="remaining-score">{{ player.currentScore }}</div>
-                <p v-if="gameSettings.enableTeams && player.teamName" class="team-name">
+              <div class="player-content bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center shadow-xl">
+                <h2 class="player-name text-xl font-bold text-white mb-2">{{ player.name }}</h2>
+                <div class="remaining-score text-4xl font-bold text-blue-300 mb-2">{{ player.currentScore }}</div>
+                <p v-if="gameSettings.enableTeams && player.teamName" class="team-name text-sm text-blue-200 mb-2">
                   {{ player.teamName }}
                 </p>
                 <div v-if="isCurrentPlayer(player)" class="current-indicator">
-                  <span class="indicator-text">Current Player</span>
+                  <span class="indicator-text bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium animate-pulse">Current Player</span>
                 </div>
-                <div v-else class="player-stats">
-                  <span class="darts-thrown">{{ player.dartsThrown }} darts</span>
-                  <span class="average">{{ getPlayerAverage(player) }} avg</span>
+                <div v-else class="player-stats text-xs text-blue-200 space-y-1">
+                  <div class="darts-thrown">{{ player.dartsThrown }} darts</div>
+                  <div class="average">{{ getPlayerAverage(player) }} avg</div>
                 </div>
               </div>
             </div>
@@ -360,170 +317,182 @@
       </div>
 
       <!-- Scoring Input - SECOND PRIORITY -->
-      <div class="scoring-section">
-        <div class="mode-toggle">
-          <label class="flex items-center space-x-2">
-            <input type="checkbox" v-model="perThrowMode" class="rounded border-sky-300 text-blue-600 focus:ring-blue-500">
-            <span class="text-sky-800">Per Throw Mode</span>
+      <div class="scoring-section flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full px-4">
+        <div class="mode-toggle mb-6 text-center">
+          <label class="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2">
+            <input type="checkbox" v-model="perThrowMode" class="rounded border-blue-300 text-blue-600 focus:ring-blue-500 bg-white/20">
+            <span class="text-blue-100 font-medium">Per Throw Mode</span>
           </label>
         </div>
 
         <!-- Simple Score Input -->
-        <div v-if="!perThrowMode" class="simple-scoring">
-          <div class="score-input-row">
+        <div v-if="!perThrowMode" class="simple-scoring bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+          <div class="score-input-row flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
             <input
                 ref="scoreInputField"
                 type="number"
                 v-model.number="scoreInput"
                 :min="0"
                 :max="maxScore"
-                class="score-input"
+                class="score-input w-full sm:w-48 h-16 text-center text-2xl font-bold bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 @input="validateScore"
                 @keyup.enter="submitScore"
                 @focus="onScoreInputFocus"
                 placeholder="Enter score"
             >
-            <button
-                @click="submitScore"
-                :disabled="!isValidScore"
-                class="submit-btn"
-            >
-              Submit
-            </button>
-            <button
-                @click="submitBust"
-                class="bust-btn"
-            >
-              Bust
-            </button>
+            <div class="flex gap-3">
+              <button
+                  @click="submitScore"
+                  :disabled="!isValidScore"
+                  class="submit-btn bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors min-w-[100px]"
+              >
+                Submit
+              </button>
+              <button
+                  @click="submitBust"
+                  class="bust-btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors min-w-[100px]"
+              >
+                Bust
+              </button>
+            </div>
           </div>
-          <p class="validation-message" :class="scoreValidationClass">{{ scoreValidationMessage }}</p>
+          <p class="validation-message text-center text-sm" :class="scoreValidationClass">{{ scoreValidationMessage }}</p>
         </div>
 
         <!-- Per Throw Input -->
-        <div v-if="perThrowMode" class="per-throw-scoring">
-          <div class="darts-display">
-            <div v-for="(dart, index) in currentThrows" :key="index" class="dart-slot">
-              <span class="dart-label">{{ index + 1 }}</span>
-              <div class="dart-value">
+        <div v-if="perThrowMode" class="per-throw-scoring bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+          <div class="darts-display flex justify-center gap-4 mb-6">
+            <div v-for="(dart, index) in currentThrows" :key="index" class="dart-slot bg-white/20 border border-white/30 rounded-lg p-4 min-w-[80px] text-center">
+              <span class="dart-label block text-xs text-blue-200 mb-1">Dart {{ index + 1 }}</span>
+              <div class="dart-value text-lg font-bold text-white">
                 {{ dart ? formatDartDisplay(dart) : '-' }}
               </div>
             </div>
           </div>
 
           <!-- Mobile-Friendly Dartboard Input -->
-          <div class="dartboard-input">
-            <div class="numbers-grid">
+          <div class="dartboard-input mb-6">
+            <div class="numbers-grid grid grid-cols-4 sm:grid-cols-5 gap-2 mb-4">
               <button
                 v-for="num in sortedNumbers"
                 :key="num"
                 @click="showMultiplierPopover(num)"
-                class="number-btn"
+                class="number-btn bg-blue-700 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
               >
                 {{ num }}
               </button>
             </div>
 
-            <div class="special-buttons">
-              <button @click="addDartScore(25, 'single')" class="special-btn">25</button>
-              <button @click="addDartScore(50, 'bull')" class="special-btn">Bull</button>
-              <button @click="addDartScore(0, 'miss')" class="special-btn">Miss</button>
+            <div class="special-buttons flex justify-center gap-3">
+              <button @click="addDartScore(25, 'single')" class="special-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">25</button>
+              <button @click="addDartScore(50, 'bull')" class="special-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Bull</button>
+              <button @click="addDartScore(0, 'miss')" class="special-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Miss</button>
             </div>
           </div>
 
-          <div class="throw-controls">
+          <div class="throw-controls flex justify-center gap-3">
             <button
                 @click="submitThrows"
                 :disabled="currentThrows.every(t => t === null)"
-                class="submit-btn"
+                class="submit-btn bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors"
             >
               Submit Throws
             </button>
-            <button @click="clearThrows" class="clear-btn">Clear</button>
-            <button @click="submitBust" class="bust-btn">Bust</button>
+            <button @click="clearThrows" class="clear-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Clear</button>
+            <button @click="submitBust" class="bust-btn bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Bust</button>
           </div>
         </div>
       </div>
 
       <!-- Game Controls - Quick Access -->
-      <div class="quick-controls">
-        <button @click="undoLastScore" :disabled="gameHistory.length === 0" class="undo-btn">
+      <div class="quick-controls flex justify-center gap-4 p-4 border-t border-white/20">
+        <button @click="undoLastScore" :disabled="gameHistory.length === 0" class="undo-btn bg-orange-600 hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors">
           Undo
         </button>
-        <button @click="toggleStatsView" class="stats-btn">
+        <button @click="toggleStatsView" class="stats-btn bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
           {{ showStats ? 'Hide Stats' : 'Show Stats' }}
         </button>
-        <button @click="resetGame" class="reset-btn">Reset</button>
+        <button @click="resetGame" class="reset-btn bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Reset</button>
       </div>
 
       <!-- Collapsible Stats Section -->
-      <div v-if="showStats" class="stats-section">
+      <div v-if="showStats" class="stats-section bg-black/20 backdrop-blur-sm border-t border-white/20 p-4 max-h-80 overflow-y-auto">
         <!-- Team-based Scoreboard -->
-        <div v-if="gameSettings.enableTeams" class="team-scoreboard">
-          <div v-for="team in activeTeams" :key="team.id" class="team-card">
-            <div class="team-header">
-              <h3 class="text-sky-800">{{ team.name }}</h3>
-              <div class="team-score">
-                <span class="score text-sky-800">{{ team.currentScore }}</span>
-                <span class="details text-sky-600">{{ team.dartsThrown }} darts | {{ getTeamAverage(team) }} avg</span>
+        <div v-if="gameSettings.enableTeams" class="team-scoreboard space-y-4">
+          <div v-for="team in activeTeams" :key="team.id" class="team-card bg-white/10 border border-white/20 rounded-lg p-4">
+            <div class="team-header flex justify-between items-center mb-3">
+              <h3 class="text-lg font-bold text-white">{{ team.name }}</h3>
+              <div class="team-score text-right">
+                <div class="score text-2xl font-bold text-blue-300">{{ team.currentScore }}</div>
+                <div class="details text-xs text-blue-200">{{ team.dartsThrown }} darts | {{ getTeamAverage(team) }} avg</div>
               </div>
             </div>
-            <div class="team-players">
+            <div class="team-players space-y-2">
               <div v-for="player in getTeamPlayers(team)" :key="player.id"
-                   class="player-row" :class="{ 'current': isCurrentPlayer(player), 'next': isUpNextPlayer(player) }">
-                <span class="name text-sky-800">{{ player.name }}</span>
-                <span class="darts text-sky-600">{{ player.dartsThrown }}</span>
-                <span class="avg text-sky-600">{{ getPlayerAverage(player) }}</span>
-                <span class="status">
-                  <span v-if="player.isOut" class="out text-sky-500">Out</span>
-                  <span v-else-if="isCurrentPlayer(player)" class="playing text-blue-600">Playing</span>
-                  <span v-else-if="isUpNextPlayer(player)" class="next text-sky-700">Next</span>
-                  <span v-else class="waiting text-sky-500">Waiting</span>
-                </span>
+                   class="player-row flex justify-between items-center p-2 rounded"
+                   :class="{
+                     'bg-green-500/20 border border-green-400': isCurrentPlayer(player),
+                     'bg-blue-500/20 border border-blue-400': isUpNextPlayer(player),
+                     'bg-white/5': !isCurrentPlayer(player) && !isUpNextPlayer(player)
+                   }">
+                <span class="name font-medium text-white">{{ player.name }}</span>
+                <div class="flex items-center gap-4 text-sm">
+                  <span class="darts text-blue-200">{{ player.dartsThrown }}</span>
+                  <span class="avg text-blue-200">{{ getPlayerAverage(player) }}</span>
+                  <span class="status min-w-[60px] text-right">
+                    <span v-if="player.isOut" class="out text-gray-400">Out</span>
+                    <span v-else-if="isCurrentPlayer(player)" class="playing text-green-400 font-medium">Playing</span>
+                    <span v-else-if="isUpNextPlayer(player)" class="next text-blue-400">Next</span>
+                    <span v-else class="waiting text-gray-400">Waiting</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Individual Scoreboard -->
-        <div v-else class="individual-scoreboard">
+        <div v-else class="individual-scoreboard bg-white/10 border border-white/20 rounded-lg overflow-hidden">
           <!-- Header row -->
-          <div class="scoreboard-header">
-            <div class="header-cell">Player</div>
-            <div class="header-cell">Score</div>
-            <div class="header-cell">Darts</div>
-            <div class="header-cell">Average</div>
+          <div class="scoreboard-header grid grid-cols-4 gap-4 p-3 bg-white/20 border-b border-white/20">
+            <div class="header-cell font-bold text-white">Player</div>
+            <div class="header-cell font-bold text-white text-center">Score</div>
+            <div class="header-cell font-bold text-white text-center">Darts</div>
+            <div class="header-cell font-bold text-white text-center">Average</div>
           </div>
 
           <!-- Player rows -->
           <div v-for="player in players" :key="player.id"
-               class="player-row"
-               :class="{ 'current-player-row': isCurrentPlayer(player), 'out-player-row': player.isOut }">
-            <div class="player-cell name-cell text-sky-800">{{ player.name }}</div>
-            <div class="player-cell score-cell text-sky-800"
+               class="player-row grid grid-cols-4 gap-4 p-3 border-b border-white/10 last:border-b-0"
+               :class="{
+                 'bg-green-500/20': isCurrentPlayer(player),
+                 'bg-gray-500/20': player.isOut
+               }">
+            <div class="player-cell name-cell font-medium text-white">{{ player.name }}</div>
+            <div class="player-cell score-cell text-center font-bold text-white"
                  :class="[
-                   { 'finish-score': isValidFinish(player) },
-                   { 'bogey-score': isBogeyFinish(player) }
+                   { 'text-green-400': isValidFinish(player) },
+                   { 'text-orange-400': isBogeyFinish(player) }
                  ]">
               {{ player.currentScore }}
             </div>
-            <div class="player-cell darts-cell text-sky-600">{{ player.dartsThrown }}</div>
-            <div class="player-cell average-cell text-sky-600">{{ getPlayerAverage(player) }}</div>
+            <div class="player-cell darts-cell text-center text-blue-200">{{ player.dartsThrown }}</div>
+            <div class="player-cell average-cell text-center text-blue-200">{{ getPlayerAverage(player) }}</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Game Over Modal -->
-    <div v-if="gameOver" class="game-over-modal">
-      <div class="modal-content">
-        <h2 class="text-sky-800">Game Over!</h2>
-        <h3 class="text-sky-700">{{ winner.name }} Wins!</h3>
-        <p class="text-sky-600">Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
-        <p v-if="winner.dartsThrown > 0" class="text-sky-600">Average: {{ getPlayerAverage(winner) }}</p>
-        <div class="modal-buttons">
-          <button @click="newGame" class="new-game-btn">New Game</button>
-          <button @click="gameOver = false" class="close-btn">Close</button>
+    <div v-if="gameOver" class="game-over-modal fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="modal-content bg-white rounded-xl p-8 max-w-md w-full text-center shadow-2xl">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Game Over!</h2>
+        <h3 class="text-2xl font-semibold text-green-600 mb-4">{{ winner.name }} Wins!</h3>
+        <p class="text-gray-600 mb-2">Final score: {{ winner.target }} in {{ winner.dartsThrown }} darts</p>
+        <p v-if="winner.dartsThrown > 0" class="text-gray-600 mb-6">Average: {{ getPlayerAverage(winner) }}</p>
+        <div class="modal-buttons flex gap-4 justify-center">
+          <button @click="newGame" class="new-game-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">New Game</button>
+          <button @click="gameOver = false" class="close-btn bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Close</button>
         </div>
       </div>
     </div>
@@ -552,7 +521,8 @@ export default {
       winner: null,
       currentPlayerIndex: 0,
       perThrowMode: false,
-      scoreInput: '',
+      // Set default to 0 so we can immediately type over it and always validate from a known state
+      scoreInput: 0,
       currentThrows: [null, null, null],
       currentThrowIndex: 0,
       gameHistory: [],
@@ -572,8 +542,14 @@ export default {
         legsFormat: 'bestOf',
         legsNumber: 3,
         targetScoreType: 'preset',
-        customTarget: 0
+        customTarget: 0,
+        mugsAway: false
       },
+
+      // Leg / match tracking
+      currentLeg: 1,
+      legWins: {}, // key: participant id (player id or team id)
+      startingParticipantIndex: 0,
 
       playerTargets: {},
       players: [],
@@ -591,7 +567,11 @@ export default {
       sortedNumbers: [],
 
       // For collapsible stats section
-      showStats: false
+      showStats: false,
+
+      // Unified participants model
+      currentParticipantIndex: 0,
+      participants: [] // unified list of participants (teams or single-player pseudo teams)
     }
   },
 
@@ -603,6 +583,10 @@ export default {
 
     currentPlayer() {
       return this.players[this.currentPlayerIndex] || {};
+    },
+
+    currentParticipant() {
+      return this.participants[this.currentParticipantIndex] || null;
     },
 
     totalPlayers() {
@@ -653,7 +637,24 @@ export default {
         transform: `translateX(${baseOffset}px)`,
         transition: this.isTransitioning ? 'transform 0.6s ease-in-out' : 'transform 0.3s ease-out'
       };
-    }
+    },
+
+    legsToWin() {
+      // Determine number of legs required to win the match
+      const n = this.gameSettings.legsNumber;
+      if (!n) return null;
+      return this.gameSettings.legsFormat === 'bestOf' ? Math.ceil(n / 2) : n;
+    },
+    canUseMugsAway() {
+      // Exactly two players (no teams) OR exactly two active teams
+      if (this.gameSettings.enableTeams) {
+        return this.gameSettings.numberOfTeams === 2;
+      }
+      return this.totalPlayers === 2;
+    },
+    showLegScores() {
+      return Object.keys(this.legWins).length > 0;
+    },
   },
 
   mounted() {
@@ -696,50 +697,137 @@ export default {
 
   methods: {
     startGame() {
+      // Validate player selection
       if (this.totalPlayers === 0) {
         alert('Please select at least one player');
         return;
       }
 
+      // Team mode validation
       if (this.gameSettings.enableTeams) {
-        // Validate team setup
         const teamsWithPlayers = this.teams.filter(team => team.players.length > 0);
-
         if (teamsWithPlayers.length < 2) {
           alert('Please assign players to at least 2 teams');
           return;
         }
-
-        // Create players from teams with proper team assignment and turn order
         this.players = this.createTeamPlayers(teamsWithPlayers);
       } else {
-        // Regular individual play
         this.players = this.createIndividualPlayers();
       }
-
+      // Build unified participants (teams or individual players as single-player teams)
+      this.buildParticipants();
+      this.initializeLegTracking();
       this.gameStarted = true;
-      this.currentPlayerIndex = 0;
-
-      // Focus the input field when game starts
+      this.currentParticipantIndex = 0;
+      // Set currentPlayerIndex to first participant's current player
+      this.syncCurrentPlayerIndex();
       this.focusScoreInput();
     },
-
-    createIndividualPlayers() {
-      return [
-        // Selected players from scorers page
-        ...this.startPlayers.map(player => ({
-          id: player.id,
-          name: player.title,
-          target: this.playerTargets[player.id] || this.gameSettings.defaultTarget,
-          currentScore: this.playerTargets[player.id] || this.gameSettings.defaultTarget,
+    buildParticipants() {
+      if (this.gameSettings.enableTeams) {
+        // Use actual teams with players
+        this.participants = this.teams
+          .filter(t => t.players.length > 0)
+          .map(team => ({
+            id: team.id,
+            name: team.name,
+            players: team.players.map(tp => this.players.find(p => p.id === tp.id)).filter(Boolean),
+            target: this.gameSettings.defaultTarget,
+            currentScore: this.gameSettings.defaultTarget,
+            dartsThrown: 0,
+            hasStarted: false,
+            isOut: false,
+            currentPlayerIndex: 0
+          }));
+      } else {
+        // Each player becomes a single-player participant
+        this.participants = this.players.map(p => ({
+          id: p.id,
+          name: p.name,
+          players: [p],
+          target: p.target,
+          currentScore: p.target,
           dartsThrown: 0,
-          scores: [],
           hasStarted: false,
           isOut: false,
-          team: null,
-          teamName: null
+          currentPlayerIndex: 0
+        }));
+      }
+    },
+    syncCurrentPlayerIndex() {
+      const participant = this.currentParticipant;
+      if (!participant) return;
+      const currentPlayer = participant.players[participant.currentPlayerIndex];
+      if (!currentPlayer) return;
+      const idx = this.players.findIndex(p => p.id === currentPlayer.id);
+      if (idx !== -1) this.currentPlayerIndex = idx;
+    },
+    initializeLegTracking() {
+      this.currentLeg = 1;
+      this.legWins = {};
+      if (this.gameSettings.enableTeams) {
+        this.activeTeams.forEach(t => { this.$set ? this.$set(this.legWins, t.id, 0) : (this.legWins[t.id] = 0); });
+      } else {
+        this.players.forEach(p => { this.$set ? this.$set(this.legWins, p.id, 0) : (this.legWins[p.id] = 0); });
+      }
+      this.startingParticipantIndex = 0; // First leg starts with first participant
+    },
+    async showWinConfirmation(winningPlayer, participantId) {
+      try {
+        const result = await Swal.fire({
+          title: `Leg Finished!`,
+            html: `
+            <div class="text-center">
+              <h3 class="text-2xl font-bold text-green-600 mb-2">${winningPlayer.name} Wins the Leg!</h3>
+              <p class="text-lg mb-2">In ${winningPlayer.dartsThrown} darts</p>
+              <p class="text-md mb-4">Average: ${this.getPlayerAverage(winningPlayer)}</p>
+              ${winningPlayer.teamName ? `<p class=\"text-md text-gray-600\">Team: ${winningPlayer.teamName}</p>` : ''}
+            </div>
+          `,
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: 'Accept Win',
+          cancelButtonText: 'Undo Last Score',
+          confirmButtonColor: '#059669',
+          cancelButtonColor: '#dc2626',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
+        if (result.isConfirmed) {
+          this.handleLegCompletion(participantId, winningPlayer);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.undoLastScore();
+        }
+      } catch (e) {
+        console.error('Error showing win confirmation', e);
+        this.handleLegCompletion(participantId, winningPlayer);
+      }
+    },
+    handleLegCompletion(participantId, winningPlayer) {
+      if (this.legWins[participantId] === undefined) this.legWins[participantId] = 0;
+      this.legWins[participantId]++;
+      const legsToWin = this.legsToWin || 1;
+      if (this.legWins[participantId] >= legsToWin) {
+        this.gameOver = true;
+        this.winner = winningPlayer;
+        return;
+      }
+      this.startNextLeg(participantId);
+    },
+    createIndividualPlayers() {
+      return [
+        ...this.startPlayers.map(player => ({
+          id: player.id,
+            name: player.title,
+            target: this.playerTargets[player.id] || this.gameSettings.defaultTarget,
+            currentScore: this.playerTargets[player.id] || this.gameSettings.defaultTarget,
+            dartsThrown: 0,
+            scores: [],
+            hasStarted: false,
+            isOut: false,
+            team: null,
+            teamName: null
         })),
-        // Custom/visiting players
         ...this.customPlayers.map(player => ({
           id: `custom-${player.name}`,
           name: player.name,
@@ -754,22 +842,16 @@ export default {
         }))
       ];
     },
-
     createTeamPlayers(teamsWithPlayers) {
       const players = [];
-
-      // Initialize team scores and player tracking
       teamsWithPlayers.forEach(team => {
         team.currentScore = this.gameSettings.defaultTarget;
         team.target = this.gameSettings.defaultTarget;
         team.dartsThrown = 0;
         team.hasStarted = false;
         team.isOut = false;
-        team.currentPlayerIndex = 0; // Track which player in the team is currently throwing
+        team.currentPlayerIndex = 0;
       });
-
-      // Simple approach: just add all players with team info
-      // The turn logic will be handled in nextPlayer() method
       teamsWithPlayers.forEach((team, teamIndex) => {
         team.players.forEach((teamPlayer, playerIndex) => {
           players.push({
@@ -778,7 +860,7 @@ export default {
             target: team.target,
             currentScore: team.currentScore,
             dartsThrown: 0,
-            totalScoreThrown: 0, // Initialize individual scoring tracker
+            totalScoreThrown: 0,
             scores: [],
             hasStarted: false,
             isOut: false,
@@ -790,442 +872,212 @@ export default {
           });
         });
       });
-
       return players;
     },
-
     validateScore() {
       const score = parseInt(this.scoreInput);
       const player = this.currentPlayer;
-
-      // Check for empty input or invalid numbers first
       if (this.scoreInput === '' || this.scoreInput === null || this.scoreInput === undefined) {
         this.isValidScore = false;
         this.scoreValidationMessage = 'Please enter a score';
         this.scoreValidationClass = 'text-red-600';
         return;
       }
-
       if (isNaN(score) || score < 0) {
         this.isValidScore = false;
         this.scoreValidationMessage = 'Invalid score';
         this.scoreValidationClass = 'text-red-600';
         return;
       }
-
       if (!this.isValidDartScore(score)) {
         this.isValidScore = false;
         this.scoreValidationMessage = 'Impossible score with darts';
         this.scoreValidationClass = 'text-red-600';
         return;
       }
-
       const newScore = player.currentScore - score;
-
       if (this.isBustScore(newScore, score, player)) {
         this.isValidScore = false;
         this.scoreValidationMessage = 'This would be a bust';
         this.scoreValidationClass = 'text-red-600';
         return;
       }
-
       this.isValidScore = true;
       this.scoreValidationMessage = newScore === 0 ? 'Winning score!' : `Would leave ${newScore}`;
       this.scoreValidationClass = newScore === 0 ? 'text-green-600' : 'text-gray-600';
     },
-
     isValidDartScore(score) {
       if (score === 0) return true;
-
-      // Generate all possible dart scores
       const possibleScores = this.generatePossibleScores();
       return possibleScores.has(score);
     },
-
     generatePossibleScores() {
       const scores = new Set([0]);
       const singleScores = [];
-
-      // Singles 1-20, doubles, trebles, and quads if enabled
       for (let i = 1; i <= 20; i++) {
         singleScores.push(i, i * 2, i * 3);
-        if (this.gameSettings.boardType === 'quadro') {
-          singleScores.push(i * 4);
-        }
+        if (this.gameSettings.boardType === 'quadro') singleScores.push(i * 4);
       }
-      singleScores.push(25, 50); // Bull and bullseye
-
-      // Generate all combinations for 1, 2, and 3 darts
+      singleScores.push(25, 50);
       singleScores.forEach(s => scores.add(s));
-
       for (let i = 0; i < singleScores.length; i++) {
-        for (let j = 0; j < singleScores.length; j++) {
-          scores.add(singleScores[i] + singleScores[j]);
-        }
+        for (let j = 0; j < singleScores.length; j++) scores.add(singleScores[i] + singleScores[j]);
       }
-
       for (let i = 0; i < singleScores.length; i++) {
         for (let j = 0; j < singleScores.length; j++) {
           for (let k = 0; k < singleScores.length; k++) {
             const total = singleScores[i] + singleScores[j] + singleScores[k];
-            if (total <= this.maxScore) {
-              scores.add(total);
-            }
+            if (total <= this.maxScore) scores.add(total);
           }
-
         }
       }
-
       return scores;
     },
-
     isBustScore(newScore, scoreThrown, player) {
       if (newScore < 0) return true;
-
-      // Check in/out rules
-      if (!player.hasStarted && !this.isValidInScore(scoreThrown)) {
-        return true;
-      }
-
-      // For finishing throws (newScore === 0), we need to handle per-throw mode differently from simple input
+      if (!player.hasStarted && !this.isValidInScore(scoreThrown)) return true;
       if (newScore === 0) {
-        // In per-throw mode, we can validate the actual finishing dart
         if (this.perThrowMode) {
-          // Check if the last dart thrown is a valid finishing dart
           const lastDart = this.currentThrows.filter(t => t !== null).pop();
-          if (lastDart && !this.isValidFinishingDart(lastDart)) {
-            return true;
-          }
+          if (lastDart && !this.isValidFinishingDart(lastDart)) return true;
         } else {
-          // In simple score input mode, check if the score can be achieved with a valid finishing dart
-          if (!this.isValidOutScore(scoreThrown)) {
-            return true;
-          }
+          if (this.gameSettings.outType === 'single') return false;
+          if (!this.canFinishDynamically(scoreThrown)) return true;
         }
       }
-
-      // Double out: can't finish on 1
-      if (this.gameSettings.outType === 'double' && newScore === 1) {
-        return true;
-      }
-
-      return false;
+      return this.gameSettings.outType === 'double' && newScore === 1;
     },
-
-    // New method to check if a specific dart is a valid finishing dart
     isValidFinishingDart(dart) {
       if (this.gameSettings.outType === 'single') return true;
-
-      if (this.gameSettings.outType === 'double') {
-        return dart.type === 'double' || dart.value === 50;
-      }
-
+      if (this.gameSettings.outType === 'double') return dart.type === 'double' || dart.value === 50;
       if (this.gameSettings.outType === 'royal') {
-        return dart.type === 'treble' || dart.type === 'double' ||
-               (this.gameSettings.boardType === 'quadro' && dart.type === 'quad');
+        return dart.type === 'treble' || dart.type === 'double' || (this.gameSettings.boardType === 'quadro' && dart.type === 'quad');
       }
-
       return true;
     },
-
     isValidInScore(score) {
       if (this.gameSettings.inType === 'single') return true;
-      if (this.gameSettings.inType === 'double') {
-        return this.containsDouble(score) || score === 50;
-      }
-      if (this.gameSettings.inType === 'treble') {
-        return this.containsTreble(score);
-      }
+      if (this.gameSettings.inType === 'double') return this.containsDouble(score) || score === 50;
+      if (this.gameSettings.inType === 'treble') return this.containsTreble(score);
       return true;
     },
-
-    isValidOutScore(score) {
-      if (this.gameSettings.outType === 'single') return true;
-      if (this.gameSettings.outType === 'double') {
-        return this.containsDouble(score) || score === 50;
-      }
-      if (this.gameSettings.outType === 'royal') {
-        return this.containsTreble(score) || this.containsDouble(score) ||
-            (this.gameSettings.boardType === 'quadro' && this.containsQuad(score));
-      }
-      return true;
-    },
-
-    containsDouble(score) {
-      for (let i = 1; i <= 20; i++) {
-        if (score === i * 2) return true;
-      }
-      return false;
-    },
-
-    containsTreble(score) {
-      for (let i = 1; i <= 20; i++) {
-        if (score === i * 3) return true;
-      }
-      return false;
-    },
-
-    containsQuad(score) {
-      for (let i = 1; i <= 20; i++) {
-        if (score === i * 4) return true;
-      }
-      return false;
-    },
-
+    containsDouble(score) { for (let i = 1; i <= 20; i++) if (score === i * 2) return true; return false; },
+    containsTreble(score) { for (let i = 1; i <= 20; i++) if (score === i * 3) return true; return false; },
+    containsQuad(score) { for (let i = 1; i <= 20; i++) if (score === i * 4) return true; return false; },
     isValidFinish(player) {
       const remaining = player.currentScore;
       const maxCheckout = this.getMaxCheckout();
-
       if (remaining <= 0 || remaining > maxCheckout) return false;
-
-      // For double out games, check if it's a valid finish
-      if (this.gameSettings.outType === 'double') {
-        return this.canFinishWithDouble(remaining);
-      }
-
-      // For other out types, use simpler logic
+      if (this.gameSettings.outType === 'double') return this.canFinishWithDouble(remaining);
       return remaining <= this.maxScore;
     },
-
     isBogeyFinish(player) {
       const remaining = player.currentScore;
       const maxCheckout = this.getMaxCheckout();
-
-      // Only applies to double out games
       if (this.gameSettings.outType !== 'double') return false;
-
-      // Must be under maximum checkout but impossible to finish
       if (remaining <= 0 || remaining > maxCheckout) return false;
-
       return !this.canFinishWithDouble(remaining);
     },
-
     getMaxCheckout() {
-      // Calculate maximum possible checkout based on board type and out type
       if (this.gameSettings.outType === 'double') {
-        if (this.gameSettings.boardType === 'quadro') {
-          // Quadro board: Q20 + Q20 + Bull = 80 + 80 + 50 = 210
-          return 210;
-        } else {
-          // Standard board: T20 + T20 + Bull = 60 + 60 + 50 = 170
-          return 170;
-        }
-      } else {
-        // For single out or royal out, use max possible score
-        return this.maxScore;
+        return this.gameSettings.boardType === 'quadro' ? 210 : 170;
       }
+      return this.maxScore;
     },
-
-    // Get all possible scoring values for a board type
     getPossibleScores(boardType) {
-      const scores = [0]; // Miss
-
-      // Single scores 1-20
-      for (let i = 1; i <= 20; i++) {
-        scores.push(i);
-      }
-
-      // Double scores 2-40
-      for (let i = 1; i <= 20; i++) {
-        scores.push(i * 2);
-      }
-
-      // Triple scores 3-60
-      for (let i = 1; i <= 20; i++) {
-        scores.push(i * 3);
-      }
-
-      // Bull scores
+      const scores = [0];
+      for (let i = 1; i <= 20; i++) scores.push(i);
+      for (let i = 1; i <= 20; i++) scores.push(i * 2);
+      for (let i = 1; i <= 20; i++) scores.push(i * 3);
       scores.push(25, 50);
-
-      // Quadro scores for quadro boards
-      if (boardType === 'quadro') {
-        for (let i = 1; i <= 20; i++) {
-          scores.push(i * 4);
-        }
-      }
-
+      if (boardType === 'quadro') { for (let i = 1; i <= 20; i++) scores.push(i * 4); }
       return [...new Set(scores)].sort((a, b) => a - b);
     },
-
-    // Get all possible double/finishing scores for a board type
     getFinishingScores(boardType) {
-      const finishingScores = [50]; // Bullseye only
-
-      // Double scores 2-40
-      for (let i = 1; i <= 20; i++) {
-        finishingScores.push(i * 2);
-      }
-
-      // For royal out games, add trebles as valid finishes
+      const finishingScores = [50];
+      for (let i = 1; i <= 20; i++) finishingScores.push(i * 2);
       if (this.gameSettings.outType === 'royal') {
-        for (let i = 1; i <= 20; i++) {
-          finishingScores.push(i * 3); // Trebles
-        }
-
-        // For quadro boards in royal out, also add quadros
-        if (boardType === 'quadro') {
-          for (let i = 1; i <= 20; i++) {
-            finishingScores.push(i * 4); // Quadros
-          }
-        }
+        for (let i = 1; i <= 20; i++) finishingScores.push(i * 3);
+        if (boardType === 'quadro') for (let i = 1; i <= 20; i++) finishingScores.push(i * 4);
       }
-
       return [...new Set(finishingScores)].sort((a, b) => a - b);
     },
-
-    canFinishWithDouble(score) {
-      const maxCheckout = this.getMaxCheckout();
-
-      // Special cases
-      if (score === 50) return true; // Bullseye
-      if (score > maxCheckout) return false; // Impossible in 3 darts
-      if (score === 1) return false; // Can't finish on 1 in double out
-
-      // Use dynamic calculation for both board types
-      return this.canFinishDynamically(score);
-    },
-
+    canFinishWithDouble(score) { return this.canFinishDynamically(score); },
     canFinishDynamically(targetScore) {
       const possibleScores = this.getPossibleScores(this.gameSettings.boardType);
       const finishingScores = this.getFinishingScores(this.gameSettings.boardType);
-
-      // Check all combinations of 3 darts where the last dart is a double/bull
-      for (let dart1 of possibleScores) {
-        for (let dart2 of possibleScores) {
-          for (let finishDart of finishingScores) {
-            if (dart1 + dart2 + finishDart === targetScore) {
-              return true;
-            }
-          }
+      for (let d1 of possibleScores) {
+        for (let d2 of possibleScores) {
+          for (let f of finishingScores) if (d1 + d2 + f === targetScore) return true;
         }
       }
-
-      // Check combinations of 2 darts where the last dart is a double/bull
-      for (let dart1 of possibleScores) {
-        for (let finishDart of finishingScores) {
-          if (dart1 + finishDart === targetScore) {
-            return true;
-          }
-        }
+      for (let d1 of possibleScores) {
+        for (let f of finishingScores) if (d1 + f === targetScore) return true;
       }
-
-      // Check single dart finish
-      for (let finishDart of finishingScores) {
-        if (finishDart === targetScore) {
-          return true;
-        }
-      }
-
+      for (let f of finishingScores) if (f === targetScore) return true;
       return false;
     },
-
-    canFinishWithDoubleQuadro(score) {
-      // This method is now redundant as we use canFinishDynamically
-      return this.canFinishDynamically(score);
-    },
-
+    canFinishWithDoubleQuadro(score) { return this.canFinishDynamically(score); },
     getPlayerAverage(player) {
       if (player.dartsThrown === 0) return '0.0';
-
-      // In team mode, use individual player's actual scoring
-      if (this.gameSettings.enableTeams && player.totalScoreThrown !== undefined) {
+      // Unified: use individual performance (player.totalScoreThrown if present else target-diff)
+      if (player.totalScoreThrown !== undefined && player.totalScoreThrown > 0) {
         return (player.totalScoreThrown / player.dartsThrown * 3).toFixed(1);
       }
-
-      // In individual mode, use the traditional calculation
       return ((player.target - player.currentScore) / player.dartsThrown * 3).toFixed(1);
     },
-
     getTeamAverage(team) {
       if (team.dartsThrown === 0) return '0.0';
       return ((team.target - team.currentScore) / team.dartsThrown * 3).toFixed(1);
     },
-
-    getTeamPlayers(team) {
-      return this.players.filter(player => player.team === team.id);
-    },
-
-    isCurrentPlayer(player) {
-      return this.players[this.currentPlayerIndex] && this.players[this.currentPlayerIndex].id === player.id;
-    },
-
+    getTeamPlayers(team) { return this.players.filter(p => p.team === team.id); },
+    isCurrentPlayer(player) { return this.players[this.currentPlayerIndex] && this.players[this.currentPlayerIndex].id === player.id; },
     isUpNextPlayer(player) {
       if (!this.gameSettings.enableTeams) return false;
-
       const currentPlayer = this.players[this.currentPlayerIndex];
       const currentTeam = currentPlayer.teamObject;
-
-      // Move to next team
       const activeTeams = this.teams.filter(team => team.players.length > 0 && !team.isOut);
       const currentTeamIndex = activeTeams.findIndex(team => team.id === currentTeam.id);
       const nextTeamIndex = (currentTeamIndex + 1) % activeTeams.length;
       const nextTeam = activeTeams[nextTeamIndex];
-
-      // Get the next player from that team
       const nextPlayerIndex = nextTeam.currentPlayerIndex % nextTeam.players.length;
       const nextTeamPlayer = nextTeam.players[nextPlayerIndex];
-
       return player.id === nextTeamPlayer.id;
     },
-
     selectDart(value, type) {
       if (this.currentThrowIndex >= 3) return;
-
-      // Vue 3: Direct assignment to reactive array instead of this.$set
       this.currentThrows[this.currentThrowIndex] = { value, type };
       this.currentThrowIndex++;
     },
-
     formatDartDisplay(dart) {
       if (dart.type === 'miss') return 'Miss';
       if (dart.type === 'single') return dart.value.toString();
-      if (dart.type === 'bull') return '50'; // Handle bullseye specially
-
-      const baseValue = dart.value / (dart.type === 'double' ? 2 : dart.type === 'treble' ? 3 : dart.type === 'quad' ? 4 : 1);
-      return `${dart.type.charAt(0).toUpperCase()}${baseValue}`;
+      if (dart.type === 'bull') return '50';
+      const base = dart.value / (dart.type === 'double' ? 2 : dart.type === 'treble' ? 3 : dart.type === 'quad' ? 4 : 1);
+      return `${dart.type.charAt(0).toUpperCase()}${base}`;
     },
-
     clearThrows() {
       this.currentThrows = [null, null, null];
       this.currentThrowIndex = 0;
-      this.selectedNumber = null; // Reset selected number when clearing throws
-    },
-
-    // New method for mobile-friendly dart input
-    addDartScore(value, type) {
-      if (this.currentThrowIndex >= 3) return;
-
-      // Add the dart to current throws
-      this.currentThrows[this.currentThrowIndex] = { value, type };
-      this.currentThrowIndex++;
-
-      // Reset selected number for next dart
       this.selectedNumber = null;
     },
-
-    // New method to show SweetAlert popover for multiplier selection
+    addDartScore(value, type) {
+      if (this.currentThrowIndex >= 3) return;
+      this.currentThrows[this.currentThrowIndex] = { value, type };
+      this.currentThrowIndex++;
+      this.selectedNumber = null;
+    },
     async showMultiplierPopover(num) {
       if (this.currentThrowIndex >= 3) return;
-
-      // Build HTML for custom buttons
-      let buttonsHtml = '<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">';
-
+      let buttonsHtml = '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">';
       if (num >= 1 && num <= 20) {
-        // Regular numbers 1-20 with all multipliers
-        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="single-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Single ${num} (${num})</button>`;
-        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="double-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Double ${num} (${num * 2})</button>`;
-        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="treble-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Treble ${num} (${num * 3})</button>`;
-
-        if (this.gameSettings.boardType === 'quadro') {
-          buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="quad-${num}" style="margin: 0; padding: 12px; font-size: 16px;">Quad ${num} (${num * 4})</button>`;
-        }
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="single-${num}">Single ${num} (${num})</button>`;
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="double-${num}">Double ${num} (${num*2})</button>`;
+        buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="treble-${num}">Treble ${num} (${num*3})</button>`;
+        if (this.gameSettings.boardType === 'quadro') buttonsHtml += `<button class="swal2-confirm swal2-styled" data-value="quad-${num}">Quad ${num} (${num*4})</button>`;
       }
-
       buttonsHtml += '</div>';
-
-      let multiplierChoice = null;
-
+      let choice = null;
       try {
         await Swal.fire({
           title: `Select multiplier for ${num}`,
@@ -1235,550 +1087,325 @@ export default {
           cancelButtonText: 'Cancel',
           showCloseButton: true,
           allowOutsideClick: false,
-          customClass: {
-            popup: 'swal2-popup-mobile-friendly',
-            title: 'swal2-title-mobile',
-            htmlContainer: 'swal2-html-mobile',
-            cancelButton: 'swal2-cancel-mobile'
-          },
           didOpen: () => {
-            // Add click handlers to custom buttons
             const buttons = Swal.getPopup().querySelectorAll('button[data-value]');
-            buttons.forEach(button => {
-              button.addEventListener('click', () => {
-                multiplierChoice = button.getAttribute('data-value');
-                Swal.close();
-              });
-            });
+            buttons.forEach(btn => btn.addEventListener('click', () => { choice = btn.getAttribute('data-value'); Swal.close(); }));
           }
         });
-
-        // Process the selection if one was made
-        if (multiplierChoice) {
-          // Parse the selected multiplier and add the dart score
-          const [type, numberStr] = multiplierChoice.split('-');
-          const baseNumber = parseInt(numberStr);
-          let dartValue, dartType;
-
-          switch (type) {
-            case 'single':
-              dartValue = baseNumber;
-              dartType = 'single';
-              break;
-            case 'double':
-              dartValue = baseNumber * 2;
-              dartType = 'double';
-              break;
-            case 'treble':
-              dartValue = baseNumber * 3;
-              dartType = 'treble';
-              break;
-            case 'quad':
-              dartValue = baseNumber * 4;
-              dartType = 'quad';
-              break;
-          }
-
-          this.addDartScore(dartValue, dartType);
+        if (choice) {
+          const [type, numberStr] = choice.split('-');
+            const base = parseInt(numberStr);
+            let dartValue, dartType;
+            switch (type) {
+              case 'single': dartValue = base; dartType='single'; break;
+              case 'double': dartValue = base*2; dartType='double'; break;
+              case 'treble': dartValue = base*3; dartType='treble'; break;
+              case 'quad': dartValue = base*4; dartType='quad'; break;
+            }
+            this.addDartScore(dartValue, dartType);
         }
-        // If cancelled or no selection, do nothing (number is deselected automatically)
-      } catch (error) {
-        // User cancelled or closed the modal, do nothing
-        console.log('Multiplier selection cancelled');
-      }
+      } catch(_) { /* ignore */ }
     },
-
     submitScore() {
-      // Additional safety check for empty input
-      if (this.scoreInput === '' || this.scoreInput === null || this.scoreInput === undefined || !this.isValidScore) {
-        return;
-      }
-
+      if (this.scoreInput === '' || this.scoreInput === null || this.scoreInput === undefined || !this.isValidScore) return;
       const score = parseInt(this.scoreInput);
       this.processScore(score, false);
-      this.scoreInput = 0; // Set to 0 instead of empty string
-      this.validateScore(); // Validate the new 0 value
+      // Always reset to 0 and focus for next throw
+      this.scoreInput = 0;
+      this.validateScore();
+      this.focusScoreInput();
     },
-
     submitThrows() {
-      const totalScore = this.currentThrows
-          .filter(t => t !== null)
-          .reduce((sum, t) => sum + t.value, 0);
-
+      const totalScore = this.currentThrows.filter(t => t !== null).reduce((s,t)=>s+t.value,0);
       this.processScore(totalScore, false);
       this.clearThrows();
     },
-
     submitBust() {
       this.processScore(0, true);
       if (this.perThrowMode) {
         this.clearThrows();
       } else {
-        this.scoreInput = '';
+        this.scoreInput = 0; // keep consistent reset to 0
+        this.validateScore();
+        this.focusScoreInput();
       }
     },
-
     processScore(score, isBust) {
-      const player = this.currentPlayer;
-      const dartsUsed = this.perThrowMode ?
-          this.currentThrows.filter(t => t !== null).length : 3;
+      const currentParticipant = this.currentParticipant;
+      if (!currentParticipant) return;
+      const throwingPlayer = currentParticipant.players[currentParticipant.currentPlayerIndex];
+      const dartsUsed = this.perThrowMode ? this.currentThrows.filter(t => t !== null).length : 3;
 
-      // Save to history for undo
+      // History (store participant + player info)
       this.gameHistory.push({
+        participantIndex: this.currentParticipantIndex,
+        participantPreviousScore: currentParticipant.currentScore,
         playerIndex: this.currentPlayerIndex,
-        previousScore: player.currentScore,
-        score: score,
-        isBust: isBust,
-        dartsUsed: dartsUsed,
-        hadStarted: player.hasStarted,
-        teamPreviousScore: this.gameSettings.enableTeams && player.teamObject ? player.teamObject.currentScore : null,
-        playerPreviousScoreThrown: player.totalScoreThrown || 0,
-        playerPreviousDartsThrown: player.dartsThrown
+        playerId: throwingPlayer.id,
+        previousPlayerScore: throwingPlayer.currentScore,
+        score,
+        isBust,
+        dartsUsed,
+        participantHadStarted: currentParticipant.hasStarted,
+        playerHadStarted: throwingPlayer.hasStarted,
+        participantDartsThrown: currentParticipant.dartsThrown,
+        playerDartsThrown: throwingPlayer.dartsThrown,
+        participantIsOut: currentParticipant.isOut,
+        playerIsOut: throwingPlayer.isOut,
+        playerTotalScoreThrown: throwingPlayer.totalScoreThrown || 0
       });
 
       if (!isBust) {
-        const newScore = player.currentScore - score;
-
-        if (this.isBustScore(newScore, score, player)) {
+        const newScore = currentParticipant.currentScore - score;
+        if (this.isBustScore(newScore, score, throwingPlayer)) {
           isBust = true;
-        }
-        else {
-          // Trigger score animation before updating the actual score
-          // this.triggerScoreAnimation(player.currentScore, newScore, player.id, isBust);
-
-          // Update scores based on game mode
-          if (this.gameSettings.enableTeams && player.teamObject) {
-            // Team mode: update team score and sync all team members
-            player.teamObject.currentScore = newScore;
-            player.teamObject.dartsThrown += dartsUsed;
-
-            if (!player.teamObject.hasStarted && score > 0) {
-              player.teamObject.hasStarted = true;
-            }
-
-            // Update all players on this team to reflect the new team score
-            this.players.forEach(p => {
-              if (p.team === player.team) {
-                p.currentScore = newScore;
-                p.target = player.teamObject.target;
-                if (!p.hasStarted && score > 0) {
-                  p.hasStarted = true;
-                }
-              }
-            });
-
-            if (newScore === 0) {
-              this.teamFinished(player.teamObject);
-              return;
-            }
-          } else {
-            // Individual mode: update only this player
-            player.currentScore = newScore;
-            player.scores.push(score);
-
-            if (!player.hasStarted && score > 0) {
-              player.hasStarted = true;
-            }
-
-            if (newScore === 0) {
-              this.playerFinished(player);
-              return;
-            }
+        } else {
+          // Apply score to participant
+          currentParticipant.currentScore = newScore;
+          if (!currentParticipant.hasStarted && score > 0) currentParticipant.hasStarted = true;
+          // Mirror to all players in participant
+          currentParticipant.players.forEach(p => {
+            p.currentScore = newScore;
+            if (!p.hasStarted && score > 0) p.hasStarted = true;
+          });
+          // Check finish
+          if (newScore === 0) {
+            // Mark finished
+            currentParticipant.isOut = true;
+            currentParticipant.players.forEach(p => p.isOut = true);
+            this.winner = throwingPlayer;
+            this.showWinConfirmation(throwingPlayer, currentParticipant.id);
+            return;
           }
         }
-      } else {
-        // Trigger bust animation
-        // this.triggerScoreAnimation(player.currentScore, player.currentScore, player.id, true);
       }
 
-      // Update individual player stats (both team and individual mode)
-      player.dartsThrown += dartsUsed;
-      player.scores.push(isBust ? `Bust (${score})` : score);
-
-      // Track individual scoring for accurate averages
+      // Update darts & player stats
+      currentParticipant.dartsThrown += dartsUsed;
+      throwingPlayer.dartsThrown += dartsUsed;
+      throwingPlayer.scores.push(isBust ? `Bust (${score})` : score);
       if (!isBust && score > 0) {
-        if (!player.totalScoreThrown) player.totalScoreThrown = 0;
-        player.totalScoreThrown += score;
+        if (!throwingPlayer.totalScoreThrown) throwingPlayer.totalScoreThrown = 0;
+        throwingPlayer.totalScoreThrown += score;
       }
 
       this.nextPlayer();
     },
-
-
-    // Add the missing methods that were referenced but not implemented
-    async teamFinished(team) {
-      // Mark all players on the winning team as finished
-      this.players.forEach(player => {
-        if (player.team === team.id) {
-          player.isOut = true;
-        }
-      });
-
-      team.isOut = true;
-
-      // Set the current player as the winner representative
-      this.winner = this.currentPlayer;
-
-      // Show SweetAlert for win confirmation
-      await this.showWinConfirmation(this.currentPlayer);
-    },
-
-    async playerFinished(player) {
-      player.isOut = true;
-      this.winner = player;
-
-      // Show SweetAlert for win confirmation
-      await this.showWinConfirmation(player);
-    },
-
-    async showWinConfirmation(winningPlayer) {
-      try {
-        const result = await Swal.fire({
-          title: 'Game Finished!',
-          html: `
-            <div class="text-center">
-              <h3 class="text-2xl font-bold text-green-600 mb-2">${winningPlayer.name} Wins!</h3>
-              <p class="text-lg mb-2">Finished in ${winningPlayer.dartsThrown} darts</p>
-              <p class="text-md mb-4">Average: ${this.getPlayerAverage(winningPlayer)}</p>
-              ${winningPlayer.teamName ? `<p class="text-md text-gray-600">Team: ${winningPlayer.teamName}</p>` : ''}
-            </div>
-          `,
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonText: 'Accept Win',
-          cancelButtonText: 'Undo Last Score',
-          confirmButtonColor: '#059669',
-          cancelButtonColor: '#dc2626',
-          allowOutsideClick: false,
-          allowEscapeKey: false
+    undoLastScore() {
+      if (this.gameHistory.length === 0) return;
+      const last = this.gameHistory.pop();
+      const participant = this.participants[last.participantIndex];
+      const player = this.players.find(p => p.id === last.playerId);
+      if (participant) {
+        participant.currentScore = last.participantPreviousScore;
+        participant.dartsThrown = last.participantDartsThrown;
+        participant.hasStarted = last.participantHadStarted;
+        participant.isOut = last.participantIsOut;
+        // Mirror back to participant players
+        participant.players.forEach(p => {
+          p.currentScore = last.participantPreviousScore;
+          p.isOut = last.participantIsOut;
         });
-
-        if (result.isConfirmed) {
-          this.gameOver = true;
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.undoLastScore();
-        }
-      } catch (error) {
-        console.error('Error showing win confirmation:', error);
-        this.gameOver = true;
       }
-    },
-
-    nextPlayer() {
-      if (this.gameSettings.enableTeams) {
-        // Team-based turn logic
-        const currentPlayer = this.players[this.currentPlayerIndex];
-        const currentTeam = currentPlayer.teamObject;
-
-        // Increment the CURRENT team's player index first
-        currentTeam.currentPlayerIndex = (currentTeam.currentPlayerIndex + 1) % currentTeam.players.length;
-
-        // Move to next team
-        const activeTeams = this.teams.filter(team => team.players.length > 0 && !team.isOut);
-        const currentTeamIndex = activeTeams.findIndex(team => team.id === currentTeam.id);
-        const nextTeamIndex = (currentTeamIndex + 1) % activeTeams.length;
-        const nextTeam = activeTeams[nextTeamIndex];
-
-        // Get the next player from that team
-        const nextPlayerIndex = nextTeam.currentPlayerIndex % nextTeam.players.length;
-        const nextTeamPlayer = nextTeam.players[nextPlayerIndex];
-
-        // Find this player in the main players array
-        const nextPlayerInArray = this.players.find(p => p.id === nextTeamPlayer.id);
-        this.currentPlayerIndex = this.players.indexOf(nextPlayerInArray);
-      } else {
-        // Individual play: smooth transition
-        this.performSmoothTransition();
+      if (player) {
+        player.currentScore = last.previousPlayerScore;
+        player.dartsThrown = last.playerDartsThrown;
+        player.hasStarted = last.playerHadStarted;
+        player.isOut = last.playerIsOut;
+        player.totalScoreThrown = last.playerTotalScoreThrown;
+        // Remove last score entry if matches
+        if (player.scores.length) player.scores.pop();
       }
-
-      // Focus the input field for the next player
-      if (this.gameSettings.enableTeams) {
+      this.currentParticipantIndex = last.participantIndex;
+      this.syncCurrentPlayerIndex();
+      this.gameOver = false;
+      this.winner = null;
+      if (!this.perThrowMode) {
+        this.scoreInput = 0;
+        this.validateScore();
         this.focusScoreInput();
       }
     },
-
-    async performSmoothTransition() {
-      // Start transition
-      this.isTransitioning = true;
-
-      // Move to next player
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-
-      // Wait for transition to complete
-      await new Promise(resolve => setTimeout(resolve, 600));
-
-      // End transition
-      this.isTransitioning = false;
-
-      // Focus input
+    nextPlayer() {
+      if (this.participants.length === 0) return;
+      const participant = this.currentParticipant;
+      participant.currentPlayerIndex = (participant.currentPlayerIndex + 1) % participant.players.length;
+      this.currentParticipantIndex = (this.currentParticipantIndex + 1) % this.participants.length;
+      let guard = 0;
+      while (this.participants[this.currentParticipantIndex].isOut && guard < this.participants.length) {
+        this.currentParticipantIndex = (this.currentParticipantIndex + 1) % this.participants.length;
+        guard++;
+      }
+      this.syncCurrentPlayerIndex();
+      if (!this.perThrowMode) {
+        // Always reset score box to 0 for the new player and focus it
+        this.scoreInput = 0;
+        this.validateScore();
+        this.focusScoreInput();
+      }
+    },
+    startNextLeg(lastWinningParticipantId) {
+      this.currentLeg++;
+      // Determine next starting participant index (supports mugs away when exactly 2 participants)
+      if (this.gameSettings.mugsAway && this.participants.length === 2) {
+        const winnerIdx = this.participants.findIndex(p => p.id === lastWinningParticipantId);
+        this.startingParticipantIndex = winnerIdx === 0 ? 1 : 0;
+      } else {
+        this.startingParticipantIndex = (this.startingParticipantIndex + 1) % this.participants.length;
+      }
+      // Reset participants & players
+      this.participants.forEach(part => {
+        part.currentScore = part.target;
+        part.dartsThrown = 0;
+        part.hasStarted = false;
+        part.isOut = false;
+        part.currentPlayerIndex = 0;
+        part.players.forEach(p => {
+          p.currentScore = p.target;
+          p.dartsThrown = 0;
+          p.hasStarted = false;
+          p.isOut = false;
+          p.scores = [];
+          p.totalScoreThrown = 0;
+        });
+      });
+      this.currentParticipantIndex = this.startingParticipantIndex;
+      this.gameHistory = [];
+      this.winner = null;
+      this.syncCurrentPlayerIndex();
       this.focusScoreInput();
     },
-
-    focusScoreInput() {
-      this.$nextTick(() => {
-        if (!this.perThrowMode && this.$refs.scoreInputField) {
-          this.$refs.scoreInputField.focus();
-        }
-      });
-    },
-
-    onScoreInputFocus() {
-      this.scoreInput = 0;
-      this.validateScore();
-    },
-
-    undoLastScore() {
-      if (this.gameHistory.length === 0) return;
-
-      const lastMove = this.gameHistory.pop();
-      const player = this.players[lastMove.playerIndex];
-
-      // Restore player state
-      player.currentScore = lastMove.previousScore;
-      player.dartsThrown = lastMove.playerPreviousDartsThrown;
-      player.hasStarted = lastMove.hadStarted;
-      player.isOut = false;
-      player.scores.pop();
-
-      // Restore individual scoring data for team mode
-      if (this.gameSettings.enableTeams && lastMove.playerPreviousScoreThrown !== undefined) {
-        player.totalScoreThrown = lastMove.playerPreviousScoreThrown;
-      }
-
-      // Handle team-specific undo
-      if (this.gameSettings.enableTeams && player.teamObject && lastMove.teamPreviousScore !== null) {
-        player.teamObject.currentScore = lastMove.teamPreviousScore;
-        player.teamObject.dartsThrown -= lastMove.dartsUsed;
-        player.teamObject.isOut = false;
-
-        // Update all players on this team
-        this.players.forEach(p => {
-          if (p.team === player.team) {
-            p.currentScore = lastMove.teamPreviousScore;
-            p.isOut = false;
-          }
-        });
-      }
-
-      // Go back to that player
-      this.currentPlayerIndex = lastMove.playerIndex;
-
-      // Close game over modal if it was open
-      this.gameOver = false;
-      this.winner = null;
-    },
-
-    newGame() {
-      this.resetGame();
-    },
-
     resetGame() {
       this.gameStarted = false;
       this.gameOver = false;
       this.winner = null;
       this.currentPlayerIndex = 0;
       this.players = [];
+      this.participants = [];
+      this.currentParticipantIndex = 0;
       this.gameHistory = [];
-      this.scoreInput = '';
+      this.scoreInput = 0; // keep consistent
       this.clearThrows();
-
-      // Reset player targets to default
-      this.startPlayers.forEach(player => {
-        this.playerTargets[player.id] = this.gameSettings.defaultTarget;
-      });
-
-      // Clear custom players
+      this.startPlayers.forEach(player => { this.playerTargets[player.id] = this.gameSettings.defaultTarget; });
       this.customPlayers = [];
-
-      // Re-initialize teams
       this.initializeTeams();
+      this.currentLeg = 1; this.legWins = {}; this.startingParticipantIndex = 0;
     },
-
-    addCustomPlayer() {
-      const name = this.newPlayerName.trim();
-      if (!name) return;
-
-      this.customPlayers.push({
-        name,
-        target: this.gameSettings.defaultTarget
-      });
-
-      this.newPlayerName = '';
-    },
-
-    removeCustomPlayer(index) {
-      this.customPlayers.splice(index, 1);
-    },
-
-    initializeTeams() {
-      this.teams = Array.from({ length: this.gameSettings.numberOfTeams }, (_, i) => ({
-        id: `team${i + 1}`,
-        name: `Team ${i + 1}`,
-        players: [],
-        currentScore: this.gameSettings.defaultTarget,
-        target: this.gameSettings.defaultTarget,
-        dartsThrown: 0,
-        hasStarted: false,
-        isOut: false
-      }));
-    },
-
-    toggleStatsView() {
-      this.showStats = !this.showStats;
-    },
-
-    // Add other missing helper methods
+    addCustomPlayer() { const name = this.newPlayerName.trim(); if (!name) return; this.customPlayers.push({ name, target: this.gameSettings.defaultTarget }); this.newPlayerName=''; },
+    removeCustomPlayer(index) { this.customPlayers.splice(index,1); },
+    initializeTeams() { this.teams = Array.from({length: this.gameSettings.numberOfTeams}, (_,i)=>({ id:`team${i+1}`, name:`Team ${i+1}`, players:[], currentScore:this.gameSettings.defaultTarget, target:this.gameSettings.defaultTarget, dartsThrown:0, hasStarted:false, isOut:false })); },
+    toggleStatsView() { this.showStats = !this.showStats; },
     selectTargetScore(value) {
       if (typeof value === 'number') {
-        // Preset score selected
         this.gameSettings.targetScoreType = 'preset';
         this.gameSettings.defaultTarget = value;
         this.gameSettings.customTarget = 0;
+        this.updateAllTargetScores && this.updateAllTargetScores(value);
       } else if (value === 'other') {
-        // Other option selected
         this.gameSettings.targetScoreType = 'other';
-        if (this.gameSettings.customTarget > 0) {
-          this.gameSettings.defaultTarget = this.gameSettings.customTarget;
+      }
+    },
+    focusScoreInput() {
+      this.$nextTick(() => {
+        const el = this.$refs.scoreInputField;
+        if (el) {
+          el.focus();
+          try {
+            el.setSelectionRange(el.value.length, el.value.length);
+          } catch (_) {}
         }
-      }
-    },
-
-    updateAllTargetScores(newTarget) {
-      // Update player targets
-      this.startPlayers.forEach(player => {
-        this.playerTargets[player.id] = newTarget;
-      });
-
-      // Update custom players
-      this.customPlayers.forEach(player => {
-        player.target = newTarget;
-      });
-
-      // Update teams
-      this.teams.forEach(team => {
-        team.target = newTarget;
-        team.currentScore = newTarget;
       });
     },
-
-    // Sets/Legs helper methods
+    onScoreInputFocus(e) {
+      try {
+        e.target.select();
+      } catch (_) {}
+    },
+    updateAllTargetScores(newT) {
+      if (this.gameStarted) return;
+      this.players.forEach(p => {
+        p.target = newT;
+        p.currentScore = newT;
+      });
+      this.teams.forEach(t => {
+        t.target = newT;
+        t.currentScore = newT;
+      });
+    },
     getValidSetsNumbers() {
-      return this.gameSettings.setsFormat === 'bestOf'
-        ? [1, 3, 5, 7, 9, 11, 13]
-        : [1, 2, 3, 4, 5, 6, 7];
+      return this.gameSettings.setsFormat === 'bestOf' ? [1, 3, 5, 7, 9] : [1, 2, 3, 4, 5, 6, 7, 8, 9];
     },
-
     getValidLegsNumbers() {
-      return this.gameSettings.legsFormat === 'bestOf'
-        ? [1, 3, 5, 7, 9, 11, 13]
-        : [1, 2, 3, 4, 5, 6, 7];
+      return this.gameSettings.legsFormat === 'bestOf' ? [1, 3, 5, 7, 9, 11, 13] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
     },
-
     updateSetsNumber() {
-      this.gameSettings.setsNumber = this.getValidSetsNumbers()[0];
+      const v = this.getValidSetsNumbers();
+      if (!v.includes(this.gameSettings.setsNumber)) this.gameSettings.setsNumber = v[0];
     },
-
     updateLegsNumber() {
-      this.gameSettings.legsNumber = this.getValidLegsNumbers()[0];
+      const v = this.getValidLegsNumbers();
+      if (!v.includes(this.gameSettings.legsNumber)) this.gameSettings.legsNumber = v[0];
     },
-
     getSetsDescription() {
-      if (this.gameSettings.setsFormat === 'bestOf') {
-        const toWin = Math.ceil(this.gameSettings.setsNumber / 2);
-        return `First to win ${toWin} sets`;
-      } else {
-        return `First to win ${this.gameSettings.setsNumber} sets`;
-      }
+      return this.gameSettings.setsFormat === 'bestOf' ? `First to ${Math.ceil(this.gameSettings.setsNumber / 2)} sets` : `First to ${this.gameSettings.setsNumber} sets`;
     },
-
     getLegsDescription() {
-      if (this.gameSettings.legsFormat === 'bestOf') {
-        const toWin = Math.ceil(this.gameSettings.legsNumber / 2);
-        return `First to win ${toWin} legs`;
-      } else {
-        return `First to win ${this.gameSettings.legsNumber} legs`;
-      }
+      return this.gameSettings.legsFormat === 'bestOf' ? `First to ${Math.ceil(this.gameSettings.legsNumber / 2)} legs` : `First to ${this.gameSettings.legsNumber} legs`;
     },
-
-    // Team management methods
     onTeamModeToggle() {
-      if (!this.gameSettings.enableTeams) {
-        // Clear all team assignments when disabling teams
-        this.teams.forEach(team => {
-          team.players = [];
-        });
-      }
+      if (this.gameSettings.enableTeams) this.initializeTeams();
+      else this.teams = [];
     },
-
     onTeamCountChange() {
       this.initializeTeams();
     },
-
     getTeamGridClass() {
-      return {
-        'grid-cols-2': this.gameSettings.numberOfTeams === 2,
-        'grid-cols-3': this.gameSettings.numberOfTeams === 3,
-        'grid-cols-2 lg:grid-cols-4': this.gameSettings.numberOfTeams === 4
-      };
+      const n = this.gameSettings.numberOfTeams;
+      if (n === 2) return 'grid-cols-1 md:grid-cols-2';
+      if (n === 3) return 'grid-cols-1 md:grid-cols-3';
+      return 'grid-cols-1 md:grid-cols-4';
     },
-
-    getTeamColorClass(teamNumber) {
-      const colors = {
-        1: 'border-blue-300 bg-blue-50',
-        2: 'border-red-300 bg-red-50',
-        3: 'border-green-300 bg-green-50',
-        4: 'border-yellow-300 bg-yellow-50'
-      };
-      return colors[teamNumber] || 'border-gray-300 bg-gray-50';
+    getTeamColorClass(i) {
+      const colors = ['bg-sky-50', 'bg-emerald-50', 'bg-amber-50', 'bg-violet-50'];
+      return colors[(i - 1) % colors.length];
     },
-
-    getTeamScore(teamIndex) {
-      return this.teams[teamIndex]?.currentScore || this.gameSettings.defaultTarget;
+    getTeamScore(i) {
+      const team = this.teams[i];
+      return team ? (team.currentScore ?? this.gameSettings.defaultTarget) : this.gameSettings.defaultTarget;
     },
-
-    // Drag and drop methods
-    onDragStart(event, player) {
-      event.dataTransfer.setData('application/json', JSON.stringify(player));
+    removePlayerFromTeam(ti, pi) {
+      const team = this.teams[ti];
+      if (!team) return;
+      team.players.splice(pi, 1);
     },
-
-    onDrop(event, teamIndex) {
-      event.preventDefault();
-      const playerData = JSON.parse(event.dataTransfer.getData('application/json'));
-
-      // Remove player from current team (if any)
-      this.teams.forEach(team => {
-        team.players = team.players.filter(p => p.id !== playerData.id);
-      });
-
-      // Add player to new team
-      const teamPlayer = {
-        id: playerData.id,
-        name: playerData.name || playerData.title,
-        type: playerData.type
-      };
-
-      this.teams[teamIndex].players.push(teamPlayer);
+    onDragStart(e, obj) {
+      try {
+        e.dataTransfer.setData('application/json', JSON.stringify(obj));
+      } catch (_) {}
     },
-
-    removePlayerFromTeam(teamIndex, playerIndex) {
-      this.teams[teamIndex].players.splice(playerIndex, 1);
+    onDrop(e, ti) {
+      try {
+        const data = e.dataTransfer.getData('application/json');
+        if (!data) return;
+        const player = JSON.parse(data);
+        const team = this.teams[ti];
+        if (!team) return;
+        if (team.players.some(p => p.id === player.id)) return;
+        team.players.push({ id: player.id, name: player.name });
+      } catch (_) {}
     },
-
-    // Player carousel helper methods
+    newGame() {
+      this.resetGame();
+    },
+    // Missing carousel helper methods
     isPreviousPlayer(player) {
-      if (this.players.length <= 1) return false;
-      const prevIndex = this.currentPlayerIndex === 0
-        ? this.players.length - 1
-        : this.currentPlayerIndex - 1;
+      const prevIndex = (this.currentPlayerIndex - 1 + this.players.length) % this.players.length;
       return this.players[prevIndex] && this.players[prevIndex].id === player.id;
     },
-
     isNextPlayer(player) {
-      if (this.players.length <= 1) return false;
       const nextIndex = (this.currentPlayerIndex + 1) % this.players.length;
       return this.players[nextIndex] && this.players[nextIndex].id === player.id;
     },
-
     isDistantPlayer(player) {
       return !this.isCurrentPlayer(player) && !this.isPreviousPlayer(player) && !this.isNextPlayer(player);
     }
@@ -1787,456 +1414,69 @@ export default {
 </script>
 
 <style scoped>
-/* Add basic styling for the component */
-.n01-scorer {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.fullscreen-overlay {
+/* Just minimal carousel positioning - everything else uses Tailwind */
+.n01-scorer.fullscreen-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #f0f9ff; /* bg-sky-50 */
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-.game-interface {
-  padding: 1rem;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.current-player-display {
-  flex: 0 0 auto;
-  margin-bottom: 2rem;
+  z-index: 50;
 }
 
 .player-carousel {
-  overflow: hidden;
   position: relative;
   height: 200px;
+  width: 100%;
+  overflow: visible;
+  padding-top: 28px;
 }
 
 .carousel-container {
-  display: flex;
-  transition: transform 0.3s ease-out;
+  position: relative;
+  height: 100%;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 .player-slide {
-  flex: 0 0 250px;
-  margin-right: 16px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #e0f2fe; /* sky-100 */
+  display: inline-block;
+  width: 250px;
+  margin: 0 8px;
+  transition: all 0.3s ease;
+  vertical-align: top;
 }
 
 .player-slide.current {
-  transform: scale(1.1);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2);
-  border: 2px solid #2563eb; /* blue-600 */
-  background: #f0f9ff; /* sky-50 */
+  transform: scale(1.2);
+  z-index: 2;
 }
 
-.player-content {
-  text-align: center;
+.player-slide.prev,
+.player-slide.next {
+  transform: scale(0.9);
+  opacity: 0.7;
 }
 
-.player-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.remaining-score {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #0c4a6e; /* text-sky-800 */
-  margin-bottom: 0.5rem;
-}
-
-.team-name {
-  color: #075985; /* text-sky-700 */
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-}
-
-.current-indicator {
-  color: #2563eb; /* blue-600 */
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-.player-stats {
-  color: #0369a1; /* text-sky-600 */
-  font-size: 0.875rem;
-}
-
-.scoring-section {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.score-input-row {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.score-input {
-  flex: 1;
-  padding: 1rem;
-  font-size: 1.5rem;
-  border: 2px solid #bae6fd; /* sky-200 */
-  border-radius: 8px;
-  text-align: center;
-  background: white;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.score-input:focus {
-  outline: none;
-  border-color: #2563eb; /* blue-600 */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.submit-btn, .bust-btn, .clear-btn {
-  padding: 1rem 2rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.submit-btn {
-  background: #0284c7; /* sky-600 */
-  color: white;
-}
-
-.submit-btn:hover:not(:disabled) {
-  background: #0369a1; /* sky-700 */
-}
-
-.submit-btn:disabled {
-  background: #94a3b8; /* slate-400 */
-  cursor: not-allowed;
-}
-
-.bust-btn {
-  background: #075985; /* sky-800 */
-  color: white;
-}
-
-.bust-btn:hover {
-  background: #0c4a6e; /* sky-900 */
-}
-
-.clear-btn {
-  background: #64748b; /* slate-500 */
-  color: white;
-}
-
-.clear-btn:hover {
-  background: #475569; /* slate-600 */
-}
-
-.validation-message {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-}
-
-.darts-display {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.dart-slot {
-  background: white;
-  border: 2px solid #bae6fd; /* sky-200 */
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  min-width: 80px;
-}
-
-.dart-label {
-  display: block;
-  font-size: 0.875rem;
-  color: #0369a1; /* text-sky-600 */
-  margin-bottom: 0.5rem;
-}
-
-.dart-value {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.numbers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.number-btn, .special-btn {
-  padding: 1rem;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: white;
-  border: 2px solid #bae6fd; /* sky-200 */
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.number-btn:hover, .special-btn:hover {
-  background: #f0f9ff; /* sky-50 */
-  border-color: #0284c7; /* sky-600 */
-}
-
-.special-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.throw-controls {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.quick-controls {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.undo-btn, .stats-btn, .reset-btn {
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.undo-btn {
-  background: #0891b2; /* cyan-600 */
-  color: white;
-}
-
-.undo-btn:hover:not(:disabled) {
-  background: #0e7490; /* cyan-700 */
-}
-
-.undo-btn:disabled {
-  background: #94a3b8; /* slate-400 */
-  cursor: not-allowed;
-}
-
-.stats-btn {
-  background: #2563eb; /* blue-600 */
-  color: white;
-}
-
-.stats-btn:hover {
-  background: #1d4ed8; /* blue-700 */
-}
-
-.reset-btn {
-  background: #075985; /* sky-800 */
-  color: white;
-}
-
-.reset-btn:hover {
-  background: #0c4a6e; /* sky-900 */
-}
-
-.stats-section {
-  margin-top: 1rem;
-  background: #f8fafc; /* slate-50 */
-  border-radius: 8px;
-  padding: 1rem;
-  border: 1px solid #e2e8f0; /* slate-200 */
-}
-
-.team-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0f2fe; /* sky-100 */
-}
-
-.team-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e2e8f0; /* slate-200 */
-}
-
-.individual-scoreboard {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #e0f2fe; /* sky-100 */
-}
-
-.scoreboard-header {
-  background: #f8fafc; /* slate-50 */
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem;
-  font-weight: bold;
-  color: #0c4a6e; /* text-sky-800 */
-}
-
-.player-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem;
-  border-bottom: 1px solid #e2e8f0; /* slate-200 */
-}
-
-.player-row.current-player-row {
-  background: #dbeafe; /* blue-100 */
-}
-
-.player-row.out-player-row {
+.player-slide.distant {
+  transform: scale(0.8);
   opacity: 0.5;
 }
 
-.finish-score {
-  color: #059669; /* emerald-600 */
-  font-weight: 600;
-}
-
-.bogey-score {
-  color: #dc2626; /* red-600 */
-  font-weight: 600;
-}
-
-.game-over-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  border: 2px solid #bae6fd; /* sky-200 */
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 1.5rem;
-}
-
-.new-game-btn, .close-btn {
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.new-game-btn {
-  background: #0284c7; /* sky-600 */
-  color: white;
-}
-
-.new-game-btn:hover {
-  background: #0369a1; /* sky-700 */
-}
-
-.close-btn {
-  background: #64748b; /* slate-500 */
-  color: white;
-}
-
-.close-btn:hover {
-  background: #475569; /* slate-600 */
-}
-
-/* Team setup styles */
-.team-drop-zone {
-  transition: all 0.2s;
-}
-
-.team-drop-zone:hover {
-  border-color: #2563eb; /* blue-600 */
-  background-color: rgba(37, 99, 235, 0.05);
-}
-
-.player-card {
-  transition: all 0.2s;
-}
-
-.player-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .score-input-row {
-    flex-direction: column;
+  .player-carousel {
+    height: 150px;
   }
 
-  .numbers-grid {
-    grid-template-columns: repeat(5, 1fr);
+  .player-slide {
+    width: 200px;
   }
+}
 
-  .quick-controls {
-    flex-direction: column;
-  }
-
-  .scoreboard-header,
-  .player-row {
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
-    font-size: 0.875rem;
+@media (max-width: 480px) {
+  .player-slide {
+    width: 150px;
+    margin: 0 4px;
   }
 }
 </style>
