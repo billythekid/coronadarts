@@ -1,0 +1,58 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  7f1630ad-7b1c-461e-a783-cbc8ca3c50d7:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 9873217d-3925-4849-a106-c6ac0138f3b5
+            handle: player
+            instructions: null
+            label: Player
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e0091ad4-1f09-4584-b44d-343e6708bc5d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 67596c10-9a3b-4e20-a52e-5817c6bbd329
+            handle: null
+            instructions: null
+            label: Score
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9210a4c5-499d-4572-86ed-189240f75228
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 9e9de3eb-8f9c-4bb3-a880-5dda107e3948
+        userCondition: null
+    thumbFieldKey: null
+handle: highScoresBlock
+hasTitleField: false
+icon: null
+name: 'High Scores (140+) Block'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

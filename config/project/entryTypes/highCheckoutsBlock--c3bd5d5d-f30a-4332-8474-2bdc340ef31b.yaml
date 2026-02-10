@@ -1,0 +1,58 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  06b7ef1d-75e3-4b81-9a7f-879c7d2bd3ac:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26
+            handle: null
+            instructions: null
+            label: Player
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: c8b22a0c-abaa-4810-99af-ca100f11195f
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: f7e93046-8f41-412f-abd5-89ca673abce7
+            handle: null
+            instructions: null
+            label: Checkout
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2500de94-3642-4f8b-b93e-f2af94bc94a6
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: b56e2a04-565a-4acc-aa45-bf05d1e23187
+        userCondition: null
+    thumbFieldKey: null
+handle: highCheckoutsBlock
+hasTitleField: false
+icon: null
+name: 'High Checkouts (100+) Block'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

@@ -1,23 +1,25 @@
 columnSuffix: null
-contentColumnType: string
-handle: player2
-instructions: null
-name: 'Player 2'
+handle: player22
+instructions: 'Leave blank if player 1 gets a bye.'
+name: 'Blind Draw Rounds - Round - Games - Player 2'
 searchable: false
 settings:
   allowSelfRelations: false
   branchLimit: null
-  localizeRelations: false
+  defaultPlacement: end
   maintainHierarchy: false
   maxRelations: 1
   minRelations: null
-  selectionLabel: 'Choose player'
+  selectionLabel: 'Choose player 2'
+  showSearchInput: true
   showSiteMenu: true
+  showUnpermittedEntries: true
+  showUnpermittedSections: true
   sources:
     - 'section:5aa6b3a0-9cda-48d1-a96d-136848c948a4' # Players
   targetSiteId: null
   validateRelatedElements: false
-  viewMode: null
+  viewMode: list
 translationKeyFormat: null
-translationMethod: site
+translationMethod: none
 type: craft\fields\Entries

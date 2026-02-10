@@ -109,7 +109,6 @@ fieldLayouts:
 handle: competition
 hasTitleField: true
 name: Competition
-section: 1603eea6-0c0e-4863-92c8-a25ff80c277a # Games
 showStatusField: true
 slugTranslationKeyFormat: null
 slugTranslationMethod: site

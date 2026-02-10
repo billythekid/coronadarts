@@ -1,7 +1,15 @@
 defaultPlacement: end
 enableVersioning: false
+entryTypes:
+  -
+    uid: 33781942-7f20-46f9-a605-44b191466dab # Players
 handle: players
+maxAuthors: 1
 name: Players
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
 propagationMethod: all
 siteSettings:
   9ef2b075-2c8e-48f2-acf4-b42629480270: # Coronavirus United Newton Tigers Singles

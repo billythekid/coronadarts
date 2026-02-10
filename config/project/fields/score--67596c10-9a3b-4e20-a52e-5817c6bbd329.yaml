@@ -1,18 +1,18 @@
 columnSuffix: null
-contentColumnType: integer(10)
-handle: player1LegsWon
+handle: score
 instructions: null
-name: 'Player 1 Legs Won'
+name: 'High Scores (140+) - Score'
 searchable: false
 settings:
   decimals: 0
-  defaultValue: 0
-  max: null
-  min: 0
+  defaultValue: null
+  max: 180
+  min: 140
   prefix: null
   previewCurrency: null
   previewFormat: decimal
   size: null
+  step: null
   suffix: null
 translationKeyFormat: null
 translationMethod: none

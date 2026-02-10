@@ -1,0 +1,22 @@
+columnSuffix: null
+handle: games
+instructions: null
+name: 'Blind Draw Rounds - Round - Games'
+searchable: true
+settings:
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    - 825cfde3-de72-4c59-aaed-18d031db136f # Blind Draw Rounds - Round - Games Block
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: verbb\supertable\fields\SuperTableField

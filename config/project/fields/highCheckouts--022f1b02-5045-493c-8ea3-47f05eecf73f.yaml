@@ -1,6 +1,5 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: highCheckouts
 instructions: null
 name: 'High Checkouts (100+)'
@@ -11,27 +10,31 @@ settings:
   columns:
     __assoc__:
       -
-        - 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26 # Player
+        - 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26
         -
           __assoc__:
             -
               - width
               - ''
       -
-        - f7e93046-8f41-412f-abd5-89ca673abce7 # Checkout
+        - f7e93046-8f41-412f-abd5-89ca673abce7
         -
           __assoc__:
             -
               - width
               - ''
-  contentTable: '{{%stc_highcheckouts}}'
+  entryTypes:
+    - c3bd5d5d-f30a-4332-8474-2bdc340ef31b # High Checkouts (100+) Block
   fieldLayout: row
+  maxEntries: null
   maxRows: 3
+  minEntries: null
   minRows: null
   propagationKeyFormat: null
   propagationMethod: all
   selectionLabel: 'Add a high checkout'
   staticField: null
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: verbb\supertable\fields\SuperTableField

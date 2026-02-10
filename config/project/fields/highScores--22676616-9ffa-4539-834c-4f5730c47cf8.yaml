@@ -1,6 +1,5 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: highScores
 instructions: null
 name: 'High Scores (140+)'
@@ -11,27 +10,31 @@ settings:
   columns:
     __assoc__:
       -
-        - 9873217d-3925-4849-a106-c6ac0138f3b5 # Player
+        - 9873217d-3925-4849-a106-c6ac0138f3b5
         -
           __assoc__:
             -
               - width
               - ''
       -
-        - 67596c10-9a3b-4e20-a52e-5817c6bbd329 # Score
+        - 67596c10-9a3b-4e20-a52e-5817c6bbd329
         -
           __assoc__:
             -
               - width
               - ''
-  contentTable: '{{%stc_highscores}}'
+  entryTypes:
+    - 8073cde4-f247-40ac-b01d-ae61a2852643 # High Scores (140+) Block
   fieldLayout: row
+  maxEntries: null
   maxRows: null
+  minEntries: null
   minRows: null
   propagationKeyFormat: null
   propagationMethod: all
   selectionLabel: 'Add high score'
   staticField: null
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: verbb\supertable\fields\SuperTableField

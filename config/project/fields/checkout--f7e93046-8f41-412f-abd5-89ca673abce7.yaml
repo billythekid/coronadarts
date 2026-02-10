@@ -1,18 +1,18 @@
 columnSuffix: null
-contentColumnType: integer(10)
-handle: player1LegsWon
+handle: checkout
 instructions: null
-name: 'Player 1 Legs Won'
+name: 'High Checkouts (100+) - Checkout'
 searchable: false
 settings:
   decimals: 0
   defaultValue: 0
-  max: null
-  min: 0
+  max: 170
+  min: 100
   prefix: null
   previewCurrency: null
   previewFormat: decimal
   size: null
+  step: null
   suffix: null
 translationKeyFormat: null
 translationMethod: none

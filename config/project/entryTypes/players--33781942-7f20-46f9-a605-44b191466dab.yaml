@@ -37,7 +37,6 @@ fieldLayouts:
 handle: players
 hasTitleField: true
 name: Players
-section: 5aa6b3a0-9cda-48d1-a96d-136848c948a4 # Players
 showStatusField: true
 slugTranslationKeyFormat: null
 slugTranslationMethod: site
