@@ -2,6 +2,7 @@ fieldLayouts:
   190985fb-4d05-4986-a0bd-65352912db15:
     tabs:
       -
+        elementCondition: null
         elements:
           -
             autocapitalize: true
@@ -9,7 +10,9 @@ fieldLayouts:
             autocorrect: true
             class: null
             disabled: false
+            elementCondition: null
             id: null
+            inputType: null
             instructions: null
             label: Title
             max: null
@@ -24,68 +27,92 @@ fieldLayouts:
             tip: null
             title: null
             type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: d670b344-3a44-497b-aaf6-67fa8322ebce
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: af3615af-c06f-4804-b179-040281bb1151 # Players
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 2f11a63b-3bed-4eba-b0bd-65c3e66e8c85
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: 6fcf820f-5057-4f40-996a-bf82db739663 # Special information
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 63488de1-40f2-4615-a7bb-8323e31a81bf
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: dd191238-04e4-486e-9029-d27780b2ce11 # Competition Type
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 3f79f4b8-7cca-4992-a3d5-aac87138371b
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: 22337b3e-aad9-4fa1-9db9-7bf2b4eb7156 # Blind Draw for each round?
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d9321694-923d-47bd-afb2-353447710c85
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: bdd67a8b-0d17-49a2-97bc-f86f7e543c13 # Blind Draw Rounds
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d5fdb9a8-3f5a-4c42-aac7-7f3abe1fd436
+            userCondition: null
             warning: null
             width: 100
           -
+            elementCondition: null
             fieldUid: 608f1f15-eead-4798-9900-48ee61e4e4f2 # Round Robin Rounds
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 466af0ba-3b48-466d-8335-f3953dc1b420
+            userCondition: null
             warning: null
             width: 100
         name: Settings
-        sortOrder: 1
+        uid: 9c212d8b-1608-473b-b142-16a0841a260f
+        userCondition: null
 handle: competition
 hasTitleField: true
 name: Competition
 section: 1603eea6-0c0e-4863-92c8-a25ff80c277a # Games
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
 sortOrder: 2
 titleFormat: null
 titleTranslationKeyFormat: null

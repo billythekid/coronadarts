@@ -2,7 +2,7 @@ columnSuffix: null
 contentColumnType: integer(10)
 fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: player1LegsWon
-instructions: ''
+instructions: null
 name: 'Player 1 Legs Won'
 searchable: false
 settings:

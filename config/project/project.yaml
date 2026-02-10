@@ -1,4 +1,4 @@
-dateModified: 1770741817
+dateModified: 1770744548
 elementSources:
   craft\elements\Entry:
     -
@@ -52,7 +52,6 @@ meta:
     98c3a7c2-70ec-44da-a147-b2acf4a813d4: 'Coronavirus United Newton Tigers Singles League' # Coronavirus United Newton Tigers Singles League
     608f1f15-eead-4798-9900-48ee61e4e4f2: 'Round Robin Rounds' # Round Robin Rounds
     0900cd97-c6b2-4a38-b2a0-0704a2955d60: 'Player 1 Legs Won' # Player 1 Legs Won
-    975cd655-130d-47b4-8992-6b5db41955e8: 'Public Schema' # Public Schema
     1603eea6-0c0e-4863-92c8-a25ff80c277a: Games # Games
     22337b3e-aad9-4fa1-9db9-7bf2b4eb7156: 'Blind Draw for each round?' # Blind Draw for each round?
     67596c10-9a3b-4e20-a52e-5817c6bbd329: Score # Score
@@ -70,10 +69,6 @@ meta:
     f7e93046-8f41-412f-abd5-89ca673abce7: Checkout # Checkout
     fe94bfac-3367-4b74-8c0a-b198f5093b79: Competition # Competition
 plugins:
-  ckeditor:
-    edition: standard
-    enabled: true
-    schemaVersion: 3.0.0.0
   conditional-fields:
     edition: standard
     enabled: true
@@ -93,10 +88,6 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 2.1.1
-  redactor:
-    edition: standard
-    enabled: true
-    schemaVersion: 2.3.0
   super-table:
     edition: standard
     enabled: true
@@ -105,7 +96,7 @@ system:
   edition: solo
   live: true
   name: 'Coronavirus United Newton Tigers Singles League'
-  schemaVersion: 4.15.0.0
+  schemaVersion: 4.17.0.3
   timeZone: Europe/London
 users:
   allowPublicRegistration: false

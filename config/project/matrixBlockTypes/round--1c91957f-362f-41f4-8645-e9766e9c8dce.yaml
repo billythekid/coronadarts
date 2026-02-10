@@ -3,37 +3,43 @@ fieldLayouts:
   b451ebe9-0a4b-46cd-af9b-06412dfedae3:
     tabs:
       -
+        elementCondition: null
         elements:
           -
+            elementCondition: null
             fieldUid: 5c94933e-5413-4c0f-8782-cee0e955cf08 # Games
             instructions: null
             label: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: b2581204-a731-4c7b-bbd6-866168e4ab34
+            userCondition: null
             warning: null
             width: 100
         name: Content
-        sortOrder: 1
+        uid: 1b691983-0479-41b3-bd06-3de5ce738246
+        userCondition: null
 fields:
   5c94933e-5413-4c0f-8782-cee0e955cf08: # Games
     columnSuffix: null
     contentColumnType: string
     fieldGroup: null
     handle: games
-    instructions: ''
+    instructions: null
     name: Games
     searchable: true
     settings:
+      blockTypeFields: 0
+      changedFieldIndicator: null
       contentTable: '{{%stc_games}}'
       fieldLayout: table
-      maxRows: ''
-      minRows: ''
-      placeholderKey: null
+      maxRows: null
+      minRows: null
       propagationKeyFormat: null
       propagationMethod: all
       selectionLabel: 'Add a game'
-      staticField: ''
+      staticField: null
     translationKeyFormat: null
     translationMethod: site
     type: verbb\supertable\fields\SuperTableField

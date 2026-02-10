@@ -7,8 +7,8 @@ name: 'Blind Draw Rounds'
 searchable: false
 settings:
   contentTable: '{{%matrixcontent_blinddrawrounds}}'
-  maxBlocks: ''
-  minBlocks: ''
+  maxBlocks: null
+  minBlocks: null
   propagationKeyFormat: null
   propagationMethod: all
 translationKeyFormat: null

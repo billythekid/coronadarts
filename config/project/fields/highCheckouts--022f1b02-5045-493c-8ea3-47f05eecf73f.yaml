@@ -2,10 +2,12 @@ columnSuffix: null
 contentColumnType: string
 fieldGroup: 741963c9-a9f3-46a4-b3cf-b5325fefb762 # Common
 handle: highCheckouts
-instructions: ''
+instructions: null
 name: 'High Checkouts (100+)'
 searchable: false
 settings:
+  blockTypeFields: 0
+  changedFieldIndicator: null
   columns:
     __assoc__:
       -
@@ -24,13 +26,12 @@ settings:
               - ''
   contentTable: '{{%stc_highcheckouts}}'
   fieldLayout: row
-  maxRows: '3'
-  minRows: ''
-  placeholderKey: null
+  maxRows: 3
+  minRows: null
   propagationKeyFormat: null
   propagationMethod: all
   selectionLabel: 'Add a high checkout'
-  staticField: ''
+  staticField: null
 translationKeyFormat: null
 translationMethod: site
 type: verbb\supertable\fields\SuperTableField

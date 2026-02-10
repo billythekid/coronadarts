@@ -2,6 +2,7 @@ fieldLayouts:
   dd37e7e7-809f-479c-bb0e-1cdd8d72ae62:
     tabs:
       -
+        elementCondition: null
         elements:
           -
             autocapitalize: true
@@ -9,7 +10,9 @@ fieldLayouts:
             autocorrect: true
             class: null
             disabled: false
+            elementCondition: null
             id: null
+            inputType: null
             instructions: null
             label: null
             max: null
@@ -24,14 +27,20 @@ fieldLayouts:
             tip: null
             title: null
             type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: de7ad959-439d-414a-a533-061aad0c2d52
+            userCondition: null
             warning: null
             width: 100
         name: Content
-        sortOrder: 1
+        uid: ef30e096-16e1-4d9c-a16d-77d6d9917012
+        userCondition: null
 handle: players
 hasTitleField: true
 name: Players
 section: 5aa6b3a0-9cda-48d1-a96d-136848c948a4 # Players
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
 sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null
