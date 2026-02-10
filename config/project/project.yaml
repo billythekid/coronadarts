@@ -1,4 +1,4 @@
-dateModified: 1756908670
+dateModified: 1770741817
 elementSources:
   craft\elements\Entry:
     -
@@ -39,6 +39,7 @@ email:
 meta:
   __names__:
     1c91957f-362f-41f4-8645-e9766e9c8dce: Round # Round
+    2b41928d-2fd0-4711-9e90-ecf5022ab60e: Simple # Simple
     3e98bd9b-16c1-4297-8be8-f06faf29e166: 'Player 1' # Player 1
     5aa6b3a0-9cda-48d1-a96d-136848c948a4: Players # Players
     5c94933e-5413-4c0f-8782-cee0e955cf08: Games # Games
@@ -69,6 +70,10 @@ meta:
     f7e93046-8f41-412f-abd5-89ca673abce7: Checkout # Checkout
     fe94bfac-3367-4b74-8c0a-b198f5093b79: Competition # Competition
 plugins:
+  ckeditor:
+    edition: standard
+    enabled: true
+    schemaVersion: 3.0.0.0
   conditional-fields:
     edition: standard
     enabled: true
