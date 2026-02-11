@@ -67,7 +67,7 @@
 
       {% if entry.specialInformation is not empty %}
         <div class="leading-loose sm:leading-normal text-center py-5">
-          {{ entry.specialInformation | markdown('gfm') }}
+          {{ entry.specialInformation | markdown('gfm') | embedYoutube }}
         </div>
       {% endif %}
 

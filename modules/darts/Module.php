@@ -51,6 +51,9 @@ class Module extends \yii\base\Module
 
     // Custom initialization code goes here...
 
+    // Register Twig extension with filters
+    Craft::$app->view->registerTwigExtension(new LeagueTwigExtension());
+
     Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function (Event $event) {
       /** @var CraftVariable $variable */
       $variable = $event->sender;
