@@ -4,6 +4,10 @@ A web application for managing dart leagues, competitions, and live scoring. Bui
 
 > **Note:** This is a personal project and work in progress. Feel free to raise PRs or issues if you find it helpful.
 
+## Background
+
+This project was created during the COVID-19 pandemic lockdowns when our friend group wanted to continue playing darts together. Since darts is a game where players don't actually need to be in the same room to play, we built this application to enable remote gameplay - each player could be at their own dartboard at home while we all participated in the same game online. What started as a solution to stay connected during lockdown evolved into a comprehensive dart league management system.
+
 ## Features
 
 - **Live Scoring Interface**: Real-time dart game scoring with Vue 3 components
