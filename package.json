@@ -40,6 +40,9 @@
     "vue-router": "^4.5.0",
     "vue-template-compiler": "^0.1.0"
   },
+  "overrides": {
+    "webpack": "~5.105.0"
+  },
   "dependencies": {
     "animate.css": "^4.1.0",
     "sweetalert2": "^11.22.5",
