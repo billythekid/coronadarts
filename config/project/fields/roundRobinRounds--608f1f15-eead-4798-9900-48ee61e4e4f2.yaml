@@ -1,5 +1,4 @@
 columnSuffix: null
-contentColumnType: integer(10)
 handle: roundRobinRounds
 instructions: 'How many rounds? (How many times should each player meet?) Every 2nd round will be reversed (home/away games)'
 name: 'Round Robin Rounds'
@@ -13,6 +12,7 @@ settings:
   previewCurrency: null
   previewFormat: decimal
   size: null
+  step: null
   suffix: rounds
 translationKeyFormat: null
 translationMethod: none

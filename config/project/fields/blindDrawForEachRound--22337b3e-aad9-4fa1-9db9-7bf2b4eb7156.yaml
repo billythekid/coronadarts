@@ -1,5 +1,4 @@
 columnSuffix: null
-contentColumnType: boolean
 handle: blindDrawForEachRound
 instructions: 'To automatically generate the whole tournament draw leave this turned off. If games are drawn between rounds, turn this on.'
 name: 'Blind Draw for each round?'
@@ -8,6 +7,7 @@ settings:
   default: false
   offLabel: null
   onLabel: null
+  showLabelsInCards: false
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Lightswitch

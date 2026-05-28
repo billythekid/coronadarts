@@ -13,7 +13,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26
+            fieldUid: 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26 # High Checkouts (100+) - Player
             handle: null
             instructions: null
             label: Player
@@ -29,7 +29,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: f7e93046-8f41-412f-abd5-89ca673abce7
+            fieldUid: f7e93046-8f41-412f-abd5-89ca673abce7 # High Checkouts (100+) - Checkout
             handle: null
             instructions: null
             label: Checkout

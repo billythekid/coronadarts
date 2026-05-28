@@ -1,5 +1,9 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
 fieldLayouts:
   dd37e7e7-809f-479c-bb0e-1cdd8d72ae62:
+    cardThumbAlignment: end
     tabs:
       -
         elementCondition: null
@@ -9,6 +13,7 @@ fieldLayouts:
             autocomplete: false
             autocorrect: true
             class: null
+            dateAdded: null
             disabled: false
             elementCondition: null
             id: null
@@ -21,7 +26,7 @@ fieldLayouts:
             orientation: null
             placeholder: null
             readonly: false
-            requirable: false
+            required: true
             size: null
             step: null
             tip: null
@@ -34,13 +39,16 @@ fieldLayouts:
         name: Content
         uid: ef30e096-16e1-4d9c-a16d-77d6d9917012
         userCondition: null
+    thumbFieldKey: null
 handle: players
 hasTitleField: true
+icon: null
 name: Players
+showSlugField: true
 showStatusField: true
 slugTranslationKeyFormat: null
 slugTranslationMethod: site
-sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null
 titleTranslationMethod: ''
+uiLabelFormat: '{title}'

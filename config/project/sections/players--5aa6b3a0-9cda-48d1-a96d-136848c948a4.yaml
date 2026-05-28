@@ -5,6 +5,7 @@ entryTypes:
     uid: 33781942-7f20-46f9-a605-44b191466dab # Players
 handle: players
 maxAuthors: 1
+minAuthors: 1
 name: Players
 previewTargets:
   -

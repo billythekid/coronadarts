@@ -1,39 +1,29 @@
 columnSuffix: null
-contentColumnType: string
 handle: highCheckouts
 instructions: null
 name: 'High Checkouts (100+)'
 searchable: false
 settings:
-  blockTypeFields: 0
-  changedFieldIndicator: null
-  columns:
-    __assoc__:
-      -
-        - 76adb1f2-9c15-4a0a-a5fc-bd9a32470c26
-        -
-          __assoc__:
-            -
-              - width
-              - ''
-      -
-        - f7e93046-8f41-412f-abd5-89ca673abce7
-        -
-          __assoc__:
-            -
-              - width
-              - ''
+  contentTable: ''
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
   entryTypes:
-    - c3bd5d5d-f30a-4332-8474-2bdc340ef31b # High Checkouts (100+) Block
-  fieldLayout: row
-  maxEntries: null
-  maxRows: 3
+    -
+      __assoc__:
+        -
+          - uid
+          - c3bd5d5d-f30a-4332-8474-2bdc340ef31b # High Checkouts (100+) Block
+        -
+          - group
+          - General
+  includeTableView: false
+  maxEntries: 3
   minEntries: null
-  minRows: null
+  pageSize: null
   propagationKeyFormat: null
   propagationMethod: all
-  selectionLabel: 'Add a high checkout'
-  staticField: null
+  showCardsInGrid: false
   viewMode: blocks
 translationKeyFormat: null
 translationMethod: site

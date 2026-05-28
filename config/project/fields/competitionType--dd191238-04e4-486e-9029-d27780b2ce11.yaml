@@ -1,11 +1,10 @@
 columnSuffix: null
-contentColumnType: string
 handle: competitionType
 instructions: null
 name: 'Competition Type'
 searchable: true
 settings:
-  columnType: string
+  customOptions: false
   options:
     -
       __assoc__:

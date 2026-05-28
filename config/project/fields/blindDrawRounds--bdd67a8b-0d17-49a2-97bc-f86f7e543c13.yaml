@@ -1,17 +1,25 @@
 columnSuffix: null
-contentColumnType: string
 handle: blindDrawRounds
 instructions: 'Add the games for each round as drawn in the blind draw.'
 name: 'Blind Draw Rounds'
 searchable: false
 settings:
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
   entryTypes:
     -
-      uid: 1c91957f-362f-41f4-8645-e9766e9c8dce
+      __assoc__:
+        -
+          - uid
+          - 1c91957f-362f-41f4-8645-e9766e9c8dce # Round
+  includeTableView: false
   maxEntries: null
   minEntries: null
+  pageSize: null
   propagationKeyFormat: null
   propagationMethod: all
+  showCardsInGrid: false
   viewMode: blocks
 translationKeyFormat: null
 translationMethod: site

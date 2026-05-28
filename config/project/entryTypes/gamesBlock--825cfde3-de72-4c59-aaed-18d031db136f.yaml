@@ -13,7 +13,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 48ac97fc-80b3-4ad2-a9a4-30e09934a0ac
+            fieldUid: 48ac97fc-80b3-4ad2-a9a4-30e09934a0ac # Blind Draw Rounds - Round - Games - Player 1
             handle: player1
             instructions: null
             label: 'Player 1'
@@ -29,7 +29,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a44bb3c5-38ba-495a-90d8-ccbf246f319d
+            fieldUid: a44bb3c5-38ba-495a-90d8-ccbf246f319d # Blind Draw Rounds - Round - Games - Player 2
             handle: player2
             instructions: null
             label: 'Player 2'

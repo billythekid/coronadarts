@@ -4,11 +4,19 @@ instructions: null
 name: 'Blind Draw Rounds - Round - Games'
 searchable: true
 settings:
+  contentTable: ''
   createButtonLabel: null
   defaultIndexViewMode: cards
   enableVersioning: false
   entryTypes:
-    - 825cfde3-de72-4c59-aaed-18d031db136f # Blind Draw Rounds - Round - Games Block
+    -
+      __assoc__:
+        -
+          - uid
+          - 825cfde3-de72-4c59-aaed-18d031db136f # Blind Draw Rounds - Round - Games Block
+        -
+          - group
+          - General
   includeTableView: false
   maxEntries: null
   minEntries: null

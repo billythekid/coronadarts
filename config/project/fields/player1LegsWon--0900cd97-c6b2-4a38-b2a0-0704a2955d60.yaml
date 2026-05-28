@@ -1,5 +1,4 @@
 columnSuffix: null
-contentColumnType: integer(10)
 handle: player1LegsWon
 instructions: null
 name: 'Player 1 Legs Won'
@@ -13,6 +12,7 @@ settings:
   previewCurrency: null
   previewFormat: decimal
   size: null
+  step: null
   suffix: null
 translationKeyFormat: null
 translationMethod: none

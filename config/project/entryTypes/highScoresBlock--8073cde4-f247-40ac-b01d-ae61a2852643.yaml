@@ -13,7 +13,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 9873217d-3925-4849-a106-c6ac0138f3b5
+            fieldUid: 9873217d-3925-4849-a106-c6ac0138f3b5 # High Scores (140+) - Player
             handle: player
             instructions: null
             label: Player
@@ -29,7 +29,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 67596c10-9a3b-4e20-a52e-5817c6bbd329
+            fieldUid: 67596c10-9a3b-4e20-a52e-5817c6bbd329 # High Scores (140+) - Score
             handle: null
             instructions: null
             label: Score

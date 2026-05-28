@@ -1,5 +1,4 @@
 columnSuffix: null
-contentColumnType: text
 handle: specialInformation
 instructions: Markdown
 name: 'Special information'
@@ -8,7 +7,6 @@ settings:
   byteLimit: null
   charLimit: null
   code: false
-  columnType: null
   initialRows: 4
   multiline: true
   placeholder: null
