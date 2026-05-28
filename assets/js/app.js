@@ -1,12 +1,13 @@
+import '../css/app.css';
+import './bootstrap';
+
+import { createApp } from 'vue';
+
 import LoseLives from "./components/lose-lives.vue";
 import CompetitionsDropdown from "./components/competitions-dropdown.vue";
 import CumulativeScores from "./components/cumulative-scores.vue";
 import PlayerDropdown from "./components/player-dropdown.vue";
 import N01Scorer from "./components/n01-scorer.vue";
-
-require('./bootstrap');
-
-import { createApp } from 'vue';
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {

@@ -8,18 +8,64 @@ use craft\helpers\ArrayHelper;
 use modules\darts\Module as Darts;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class LeagueTwigExtension extends AbstractExtension
 {
 
   private $gamesQuery;
   private $players;
+  private static $viteManifest = null;
 
   public function getFilters()
   {
     return [
       new TwigFilter('embedYoutube', [$this, 'embedYoutubeFilter'], ['is_safe' => ['html']]),
     ];
+  }
+
+  public function getFunctions()
+  {
+    return [
+      new TwigFunction('vite', [$this, 'viteAssetTags'], ['is_safe' => ['html']]),
+    ];
+  }
+
+  /**
+   * Read the Vite manifest and return the `<link>` and `<script>` tags for
+   * the given entry point (e.g. "assets/js/app.js").
+   *
+   * Output path matches `base: '/dist/'` in vite.config.js.
+   */
+  public function viteAssetTags($entry)
+  {
+    $manifestPath = Craft::getAlias('@webroot') . '/dist/.vite/manifest.json';
+
+    if (self::$viteManifest === null) {
+      if (!is_file($manifestPath)) {
+        return "<!-- vite manifest not found at {$manifestPath} -->";
+      }
+      self::$viteManifest = json_decode(file_get_contents($manifestPath), true) ?: [];
+    }
+
+    if (!isset(self::$viteManifest[$entry])) {
+      return "<!-- vite entry '{$entry}' not found in manifest -->";
+    }
+
+    $info = self::$viteManifest[$entry];
+    $tags = [];
+
+    if (!empty($info['css'])) {
+      foreach ($info['css'] as $cssFile) {
+        $tags[] = '<link rel="stylesheet" href="/dist/' . htmlspecialchars($cssFile, ENT_QUOTES) . '">';
+      }
+    }
+
+    if (!empty($info['file'])) {
+      $tags[] = '<script type="module" src="/dist/' . htmlspecialchars($info['file'], ENT_QUOTES) . '"></script>';
+    }
+
+    return implode("\n", $tags);
   }
 
   public function getPosition($player, $competition)

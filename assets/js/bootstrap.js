@@ -1,8 +1,7 @@
-window.axios = require('axios');
+import axios from 'axios';
+import lodash from 'lodash';
 
-window.lodash = require('lodash');
+window.axios = axios;
+window.lodash = lodash;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-window.newsToken = process.env.MIX_AUTH_NEWS;
-window.finderToken = process.env.MIX_AUTH_FINDER;

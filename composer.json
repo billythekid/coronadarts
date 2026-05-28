@@ -1,7 +1,6 @@
 {
   "require": {
     "craftcms/cms": "^5.9.8",
-    "misterbk/mix": "v1.8.1",
     "putyourlightson/craft-elements-panel": "^3.0.1",
     "verbb/super-table": "^4.0.5",
     "vlucas/phpdotenv": "^5.4.0"
