@@ -1,8 +1,5 @@
 <!doctype html>
 {% apply spaceless %}
-{% do view.registerJsFile(mix("/js/manifest.js")) %}
-{% do view.registerJsFile(mix("/js/vendor.js")) %}
-{% do view.registerJsFile(mix("/js/app.js")) %}
 <html lang="en-GB">
   <head>
     <meta charset="UTF-8">
@@ -10,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="none">
     <title>{{ title is defined ? title ~ " | " }}{{ siteName }}</title>
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    {{ vite('assets/js/app.js')|raw }}
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">

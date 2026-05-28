@@ -21,7 +21,7 @@ This project was created during the COVID-19 pandemic lockdowns when our friend 
 
 - **Backend**: Craft CMS 5.9+ (PHP 8.3+)
 - **Frontend**: Vue 3 with Composition API
-- **Build Tool**: Laravel Mix 6
+- **Build Tool**: Vite 5
 - **Styling**: Tailwind CSS 3
 - **Database**: MySQL
 - **Additional**: Axios, VueDraggable, SweetAlert2
@@ -69,19 +69,14 @@ npm install
 
 ### 4. Build Assets
 
-For development:
+For development (rebuilds on file change):
 ```bash
 npm run dev
 ```
 
 For production:
 ```bash
-npm run production
-```
-
-For continuous development with auto-rebuild:
-```bash
-npm run watch
+npm run build
 ```
 
 ### 5. Complete Setup
@@ -105,12 +100,10 @@ The Vue 3 application is located in `assets/js/`:
 
 ### Asset Compilation
 
-- **Development**: `npm run dev` - Builds with source maps
-- **Production**: `npm run production` - Optimized and minified
-- **Watch**: `npm run watch` - Auto-recompile on changes
-- **Hot Reload**: `npm run hot` - Live reloading during development
+- **Development**: `npm run dev` - Vite watch mode, rebuilds on file change
+- **Production**: `npm run build` - Optimized and minified, with content-hashed filenames for cachebusting
 
-Compiled assets are output to `web/assets/`.
+Compiled assets are output to `web/dist/`. The Vite manifest at `web/dist/.vite/manifest.json` is consumed by the `vite()` Twig function (defined in `modules/darts/twigextensions/LeagueTwigExtension.php`).
 
 ### Backend Structure
 
